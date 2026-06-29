@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Thundra AI — Edit Smarter. Go Viral.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07070F;
+  --purple:#7C3AED;
+  --purple-l:#A78BFA;
+  --blue:#3B82F6;
+  --pink:#EC4899;
+  --white:#F8F8FF;
+  --muted:#94A3B8;
+  --border:rgba(124,58,237,0.18);
+  --font-h:'Space Grotesk',sans-serif;
+  --font-b:'Inter',sans-serif;
+}
+html,body{width:100%;min-height:100vh;overflow-x:hidden}
+body{
+  background:var(--bg);
+  color:var(--white);
+  font-family:var(--font-b);
+}
+
+/* ── DOT GRID ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:radial-gradient(rgba(124,58,237,0.12) 1px,transparent 1px);
+  background-size:36px 36px;
+  pointer-events:none;z-index:0;
+}
+
+/* ── NAV ── */
+nav{
+  position:relative;z-index:10;
+  padding:0 6%;height:68px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  background:rgba(7,7,15,0.6);backdrop-filter:blur(20px);
+}
+.logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--font-h);font-size:1.25rem;font-weight:700;
+  color:var(--white);text-decoration:none;
+}
+.bolt-icon{
+  width:26px;height:26px;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  clip-path:polygon(62% 0%,38% 44%,72% 44%,32% 100%,56% 54%,22% 54%);
+  filter:drop-shadow(0 0 10px rgba(124,58,237,0.9));
+}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.88rem;transition:color 0.2s}
+.nav-links a:hover{color:var(--white)}
+.nav-btn{
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  color:var(--white);font-weight:600;font-size:0.88rem;
+  padding:9px 22px;border-radius:8px;text-decoration:none;
+  box-shadow:0 0 20px rgba(124,58,237,0.4);
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.nav-btn:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(124,58,237,0.6)}
+
+/* ── HERO ── */
+#hero{
+  position:relative;z-index:1;
+  min-height:calc(100vh - 68px);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  padding:0 6%;
+  gap:40px;
+  overflow:hidden;
+}
+
+/* big purple bg glow behind orb */
+#hero::after{
+  content:'';position:absolute;
+  right:-100px;top:50%;transform:translateY(-50%);
+  width:700px;height:700px;
+  background:radial-gradient(ellipse,rgba(124,58,237,0.22) 0%,rgba(59,130,246,0.1) 40%,transparent 70%);
+  pointer-events:none;z-index:0;
+  animation:breathe 6s ease-in-out infinite;
+}
+@keyframes breathe{
+  0%,100%{opacity:0.8;transform:translateY(-50%) scale(1)}
+  50%{opacity:1;transform:translateY(-52%) scale(1.05)}
+}
+
+/* ── LEFT CONTENT ── */
+.hero-left{position:relative;z-index:2}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(124,58,237,0.1);
+  border:1px solid rgba(124,58,237,0.3);
+  border-radius:100px;padding:6px 16px;
+  font-size:0.75rem;font-weight:600;letter-spacing:0.08em;
+  color:var(--purple-l);margin-bottom:30px;
+  text-transform:uppercase;
+  opacity:0;animation:fadeup 0.6s 0.1s forwards;
+}
+.eyebrow-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--purple-l);
+  animation:blink 2s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+.hero-headline{
+  font-family:var(--font-h);
+  font-size:clamp(3rem,5.5vw,5rem);
+  font-weight:800;
+  line-height:1.05;
+  letter-spacing:-0.03em;
+  color:var(--white);
+  margin-bottom:10px;
+}
+.hero-headline .line1{
+  display:block;
+  opacity:0;animation:fadeup 0.6s 0.25s forwards;
+}
+.hero-headline .line2{
+  display:block;
+  background:linear-gradient(135deg,var(--purple-l) 0%,var(--blue) 50%,var(--pink) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  opacity:0;animation:fadeup 0.6s 0.4s forwards;
+}
+
+.hero-sub{
+  font-size:1.05rem;color:var(--muted);
+  line-height:1.75;max-width:480px;
+  opacity:0;animation:fadeup 0.6s 0.55s forwards;
+  margin-bottom:36px;
+}
+
+.hero-btns{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  opacity:0;animation:fadeup 0.6s 0.7s forwards;
+  margin-bottom:48px;
+}
+.btn-main{
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  color:var(--white);font-family:var(--font-h);font-weight:700;
+  font-size:1rem;padding:15px 32px;border-radius:10px;border:none;
+  cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:9px;
+  box-shadow:0 0 30px rgba(124,58,237,0.5);
+  transition:transform 0.2s,box-shadow 0.2s;
+  position:relative;overflow:hidden;
+}
+.btn-main::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent);
+  transform:translateX(-100%);transition:transform 0.4s;
+}
+.btn-main:hover::before{transform:translateX(100%)}
+.btn-main:hover{transform:translateY(-3px);box-shadow:0 0 50px rgba(124,58,237,0.7)}
+
+.btn-sec{
+  background:transparent;color:var(--white);
+  font-family:var(--font-h);font-weight:500;font-size:1rem;
+  padding:14px 26px;border-radius:10px;
+  border:1px solid rgba(124,58,237,0.4);
+  cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:border-color 0.2s,background 0.2s;
+}
+.btn-sec:hover{border-color:var(--purple);background:rgba(124,58,237,0.08)}
+
+/* ── STATS ROW (like Scale.AI) ── */
+.stats-row{
+  display:flex;align-items:center;gap:0;
+  opacity:0;animation:fadeup 0.6s 0.85s forwards;
+  border-top:1px solid var(--border);
+  padding-top:28px;
+}
+.stat-item{
+  flex:1;padding-right:24px;
+  border-right:1px solid var(--border);
+}
+.stat-item:last-child{border-right:none;padding-right:0;padding-left:24px;flex:none}
+.stat-item:not(:first-child){padding-left:24px}
+.stat-num{
+  font-family:var(--font-h);font-size:1.6rem;font-weight:700;
+  background:linear-gradient(135deg,var(--white),var(--purple-l));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;margin-bottom:4px;
+}
+.stat-lbl{font-size:0.78rem;color:var(--muted);line-height:1.4}
+
+/* ── RIGHT — ORB ── */
+.hero-right{
+  position:relative;z-index:2;
+  display:flex;align-items:center;justify-content:center;
+  height:580px;
+}
+
+/* Outer glow rings */
+.orb-wrap{
+  position:relative;
+  width:420px;height:420px;
+  display:flex;align-items:center;justify-content:center;
+  animation:float 5s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0px)}
+  50%{transform:translateY(-18px)}
+}
+
+.ring{
+  position:absolute;border-radius:50%;border:1px solid;
+  animation:spin linear infinite;
+}
+.ring1{
+  width:100%;height:100%;
+  border-color:rgba(124,58,237,0.15);
+  animation-duration:30s;
+}
+.ring2{
+  width:115%;height:115%;
+  border-color:rgba(59,130,246,0.1);
+  animation-duration:45s;animation-direction:reverse;
+}
+.ring3{
+  width:130%;height:130%;
+  border-color:rgba(236,72,153,0.07);
+  animation-duration:60s;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Ring dots (like orbital nodes) */
+.ring1::before,.ring1::after{
+  content:'';position:absolute;width:8px;height:8px;
+  background:var(--purple);border-radius:50%;
+  box-shadow:0 0 10px var(--purple),0 0 20px var(--purple);
+  top:50%;left:-4px;transform:translateY(-50%);
+}
+.ring1::after{left:auto;right:-4px;background:var(--blue);box-shadow:0 0 10px var(--blue),0 0 20px var(--blue)}
+
+/* The orb itself */
+.orb{
+  position:relative;
+  width:300px;height:300px;border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255,255,255,0.25) 0%, transparent 50%),
+    radial-gradient(circle at 65% 20%, rgba(59,130,246,0.6) 0%, transparent 45%),
+    radial-gradient(circle at 30% 70%, rgba(236,72,153,0.5) 0%, transparent 45%),
+    radial-gradient(circle at 70% 65%, rgba(124,58,237,0.7) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(124,58,237,0.3) 0%, #1a0533 100%);
+  box-shadow:
+    0 0 60px rgba(124,58,237,0.6),
+    0 0 120px rgba(124,58,237,0.3),
+    0 0 200px rgba(59,130,246,0.15),
+    inset 0 0 60px rgba(255,255,255,0.05);
+  animation:orb-pulse 4s ease-in-out infinite;
+  overflow:hidden;
+}
+@keyframes orb-pulse{
+  0%,100%{
+    box-shadow:0 0 60px rgba(124,58,237,0.6),0 0 120px rgba(124,58,237,0.3),0 0 200px rgba(59,130,246,0.15),inset 0 0 60px rgba(255,255,255,0.05);
+  }
+  50%{
+    box-shadow:0 0 90px rgba(124,58,237,0.8),0 0 180px rgba(124,58,237,0.4),0 0 280px rgba(59,130,246,0.2),inset 0 0 80px rgba(255,255,255,0.08);
+  }
+}
+
+/* Film strip strips on the orb */
+.orb-strips{
+  position:absolute;inset:0;border-radius:50%;overflow:hidden;
+  opacity:0.35;
+}
+.strip{
+  position:absolute;
+  width:32px;
+  background:rgba(0,0,0,0.5);
+  display:flex;flex-direction:column;gap:3px;
+  padding:3px 3px;
+}
+.strip-frame{
+  width:100%;background:rgba(255,255,255,0.12);
+  border-radius:1px;flex-shrink:0;height:20px;
+}
+.strip:nth-child(1){left:20%;top:-10%;height:130%;transform:rotate(-15deg);animation:strip-scroll 3s linear infinite}
+.strip:nth-child(2){left:50%;top:-10%;height:130%;transform:rotate(5deg);animation:strip-scroll 4s linear infinite reverse}
+.strip:nth-child(3){left:75%;top:-10%;height:130%;transform:rotate(-8deg);animation:strip-scroll 3.5s linear infinite}
+@keyframes strip-scroll{
+  0%{top:-10%}100%{top:10%}
+}
+
+/* Sheen sweep */
+.orb-sheen{
+  position:absolute;inset:0;border-radius:50%;
+  background:linear-gradient(135deg,rgba(255,255,255,0.25) 0%,transparent 50%);
+  animation:sheen 6s ease-in-out infinite;
+}
+@keyframes sheen{
+  0%,100%{opacity:0.6;transform:rotate(0deg)}
+  50%{opacity:0.9;transform:rotate(10deg)}
+}
+
+/* Floating mini chips around orb */
+.chip{
+  position:absolute;
+  background:rgba(13,13,26,0.85);
+  border:1px solid rgba(124,58,237,0.35);
+  border-radius:10px;
+  padding:8px 14px;
+  font-size:0.78rem;
+  font-family:var(--font-h);font-weight:600;
+  color:var(--white);
+  backdrop-filter:blur(12px);
+  white-space:nowrap;
+  box-shadow:0 4px 20px rgba(0,0,0,0.4),0 0 12px rgba(124,58,237,0.2);
+  display:flex;align-items:center;gap:7px;
+}
+.chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+.chip1{
+  top:8%;left:-15%;
+  animation:chip-float1 4s ease-in-out infinite;
+}
+.chip2{
+  top:20%;right:-18%;
+  animation:chip-float2 5s ease-in-out infinite;
+}
+.chip3{
+  bottom:22%;left:-20%;
+  animation:chip-float1 4.5s ease-in-out infinite reverse;
+}
+.chip4{
+  bottom:8%;right:-12%;
+  animation:chip-float2 3.8s ease-in-out infinite;
+}
+@keyframes chip-float1{
+  0%,100%{transform:translateY(0) rotate(-1deg)}
+  50%{transform:translateY(-8px) rotate(1deg)}
+}
+@keyframes chip-float2{
+  0%,100%{transform:translateY(0) rotate(1deg)}
+  50%{transform:translateY(-10px) rotate(-1deg)}
+}
+
+/* ── PARTICLES ── */
+#particles{
+  position:absolute;inset:0;pointer-events:none;z-index:1;
+  overflow:hidden;
+}
+.particle{
+  position:absolute;border-radius:50%;
+  animation:particle-drift linear infinite;
+}
+@keyframes particle-drift{
+  0%{opacity:0;transform:translateY(0) scale(0)}
+  10%{opacity:1}
+  90%{opacity:0.6}
+  100%{opacity:0;transform:translateY(-120px) scale(1)}
+}
+
+/* ── BRAND STRIP (like Scale.AI logos row) ── */
+.brand-strip{
+  position:relative;z-index:1;
+  padding:28px 6%;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:0;
+  background:rgba(7,7,15,0.6);
+  backdrop-filter:blur(10px);
+  overflow:hidden;
+}
+.brand-label{
+  font-size:0.75rem;color:var(--muted);
+  white-space:nowrap;margin-right:40px;letter-spacing:0.06em;
+  font-weight:500;text-transform:uppercase;flex-shrink:0;
+}
+.brand-scroll{
+  display:flex;align-items:center;gap:52px;
+  animation:brand-move 20s linear infinite;
+  flex-shrink:0;
+}
+.brand-scroll-wrap{
+  display:flex;align-items:center;gap:52px;
+  overflow:hidden;flex:1;
+  mask-image:linear-gradient(90deg,transparent,black 10%,black 90%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,black 10%,black 90%,transparent);
+}
+@keyframes brand-move{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-50%)}
+}
+.brand{
+  font-family:var(--font-h);font-size:1rem;font-weight:600;
+  color:rgba(148,163,184,0.5);white-space:nowrap;
+  letter-spacing:0.04em;
+  transition:color 0.3s;flex-shrink:0;
+}
+.brand:hover{color:rgba(148,163,184,0.9)}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeup{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  #hero{grid-template-columns:1fr;padding-top:60px;text-align:center}
+  .hero-right{height:360px;order:-1}
+  .orb-wrap{width:280px;height:280px}
+  .orb{width:200px;height:200px}
+  .chip{display:none}
+  .stats-row{justify-content:center}
+  .hero-btns{justify-content:center}
+  .hero-sub{margin:0 auto 36px}
+  .nav-links{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:0.01ms!important}
+  .eyebrow,.hero-headline .line1,.hero-headline .line2,.hero-sub,.hero-btns,.stats-row{opacity:1!important}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="bolt-icon"></div>
+    Thundra AI
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Features</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#">Our Story</a></li>
+    <li><a href="#">Community</a></li>
+    <li><a href="#" class="nav-btn">Sign Up Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+
+  <!-- Particles canvas -->
+  <div id="particles"></div>
+
+  <!-- LEFT -->
+  <div class="hero-left">
+    <div class="eyebrow">
+      <div class="eyebrow-dot"></div>
+      Now in Early Access · Karachi, Pakistan
+    </div>
+
+    <h1 class="hero-headline">
+      <span class="line1">Edit Smarter.</span>
+      <span class="line2">Go Viral.</span>
+    </h1>
+
+    <p class="hero-sub">
+      Thundra AI turns raw footage into publish-ready videos automatically —
+      Urdu captions, color grading, B-roll, and cuts. One prompt. 60 seconds.
+    </p>
+
+    <div class="hero-btns">
+      <a href="#" class="btn-main">
+        ⚡ Start Editing Free
+      </a>
+      <a href="#" class="btn-sec">
+        ▶ Watch Demo
+      </a>
+    </div>
+
+    <!-- STATS ROW — mirroring Scale.AI layout -->
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num" data-target="5" data-suffix="M+">0</div>
+        <div class="stat-lbl">Pakistani<br/>Creators</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-target="60" data-suffix="s">0</div>
+        <div class="stat-lbl">Avg Render<br/>Time</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-target="91" data-suffix="%">0</div>
+        <div class="stat-lbl">Gross<br/>Margin</div>
+      </div>
+      <div class="stat-item" style="border-right:none">
+        <div class="stat-num">4.9</div>
+        <div class="stat-lbl">Beta User<br/>Rating</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT — ORB -->
+  <div class="hero-right">
+    <div class="orb-wrap">
+      <!-- Rings -->
+      <div class="ring ring1"></div>
+      <div class="ring ring2"></div>
+      <div class="ring ring3"></div>
+
+      <!-- Main orb -->
+      <div class="orb">
+        <div class="orb-strips">
+          <div class="strip">
+            <div class="strip-frame"></div><div class="strip-frame"></div>
+            <div class="strip-frame"></div><div class="strip-frame"></div>
+            <div class="strip-frame"></div><div class="strip-frame"></div>
+            <div class="strip-frame"></div><div class="strip-frame"></div>
+          </div>
+          <div class="strip">
+            <div class="strip-frame"></div><div class="strip-frame"></div>
+            <div class="strip-frame"></div><div class="strip-frame"></div>
+            <div class="strip-frame"></div><div class="strip-frame"></div>
+            <div class="strip-frame"></div><div class="strip-frame"></div>
+          </div>
+          <div class="strip">
+            <div class="strip-frame"></div><div class="strip-frame"></div>
+            <div class="strip-frame"></div><div class="strip-frame"></div>
+            <div class="strip-frame"></div><div class="strip-frame"></div>
+            <div class="strip-frame"></div><div class="strip-frame"></div>
+          </div>
+        </div>
+        <div class="orb-sheen"></div>
+      </div>
+
+      <!-- Floating chips -->
+      <div class="chip chip1">
+        <div class="chip-dot" style="background:#22C55E;box-shadow:0 0 8px #22C55E"></div>
+        ✂️ Silences removed
+      </div>
+      <div class="chip chip2">
+        <div class="chip-dot" style="background:#A78BFA;box-shadow:0 0 8px #A78BFA"></div>
+        💬 Urdu captions
+      </div>
+      <div class="chip chip3">
+        <div class="chip-dot" style="background:#3B82F6;box-shadow:0 0 8px #3B82F6"></div>
+        🎬 B-roll matched
+      </div>
+      <div class="chip chip4">
+        <div class="chip-dot" style="background:#EC4899;box-shadow:0 0 8px #EC4899"></div>
+        🎨 Color graded
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- BRAND STRIP — like Scale.AI logos -->
+<div class="brand-strip">
+  <span class="brand-label">Works with footage from</span>
+  <div class="brand-scroll-wrap">
+    <div class="brand-scroll" id="brandScroll">
+      <span class="brand">YouTube</span>
+      <span class="brand">TikTok</span>
+      <span class="brand">INSTAGRAM</span>
+      <span class="brand">CapCut</span>
+      <span class="brand">Pexels</span>
+      <span class="brand">Pixabay</span>
+      <span class="brand">DaVinci</span>
+      <span class="brand">Premiere</span>
+      <!-- duplicated for seamless loop -->
+      <span class="brand">YouTube</span>
+      <span class="brand">TikTok</span>
+      <span class="brand">INSTAGRAM</span>
+      <span class="brand">CapCut</span>
+      <span class="brand">Pexels</span>
+      <span class="brand">Pixabay</span>
+      <span class="brand">DaVinci</span>
+      <span class="brand">Premiere</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── PARTICLES ──
+const particleContainer = document.getElementById('particles');
+const colors = ['rgba(124,58,237,','rgba(59,130,246,','rgba(236,72,153,','rgba(167,139,250,'];
+
+function spawnParticle(){
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random() * 4 + 1;
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  const opacity = Math.random() * 0.6 + 0.2;
+  const duration = Math.random() * 6 + 4;
+  const delay = Math.random() * 2;
+  const left = 45 + Math.random() * 35; // mostly right side near orb
+  p.style.cssText = `
+    width:${size}px;height:${size}px;
+    background:${color}${opacity});
+    box-shadow:0 0 ${size*3}px ${color}0.8);
+    left:${left}%;
+    bottom:${20 + Math.random() * 60}%;
+    animation-duration:${duration}s;
+    animation-delay:${delay}s;
+  `;
+  particleContainer.appendChild(p);
+  setTimeout(() => p.remove(), (duration + delay) * 1000);
+}
+
+// spawn particles continuously
+for(let i = 0; i < 20; i++){
+  setTimeout(spawnParticle, i * 300);
+}
+setInterval(spawnParticle, 400);
+
+// ── COUNTER ANIMATION ──
+function animateCounter(el){
+  const target = parseFloat(el.dataset.target);
+  const suffix = el.dataset.suffix || '';
+  const duration = 1800;
+  const start = performance.now();
+  function tick(now){
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const val = target * ease;
+    el.textContent = (Number.isInteger(target) ? Math.round(val) : val.toFixed(1)) + suffix;
+    if(progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// Trigger counters when stats row is visible
+const statsRow = document.querySelector('.stats-row');
+let counted = false;
+const statsObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting && !counted){
+      counted = true;
+      document.querySelectorAll('[data-target]').forEach(animateCounter);
+      statsObserver.disconnect();
+    }
+  });
+}, {threshold: 0.5});
+if(statsRow) statsObserver.observe(statsRow);
+
+// Also trigger on load since hero is visible immediately
+setTimeout(() => {
+  if(!counted){
+    counted = true;
+    document.querySelectorAll('[data-target]').forEach(animateCounter);
+  }
+}, 900);
+</script>
+</body>
+</html>
