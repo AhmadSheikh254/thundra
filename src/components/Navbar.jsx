@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Database, ArrowRight, Menu, X, Sparkles } from 'lucide-react';
 import ThundraLogo from './ThundraLogo';
@@ -13,9 +14,19 @@ export default function Navbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Body scroll lock when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileMenuOpen]);
 
   const handleLogoClick = (e) => {
     e.preventDefault();
@@ -151,71 +162,84 @@ export default function Navbar() {
         {/* Mobile Hamburger toggle */}
         <button 
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-full bg-slate-900/60 border border-slate-800 text-slate-400 hover:text-white transition-colors"
+          className="md:hidden w-9 h-9 flex items-center justify-center rounded-full bg-slate-900/60 border border-slate-800 text-slate-450 hover:text-white transition-colors relative"
+          aria-label="Toggle Menu"
         >
-          {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          <div className="w-4 h-4 relative flex flex-col justify-center items-center">
+            <span className={`w-3.5 h-[1.5px] bg-current absolute transition-all duration-300 ${mobileMenuOpen ? 'rotate-45' : '-translate-y-1'}`} />
+            <span className={`w-3.5 h-[1.5px] bg-current absolute transition-all duration-200 ${mobileMenuOpen ? 'opacity-0 scale-x-0' : ''}`} />
+            <span className={`w-3.5 h-[1.5px] bg-current absolute transition-all duration-300 ${mobileMenuOpen ? '-rotate-45' : 'translate-y-1'}`} />
+          </div>
         </button>
 
         {/* Mobile Capsule Drawer */}
-        {mobileMenuOpen && (
-          <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-[#101826]/95 border border-[#3D5A80]/20 rounded-3xl p-5 flex flex-col gap-3.5 z-50 backdrop-blur-xl shadow-2xl animate-[fadeIn_0.2s_ease-out]">
-            <Link 
-              to="/assistant" 
-              onClick={(e) => handleNavigation('/assistant', e)}
-              className={`flex items-center gap-2 p-2.5 rounded-xl text-sm font-semibold transition-all ${
-                isLinkActive('/assistant') ? 'text-white bg-white/[0.04]' : 'text-slate-300 hover:text-white'
-              }`}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: -8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -8 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute top-[calc(100%+8px)] left-0 right-0 bg-[#101826]/95 border border-[#3D5A80]/20 rounded-3xl p-5 flex flex-col gap-3.5 z-50 backdrop-blur-xl shadow-2xl"
             >
-              <Sparkles className="w-4 h-4 text-blueTheme animate-pulse" />
-              <span>AI Assistant</span>
-            </Link>
+              <Link 
+                to="/assistant" 
+                onClick={(e) => handleNavigation('/assistant', e)}
+                className={`flex items-center gap-2 p-2.5 rounded-xl text-sm font-semibold transition-all ${
+                  isLinkActive('/assistant') ? 'text-white bg-white/[0.04]' : 'text-slate-300 hover:text-white'
+                }`}
+              >
+                <Sparkles className="w-4 h-4 text-blueTheme animate-pulse" />
+                <span>AI Assistant</span>
+              </Link>
 
-            <Link 
-              to="/projects" 
-              onClick={(e) => handleNavigation('/projects', e)}
-              className={`flex items-center gap-2 p-2.5 rounded-xl text-sm font-semibold transition-all ${
-                isLinkActive('/projects') ? 'text-white bg-white/[0.04]' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <Database className="w-4 h-4 text-[#F5EFE6]" />
-              <span>Projects</span>
-            </Link>
-            
-            <Link 
-              to="/how-it-works" 
-              onClick={(e) => handleNavigation('/how-it-works', e)}
-              className={`p-2.5 rounded-xl text-sm font-semibold transition-all ${
-                isLinkActive('/how-it-works') ? 'text-white bg-white/[0.04]' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <span>How It Works</span>
-            </Link>
+              <Link 
+                to="/projects" 
+                onClick={(e) => handleNavigation('/projects', e)}
+                className={`flex items-center gap-2 p-2.5 rounded-xl text-sm font-semibold transition-all ${
+                  isLinkActive('/projects') ? 'text-white bg-white/[0.04]' : 'text-slate-300 hover:text-white'
+                }`}
+              >
+                <Database className="w-4 h-4 text-[#F5EFE6]" />
+                <span>Projects</span>
+              </Link>
+              
+              <Link 
+                to="/how-it-works" 
+                onClick={(e) => handleNavigation('/how-it-works', e)}
+                className={`p-2.5 rounded-xl text-sm font-semibold transition-all ${
+                  isLinkActive('/how-it-works') ? 'text-white bg-white/[0.04]' : 'text-slate-300 hover:text-white'
+                }`}
+              >
+                <span>How It Works</span>
+              </Link>
 
-            <a 
-              href="/#features" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white transition-colors"
-            >
-              Features
-            </a>
+              <a 
+                href="/#features" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white transition-colors"
+              >
+                Features
+              </a>
 
-            <a 
-              href="/#pricing" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white transition-colors"
-            >
-              Pricing
-            </a>
+              <a 
+                href="/#pricing" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white transition-colors"
+              >
+                Pricing
+              </a>
 
-            <Link 
-              to="/projects"
-              onClick={(e) => handleNavigation('/projects', e)}
-              className="w-full text-center bg-gradient-to-r from-purpleTheme to-blueTheme py-3 text-xs font-bold uppercase tracking-wider rounded-xl text-white border border-[#F5EFE6]/20 shadow-md"
-            >
-              Workspace
-            </Link>
-          </div>
-        )}
+              <Link 
+                to="/projects"
+                onClick={(e) => handleNavigation('/projects', e)}
+                className="w-full text-center bg-gradient-to-r from-purpleTheme to-blueTheme py-3 text-xs font-bold uppercase tracking-wider rounded-xl text-white border border-[#F5EFE6]/20 shadow-md"
+              >
+                Workspace
+              </Link>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </nav>
   );

@@ -939,8 +939,8 @@ export default function Home() {
           </div>
 
           <h1 
-            className="font-heading text-3xl md:text-5xl lg:text-[2.85rem] xl:text-[3.5rem] font-black tracking-tight leading-[1.08] text-white"
-            style={{ textShadow: '0 4px 18px rgba(0, 0, 0, 0.95), 0 2px 4px rgba(0, 0, 0, 0.85)' }}
+            className="font-heading font-black tracking-tight leading-[1.08] text-white"
+            style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', textShadow: '0 4px 18px rgba(0, 0, 0, 0.95), 0 2px 4px rgba(0, 0, 0, 0.85)' }}
           >
             Edit Videos. <br />
             <span 
@@ -974,65 +974,107 @@ export default function Home() {
 
         {/* Right Side: Mockup Dashboard Preview */}
         <div className="relative flex items-center justify-center">
-          {/* Ambient halo behind mockup */}
-          <div 
-            className="absolute w-[500px] h-[350px] rounded-full blur-[100px] pointer-events-none" 
-            style={{ backgroundColor: 'rgba(79, 209, 255, 0.06)' }}
-          />
+          {/* ── Depth ambient lighting system ── */}
+          {/* Primary cool-blue ambient — top-left light source */}
+          <div className="absolute pointer-events-none" style={{ width: '420px', height: '280px', top: '-60px', left: '-40px', background: 'radial-gradient(ellipse at 20% 20%, rgba(79,209,255,0.07) 0%, transparent 65%)', filter: 'blur(40px)' }} />
+          {/* Secondary warm reflection — bottom-right */}
+          <div className="absolute pointer-events-none" style={{ width: '300px', height: '200px', bottom: '-40px', right: '-20px', background: 'radial-gradient(ellipse at 80% 80%, rgba(212,165,116,0.05) 0%, transparent 60%)', filter: 'blur(30px)' }} />
+          {/* Contact shadow — card sits on a surface */}
+          <div className="absolute pointer-events-none" style={{ width: '85%', height: '30px', bottom: '-18px', left: '7.5%', background: 'radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 70%)', filter: 'blur(12px)', borderRadius: '50%' }} />
+          {/* Deep ambient glow */}
+          <div className="absolute pointer-events-none" style={{ width: '110%', height: '110%', top: '-5%', left: '-5%', background: 'radial-gradient(ellipse at 30% 30%, rgba(61,90,128,0.06) 0%, transparent 55%)', filter: 'blur(60px)' }} />
 
           {/* Wrapper container for floating and HUD frame */}
-          <div className="w-full max-w-[470px] lg:max-w-[490px] xl:max-w-[530px] relative z-10 transition-all duration-300 animate-float">
+          <motion.div
+            className="w-full max-w-[470px] lg:max-w-[490px] xl:max-w-[530px] relative z-10 animate-float mx-auto"
+            whileHover={{ rotateX: 1.5, rotateY: -1.5, scale: 1.008 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 30 }}
+            style={{ transformStyle: 'preserve-3d', perspective: '1200px' }}
+          >
             {/* Premium HUD cinematic frame overlay (sitting outside the overflow-hidden boundaries of the card content) */}
             <CardHUDFrame />
 
-            {/* Inner Dashboard Container */}
+            {/* Inner Dashboard Container — True Depth Glass */}
             <div 
-              className="w-full rounded-3xl p-3 md:p-3.5 space-y-2.5 backdrop-blur-md overflow-hidden relative"
+              className="w-full rounded-[24px] p-3 md:p-3.5 space-y-2.5 overflow-hidden relative"
               style={{
-                backgroundColor: '#0B1220',
-                border: '1px solid rgba(79, 209, 255, 0.12)',
-                boxShadow: '0 25px 80px rgba(0, 0, 0, 0.45)'
+                background: 'linear-gradient(155deg, #131d2e 0%, #0e1828 40%, #0b1220 75%, #080f1b 100%)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                boxShadow: [
+                  '0 0 0 1px rgba(255,255,255,0.03)',
+                  '0 2px 4px rgba(0,0,0,0.4)',
+                  '0 8px 16px rgba(0,0,0,0.45)',
+                  '0 24px 48px rgba(0,0,0,0.5)',
+                  '0 48px 80px rgba(0,0,0,0.4)',
+                  'inset 0 1px 0 rgba(255,255,255,0.07)',
+                  'inset 0 -1px 0 rgba(0,0,0,0.3)'
+                ].join(', ')
               }}
             >
-              {/* Inner border and top highlight overlay */}
-              <div 
-                className="absolute inset-0 pointer-events-none rounded-[23px]"
+              {/* === MATERIAL LIGHTING LAYERS === */}
+              {/* Top-left cool light source */}
+              <div className="absolute top-0 left-0 w-56 h-32 pointer-events-none rounded-tl-[24px]" style={{ background: 'radial-gradient(ellipse at 10% 10%, rgba(79,209,255,0.055) 0%, rgba(61,90,128,0.03) 40%, transparent 70%)', zIndex: 1 }} />
+              {/* Top edge specular highlight */}
+              <div className="absolute top-0 left-12 right-12 h-[1px] pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 30%, rgba(79,209,255,0.15) 50%, rgba(255,255,255,0.12) 70%, transparent 100%)', zIndex: 8 }} />
+              {/* Left edge highlight */}
+              <div className="absolute top-8 left-0 w-[1px] h-24 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(79,209,255,0.08) 0%, transparent 100%)', zIndex: 8 }} />
+              {/* Bottom right warm shadow (ambient occlusion) */}
+              <div className="absolute bottom-0 right-0 w-48 h-28 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 90% 90%, rgba(0,0,0,0.45) 0%, transparent 60%)', zIndex: 1 }} />
+              {/* Surface micro-texture — top glass sheen */}
+              <div className="absolute inset-[1px] pointer-events-none rounded-[23px]" style={{ background: 'linear-gradient(175deg, rgba(255,255,255,0.032) 0%, rgba(255,255,255,0.008) 25%, transparent 50%)', zIndex: 2 }} />
+              {/* Bottom vignette */}
+              <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none rounded-b-[24px]" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.25) 0%, transparent 100%)', zIndex: 3 }} />
+              {/* macOS title bar — elevated glass surface */}
+              <div className="flex items-center justify-between -mx-3 -mt-3 md:-mx-3.5 md:-mt-3.5 px-4 py-2 rounded-t-[23px] border-b relative z-10"
                 style={{
-                  borderWidth: '1px',
-                  borderStyle: 'solid',
-                  borderColor: 'rgba(245, 239, 230, 0.04)',
-                  borderTopColor: 'rgba(245, 239, 230, 0.08)',
-                  margin: '1px',
-                  zIndex: 5
+                  background: 'linear-gradient(180deg, rgba(8,12,22,0.92) 0%, rgba(10,15,24,0.85) 100%)',
+                  backdropFilter: 'blur(16px)',
+                  borderColor: 'rgba(255,255,255,0.045)',
+                  boxShadow: '0 1px 0 rgba(255,255,255,0.04) inset, 0 1px 8px rgba(0,0,0,0.2)'
                 }}
-              />
-              {/* macOS bar */}
-              <div className="flex items-center justify-between -mx-3 -mt-3 md:-mx-3.5 md:-mt-3.5 px-4 py-1.5 bg-slate-950/70 rounded-t-3xl border-b border-white/[0.05]">
-                {/* Traffic lights */}
+              >
+                {/* Traffic lights — glass spheres */}
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ef4444]/90 border border-[#ef4444]/40 shadow-[0_0_6px_rgba(239,68,68,0.2)] transition-colors hover:bg-[#ff5f56]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#f59e0b]/90 border border-[#f59e0b]/40 shadow-[0_0_6px_rgba(245,158,11,0.2)] transition-colors hover:bg-[#ffbd2e]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#10b981]/90 border border-[#10b981]/40 shadow-[0_0_6px_rgba(16,185,129,0.2)] transition-colors hover:bg-[#27c93f]" />
+                  {[
+                    { bg: '#ff5f57', glow: '239,68,68' },
+                    { bg: '#febc2e', glow: '245,158,11' },
+                    { bg: '#28c840', glow: '16,185,129' }
+                  ].map((dot, i) => (
+                    <span key={i} className="w-[9px] h-[9px] rounded-full cursor-pointer transition-all duration-200 hover:scale-110 relative block" style={{
+                      background: `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.4) 0%, ${dot.bg} 45%)`,
+                      boxShadow: `0 1px 3px rgba(0,0,0,0.5), 0 0 0 0.5px rgba(0,0,0,0.2)`
+                    }} />
+                  ))}
                 </div>
                 
                 {/* File / Project Path Breadcrumbs */}
                 <div className="flex items-center gap-1 text-[9px] font-mono font-medium tracking-wide">
-                  <span className="text-slate-500 hover:text-slate-400 cursor-pointer transition-colors">projects</span>
-                  <span className="text-slate-700">/</span>
-                  <div className="flex items-center gap-1 bg-purpleTheme/15 border border-purpleTheme/35 rounded-md px-1.5 py-0.5 text-purpleLight shadow-sm">
-                    <Film className="w-2.5 h-2.5 text-purpleLight shrink-0" />
-                    <span className="font-semibold text-purple-200">thundra_ai_intro.proj</span>
+                  <span className="cursor-pointer transition-colors duration-200" style={{ color: 'rgba(100,116,139,0.5)' }}>projects</span>
+                  <span style={{ color: 'rgba(100,116,139,0.25)', margin: '0 2px' }}>/</span>
+                  <div className="flex items-center gap-1 rounded-md px-1.5 py-0.5" style={{ background: 'rgba(61,90,128,0.15)', border: '1px solid rgba(61,90,128,0.28)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}>
+                    <Film className="w-2.5 h-2.5 shrink-0" style={{ color: 'rgba(192,170,255,0.8)' }} />
+                    <span className="font-semibold tracking-tight" style={{ color: 'rgba(216,200,255,0.85)' }}>thundra_ai_intro.proj</span>
                   </div>
                 </div>
 
-                {/* Status Badges */}
+                {/* Status Badges — elevated glass chips */}
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[8.5px] bg-gradient-to-r from-pinkTheme/15 via-purpleTheme/10 to-blueTheme/15 border border-pinkTheme/35 text-pinkTheme px-2 py-0.5 rounded-full font-mono font-bold tracking-wide shadow-[0_0_10px_rgba(212,165,116,0.15)] flex items-center gap-1">
-                    <span className="w-1 h-1 rounded-full bg-pinkTheme animate-pulse" />
+                  <span className="text-[7.5px] px-2 py-[3px] rounded-full font-mono font-bold tracking-wider flex items-center gap-1" style={{
+                    background: 'linear-gradient(135deg, rgba(212,165,116,0.12) 0%, rgba(212,165,116,0.06) 100%)',
+                    border: '1px solid rgba(212,165,116,0.2)',
+                    color: '#D4A574',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.05) inset'
+                  }}>
+                    <span className="w-[5px] h-[5px] rounded-full" style={{ background: '#D4A574', boxShadow: '0 0 4px rgba(212,165,116,0.9)' }} />
                     1080P
                   </span>
-                  <span className="text-[8.5px] bg-gradient-to-r from-blueTheme/15 to-purpleTheme/15 border border-blueTheme/35 text-blueTheme px-2 py-0.5 rounded-full font-mono font-bold tracking-wide shadow-[0_0_10px_rgba(79,209,255,0.15)] flex items-center gap-1">
-                    <span className="w-1 h-1 rounded-full bg-blueTheme animate-pulse" />
+                  <span className="text-[7.5px] px-2 py-[3px] rounded-full font-mono font-bold tracking-wider flex items-center gap-1" style={{
+                    background: 'linear-gradient(135deg, rgba(79,209,255,0.1) 0%, rgba(79,209,255,0.04) 100%)',
+                    border: '1px solid rgba(79,209,255,0.18)',
+                    color: '#4FD1FF',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.05) inset'
+                  }}>
+                    <span className="w-[5px] h-[5px] rounded-full" style={{ background: '#4FD1FF', boxShadow: '0 0 4px rgba(79,209,255,0.9)' }} />
                     30FPS
                   </span>
                 </div>
@@ -1044,32 +1086,38 @@ export default function Home() {
 
             {/* Main Panel: Media Bin + Video Preview */}
             <div className="flex gap-3">
-              {/* Media Bin */}
-              <div className="w-[120px] bg-[#0c0c16]/90 border border-white/[0.06] rounded-xl p-2 space-y-1.5 shrink-0 hidden sm:block shadow-inner backdrop-blur-md">
-                <p className="text-[7.5px] font-bold tracking-widest text-slate-400 uppercase">MEDIA BIN</p>
-                <div className="space-y-1">
+              {/* Media Bin — elevated glass panel with depth */}
+              <div className="w-[120px] shrink-0 hidden sm:block rounded-xl p-2 space-y-1.5 relative z-10" style={{
+                background: 'linear-gradient(160deg, rgba(20,30,50,0.95) 0%, rgba(14,22,38,0.9) 100%)',
+                border: '1px solid rgba(255,255,255,0.07)',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.3), 0 8px 20px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.06) inset'
+              }}>
+                {/* Panel top reflection */}
+                <div className="absolute top-0 left-2 right-2 h-px rounded-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)' }} />
+                <p className="text-[6.5px] font-bold tracking-[0.2em] uppercase relative z-10" style={{ color: 'rgba(100,116,139,0.55)', letterSpacing: '0.18em' }}>Media Bin</p>
+                <div className="space-y-[5px] relative z-10">
                   {[
-                    { name: "raw_intro.mp4", size: "42MB", type: "video", active: true, icon: Film, bgClass: "bg-[rgba(244,63,94,0.08)] border-[rgba(244,63,94,0.25)] text-[#F5EFE6] shadow-[0_2px_8px_rgba(244,63,94,0.08)]" },
-                    { name: "lofi_beat.wav", size: "4MB", type: "audio", active: true, icon: Music, bgClass: "bg-blueTheme/10 border-blueTheme/45 text-blue-400 shadow-[0_2px_8px_rgba(59,130,246,0.12)]" },
-                    { name: "broll_laser.mp4", size: "12MB", type: "video", active: mockupState === 'preview', icon: Film, bgClass: "bg-[rgba(245,239,230,0.08)] border-[rgba(245,239,230,0.35)] text-[#F5EFE6] shadow-[0_2px_8px_rgba(245,239,230,0.08)]" }
+                    { name: "raw_intro.mp4", size: "42MB", active: true, icon: Film, color: 'rgba(252,100,120,0.95)', borderColor: 'rgba(244,63,94,0.18)', bg: 'linear-gradient(135deg, rgba(244,63,94,0.09), rgba(244,63,94,0.04))' },
+                    { name: "lofi_beat.wav", size: "4MB", active: true, icon: Music, color: 'rgba(79,209,255,0.95)', borderColor: 'rgba(79,209,255,0.18)', bg: 'linear-gradient(135deg, rgba(79,209,255,0.09), rgba(79,209,255,0.04))' },
+                    { name: "broll_laser.mp4", size: "12MB", active: mockupState === 'preview', icon: Film, color: 'rgba(245,239,230,0.85)', borderColor: 'rgba(245,239,230,0.15)', bg: 'linear-gradient(135deg, rgba(245,239,230,0.06), rgba(245,239,230,0.02))' }
                   ].map((file, i) => {
                     const FileIcon = file.icon;
                     return (
-                      <div key={i} className={`p-1 px-1.5 rounded-lg border text-[8.5px] flex flex-col gap-0.5 transition-all duration-300 ${
-                        file.active 
-                          ? file.bgClass 
-                          : 'border-slate-800/60 bg-slate-950/20 text-slate-550'
-                      }`}>
+                      <div key={i} className="p-1 px-1.5 rounded-lg flex flex-col gap-0.5 transition-all duration-200" style={{
+                        background: file.active ? file.bg : 'rgba(255,255,255,0.015)',
+                        border: `1px solid ${file.active ? file.borderColor : 'rgba(255,255,255,0.035)'}`,
+                        boxShadow: file.active ? '0 1px 3px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.04) inset' : '0 1px 2px rgba(0,0,0,0.15)'
+                      }}>
                         <div className="flex items-center gap-1.5 min-w-0">
-                          <FileIcon className={`w-3 h-3 shrink-0 ${file.active ? 'opacity-100 animate-pulse' : 'opacity-35'}`} />
-                          <span className="font-mono truncate block font-semibold">{file.name}</span>
+                          <FileIcon className="w-3 h-3 shrink-0" style={{ color: file.active ? file.color : 'rgba(100,116,139,0.35)' }} />
+                          <span className="font-mono truncate block font-semibold text-[8px]" style={{ color: file.active ? 'rgba(230,240,255,0.9)' : 'rgba(100,116,139,0.4)' }}>{file.name}</span>
                         </div>
-                        <div className="flex items-center justify-between font-mono text-[7px] leading-none">
-                          <span className="opacity-60">{file.size}</span>
+                        <div className="flex items-center justify-between font-mono text-[6.5px] leading-none">
+                          <span style={{ color: 'rgba(100,116,139,0.5)' }}>{file.size}</span>
                           {file.active && (
-                            <span className="flex items-center gap-1 bg-green-950/80 border border-green-550/45 rounded px-1 py-0.5 leading-none">
-                              <span className="w-1 h-1 rounded-full bg-green-400 animate-pulse" />
-                              <span className="text-[5.5px] text-green-400 uppercase tracking-wide font-extrabold font-mono">READY</span>
+                            <span className="flex items-center gap-0.5 rounded px-[5px] py-0.5 leading-none" style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}>
+                              <span className="w-[4px] h-[4px] rounded-full animate-pulse" style={{ background: '#34d399', boxShadow: '0 0 4px rgba(52,211,153,0.9)' }} />
+                              <span className="text-[5px] uppercase tracking-widest font-black" style={{ color: '#34d399' }}>READY</span>
                             </span>
                           )}
                         </div>
@@ -1079,30 +1127,72 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Video Preview Studio */}
-              <div className="flex-1 min-w-0">
-                <div className="relative aspect-[21/10] rounded-xl overflow-hidden bg-slate-950 border border-white/[0.05] flex items-center justify-center shadow-inner">
-                  {/* Background gradient indicator overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 z-10 pointer-events-none" />
+              {/* Video Preview Studio — premium depth surface */}
+              <div className="flex-1 min-w-0 relative z-10">
+                <div className="relative aspect-[21/10] rounded-xl overflow-hidden flex items-center justify-center" style={{
+                  background: 'linear-gradient(145deg, #0a1120 0%, #06090f 100%)',
+                  border: '1px solid rgba(255,255,255,0.045)',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04), inset 0 -1px 0 rgba(0,0,0,0.3)'
+                }}>
+                  {/* Corner specular highlights */}
+                  <div className="absolute top-0 left-0 w-16 h-8 pointer-events-none z-10" style={{ background: 'radial-gradient(ellipse at 5% 5%, rgba(79,209,255,0.04) 0%, transparent 75%)' }} />
+                  <div className="absolute top-0 right-0 w-12 h-6 pointer-events-none z-10" style={{ background: 'radial-gradient(ellipse at 90% 5%, rgba(255,255,255,0.02) 0%, transparent 75%)' }} />
+                  {/* Edge vignette */}
+                  <div className="absolute inset-0 pointer-events-none z-10" style={{ background: 'radial-gradient(ellipse at 50% 50%, transparent 35%, rgba(0,0,0,0.6) 100%)' }} />
+                  {/* Scan line texture */}
+                  <div className="absolute inset-0 pointer-events-none z-[5] opacity-[0.02]" style={{ backgroundImage: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.5) 0px, rgba(255,255,255,0.5) 1px, transparent 1px, transparent 3px)' }} />
                   
                   {mockupState === 'typing' && (
-                    <div className="text-center space-y-2 text-slate-500 z-10">
-                      <Film className="w-8 h-8 mx-auto animate-pulse text-purpleLight/40" />
-                      <p className="text-[10px] font-mono tracking-wider">Awaiting AI Prompt...</p>
+                    <div className="text-center z-20 flex flex-col items-center gap-2.5">
+                      {/* Premium AI idle orb */}
+                      <div className="relative flex items-center justify-center">
+                        {/* Outer pulse rings */}
+                        <div className="absolute w-16 h-16 rounded-full animate-ping" style={{ background: 'transparent', border: '1px solid rgba(79,209,255,0.06)', animationDuration: '3s' }} />
+                        <div className="absolute w-12 h-12 rounded-full animate-ping" style={{ background: 'transparent', border: '1px solid rgba(79,209,255,0.09)', animationDuration: '2.2s', animationDelay: '0.4s' }} />
+                        {/* Core orb */}
+                        <div className="relative w-9 h-9 rounded-full flex items-center justify-center" style={{
+                          background: 'radial-gradient(circle at 35% 30%, rgba(100,180,255,0.15) 0%, rgba(61,90,128,0.1) 50%, rgba(0,0,0,0.2) 100%)',
+                          border: '1px solid rgba(79,209,255,0.14)',
+                          boxShadow: '0 0 0 3px rgba(79,209,255,0.03), 0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)'
+                        }}>
+                          <Sparkles className="w-3.5 h-3.5" style={{ color: 'rgba(79,209,255,0.55)' }} />
+                        </div>
+                      </div>
+                      <p className="text-[8.5px] font-mono tracking-[0.14em]" style={{ color: 'rgba(100,116,139,0.55)', letterSpacing: '0.12em' }}>awaiting prompt</p>
                     </div>
                   )}
 
                   {mockupState === 'processing' && (
-                    <div className="text-center space-y-3.5 z-10 w-[80%]">
-                      <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
-                        <span className="flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-purpleLight animate-ping" />
-                          <span>AI Rendering Studio...</span>
-                        </span>
-                        <span>{processProgress}%</span>
+                    <div className="text-center z-20 w-[78%] flex flex-col items-center gap-2.5">
+                      {/* Premium AI rendering orb — animated spinner */}
+                      <div className="relative w-11 h-11">
+                        {/* Outer rotating conic ring */}
+                        <div className="absolute inset-0 rounded-full animate-spin" style={{ background: 'conic-gradient(from 0deg, rgba(79,209,255,0.9) 0%, rgba(61,90,128,0.25) 50%, rgba(79,209,255,0.9) 100%)', animationDuration: '1.8s', padding: '1.5px' }}>
+                          <div className="w-full h-full rounded-full" style={{ background: '#06090f' }} />
+                        </div>
+                        {/* Inner static orb */}
+                        <div className="absolute inset-[3px] rounded-full flex items-center justify-center" style={{
+                          background: 'radial-gradient(circle at 40% 35%, rgba(79,209,255,0.12) 0%, rgba(0,0,0,0.4) 100%)',
+                          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)'
+                        }}>
+                          <Sparkles className="w-3 h-3" style={{ color: 'rgba(79,209,255,0.8)' }} />
+                        </div>
                       </div>
-                      <div className="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden border border-white/[0.05]">
-                        <div className="h-full bg-gradient-to-r from-purpleTheme to-blueTheme rounded-full transition-all duration-100" style={{ width: `${processProgress}%` }} />
+                      {/* Status row */}
+                      <div className="flex items-center justify-between w-full text-[8.5px] font-mono" style={{ color: 'rgba(148,163,184,0.75)' }}>
+                        <span className="flex items-center gap-1.5">
+                          <span className="w-[5px] h-[5px] rounded-full animate-pulse" style={{ background: '#4FD1FF', boxShadow: '0 0 5px rgba(79,209,255,0.8)' }} />
+                          AI Rendering...
+                        </span>
+                        <span className="font-bold tabular-nums" style={{ color: '#4FD1FF' }}>{processProgress}%</span>
+                      </div>
+                      {/* Progress bar — premium */}
+                      <div className="w-full h-[3px] rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.04)', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)' }}>
+                        <div className="h-full rounded-full transition-all duration-100" style={{
+                          width: `${processProgress}%`,
+                          background: 'linear-gradient(90deg, rgba(61,90,128,0.9), rgba(79,209,255,1))',
+                          boxShadow: '0 0 6px rgba(79,209,255,0.5), 0 0 1px rgba(255,255,255,0.6)'
+                        }} />
                       </div>
                     </div>
                   )}
@@ -1114,26 +1204,27 @@ export default function Home() {
                         muted autoPlay loop playsInline 
                         className="absolute inset-0 w-full h-full object-cover opacity-70" 
                       />
-                      
-                      {/* Realtime Caption overlays */}
-                      <div className="absolute bottom-4 left-3 right-3 z-20 text-center">
-                        <span className="bg-gradient-to-r from-pinkTheme via-purpleTheme to-blueTheme text-white px-3.5 py-1.5 rounded-lg text-[10px] md:text-xs font-black tracking-wide shadow-[0_8px_24px_rgba(124,58,237,0.35)] uppercase inline-block font-heading max-w-[90%] transition-all duration-300 transform scale-102 border border-purpleLight/40">
+                      {/* Caption overlay */}
+                      <div className="absolute bottom-3 left-3 right-3 z-20 text-center">
+                        <span className="text-white px-3 py-1 rounded-lg text-[9px] font-black tracking-wide uppercase inline-block font-heading max-w-[90%] transition-all duration-300" style={{
+                          background: 'linear-gradient(90deg, rgba(212,165,116,0.88), rgba(61,90,128,0.88), rgba(79,209,255,0.88))',
+                          boxShadow: '0 4px 16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
+                          backdropFilter: 'blur(8px)'
+                        }}>
                           {getMockupCaption(mockupTime)}
                         </span>
                       </div>
-
-                      {/* Timecode overlay */}
-                      <div className="absolute top-2 right-2 bg-slate-950/80 border border-white/[0.08] backdrop-blur-sm px-2.5 py-1 rounded-full text-[8.5px] font-mono font-bold text-slate-300 z-20 shadow-md">
-                        TCR: 00:00:{Math.floor(mockupTime).toString().padStart(2, '0')}:{Math.floor((mockupTime % 1) * 30).toString().padStart(2, '0')}
+                      {/* Timecode */}
+                      <div className="absolute top-2 right-2 px-2 py-[3px] rounded-md text-[7.5px] font-mono font-bold z-20" style={{ background: 'rgba(5,8,15,0.8)', border: '1px solid rgba(255,255,255,0.06)', color: 'rgba(203,213,225,0.8)', backdropFilter: 'blur(8px)' }}>
+                        TCR: 00:{Math.floor(mockupTime).toString().padStart(2,'0')}:{Math.floor((mockupTime%1)*30).toString().padStart(2,'0')}
                       </div>
-
-                      {/* Active Render Badge */}
-                      <div className="absolute top-2 left-2 bg-gradient-to-r from-red-500/20 via-pink-500/15 to-purple-500/20 border border-red-500/40 px-2.5 py-1 rounded-full text-[8px] font-bold font-mono text-white tracking-wide z-20 flex items-center gap-1.5 shadow-[0_0_12px_rgba(239,68,68,0.25)]">
-                        <span className="relative flex h-1.5 w-1.5">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500"></span>
+                      {/* Live badge */}
+                      <div className="absolute top-2 left-2 px-2 py-[3px] rounded-md text-[7px] font-bold font-mono text-white tracking-wide z-20 flex items-center gap-1.5" style={{ background: 'rgba(239,68,68,0.14)', border: '1px solid rgba(239,68,68,0.25)', backdropFilter: 'blur(8px)' }}>
+                        <span className="relative flex h-[5px] w-[5px]">
+                          <span className="animate-ping absolute inset-0 rounded-full bg-red-400 opacity-75"></span>
+                          <span className="relative rounded-full h-[5px] w-[5px] bg-red-500"></span>
                         </span>
-                        <span className="uppercase text-red-200 font-extrabold tracking-wider">LIVE PREVIEW</span>
+                        <span className="uppercase text-red-300 font-extrabold">LIVE</span>
                       </div>
                     </>
                   )}
@@ -1141,125 +1232,102 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Timeline Tracks Section */}
-            <div className="space-y-1.5 pt-0.5 border-t border-white/[0.03]">
-              <div className="flex items-center justify-between text-[8px] font-mono text-slate-500 border-b border-white/[0.03] pb-0.5">
-                <span className="tracking-wider">TIMELINE TRACKS</span>
-                <div className="flex gap-3.5">
-                  <span>00:00</span>
-                  <span>00:05</span>
-                  <span>00:10</span>
-                  <span>00:15</span>
-                  <span>00:20</span>
+            {/* Timeline Tracks Section — Apple-quality depth */}
+            <div className="space-y-1.5 pt-1 relative z-10" style={{ borderTop: '1px solid rgba(255,255,255,0.035)' }}>
+              {/* Timeline header */}
+              <div className="flex items-center justify-between pb-1" style={{ borderBottom: '1px solid rgba(255,255,255,0.025)' }}>
+                <span className="text-[6.5px] font-bold tracking-[0.2em] uppercase" style={{ color: 'rgba(100,116,139,0.5)', letterSpacing: '0.2em' }}>Timeline</span>
+                <div className="flex gap-3 text-[6.5px] font-mono" style={{ color: 'rgba(100,116,139,0.38)' }}>
+                  {['00:00','00:05','00:10','00:15','00:20'].map(t => <span key={t}>{t}</span>)}
                 </div>
               </div>
 
-              {/* Tracks Container */}
-              <div className="relative border border-white/[0.03] bg-slate-950/50 rounded-xl p-1.5 space-y-1 overflow-hidden shadow-inner">
-                {/* V1 Track (Video Blocks) */}
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-slate-900 border border-slate-800 rounded flex items-center justify-center text-slate-500 shrink-0">
-                    <Film className="w-2 h-2" />
+              {/* Tracks trough — dark recessed surface */}
+              <div className="relative rounded-xl overflow-hidden" style={{
+                background: 'linear-gradient(180deg, rgba(4,6,12,0.7) 0%, rgba(6,9,16,0.65) 100%)',
+                border: '1px solid rgba(255,255,255,0.03)',
+                boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(0,0,0,0.3)',
+                padding: '5px 6px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '5px'
+              }}>
+                {/* V1: Video track */}
+                <div className="flex items-center gap-1.5">
+                  <div className="w-[14px] h-[14px] rounded-[4px] flex items-center justify-center shrink-0" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
+                    <Film className="w-2 h-2" style={{ color: 'rgba(100,116,139,0.5)' }} />
                   </div>
-                  <div className="flex-1 h-4 relative" style={{ display: 'grid', gridTemplateColumns: 'repeat(20, minmax(0, 1fr))', gap: '2px' }}>
-                    {/* Block 1: Intro (0-5s, spans 5 cols) */}
-                    <div className={`col-span-5 rounded border transition-all duration-300 text-[7.5px] font-mono flex items-center justify-center truncate px-0.5 ${
-                      mockupState === 'preview' && mockupTime < 5
-                        ? 'bg-gradient-to-r from-blueTheme/25 via-blueTheme/35 to-purpleTheme/25 border-blueTheme/45 text-blue-400 shadow-sm shadow-blueTheme/10 scale-[1.02] -translate-y-[0.5px]'
-                        : 'bg-[#101622]/60 border-white/[0.04] text-slate-400'
-                    }`}>
-                      Intro A-Roll
-                    </div>
-                    {/* Block 2: B-Roll overlay (5-12s, spans 7 cols) */}
-                    <div className={`col-span-7 rounded border transition-all duration-300 text-[7.5px] font-mono flex items-center justify-center truncate px-0.5 ${
-                      mockupState === 'preview' && mockupTime >= 5 && mockupTime < 12
-                        ? 'bg-gradient-to-r from-purpleTheme/25 via-purpleTheme/35 to-blueTheme/25 border-purpleLight/45 text-purpleLight shadow-sm shadow-purpleTheme/10 scale-[1.02] -translate-y-[0.5px]'
-                        : 'bg-[#101622]/60 border-white/[0.04] text-slate-400'
-                    }`}>
-                      B-Roll Laser
-                    </div>
-                    {/* Block 3: Outro (12-20s, spans 8 cols) */}
-                    <div className={`col-span-8 rounded border transition-all duration-300 text-[7.5px] font-mono flex items-center justify-center truncate px-0.5 ${
-                      mockupState === 'preview' && mockupTime >= 12
-                        ? 'bg-gradient-to-r from-blueTheme/25 via-blueTheme/35 to-purpleTheme/25 border-blueTheme/45 text-blue-400 shadow-sm shadow-blueTheme/10 scale-[1.02] -translate-y-[0.5px]'
-                        : 'bg-[#101622]/60 border-white/[0.04] text-slate-400'
-                    }`}>
-                      Outro A-Roll
-                    </div>
+                  <div className="flex-1 h-[18px]" style={{ display: 'grid', gridTemplateColumns: 'repeat(20, minmax(0,1fr))', gap: '2px' }}>
+                    {[
+                      { span: 5, label: 'Intro A-Roll', isActive: mockupState==='preview'&&mockupTime<5, activeColor: 'rgba(79,209,255,0.85)', activeBg: 'linear-gradient(135deg,rgba(79,209,255,0.16),rgba(61,90,128,0.2))', activeBorder: 'rgba(79,209,255,0.22)' },
+                      { span: 7, label: 'B-Roll Laser', isActive: mockupState==='preview'&&mockupTime>=5&&mockupTime<12, activeColor: 'rgba(212,165,116,0.9)', activeBg: 'linear-gradient(135deg,rgba(212,165,116,0.14),rgba(61,90,128,0.18))', activeBorder: 'rgba(212,165,116,0.2)' },
+                      { span: 8, label: 'Outro A-Roll', isActive: mockupState==='preview'&&mockupTime>=12, activeColor: 'rgba(79,209,255,0.85)', activeBg: 'linear-gradient(135deg,rgba(79,209,255,0.16),rgba(61,90,128,0.2))', activeBorder: 'rgba(79,209,255,0.22)' }
+                    ].map((clip,i) => (
+                      <div key={i} className={`col-span-${clip.span} rounded-[4px] text-[6.5px] font-mono font-semibold flex items-center justify-center truncate px-0.5 transition-all duration-200`} style={{
+                        background: clip.isActive ? clip.activeBg : 'linear-gradient(135deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))',
+                        border: `1px solid ${clip.isActive ? clip.activeBorder : 'rgba(255,255,255,0.045)'}`,
+                        color: clip.isActive ? clip.activeColor : 'rgba(100,116,139,0.4)',
+                        boxShadow: clip.isActive
+                          ? '0 1px 4px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.05) inset'
+                          : '0 1px 2px rgba(0,0,0,0.2)'
+                      }}>{clip.label}</div>
+                    ))}
                   </div>
                 </div>
 
-                {/* T1 Track (Subtitle Text Blocks) */}
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-slate-900 border border-slate-800 rounded flex items-center justify-center text-slate-500 shrink-0">
-                    <MessageSquare className="w-2 h-2" />
+                {/* T1: Subtitle track */}
+                <div className="flex items-center gap-1.5">
+                  <div className="w-[14px] h-[14px] rounded-[4px] flex items-center justify-center shrink-0" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
+                    <MessageSquare className="w-2 h-2" style={{ color: 'rgba(100,116,139,0.5)' }} />
                   </div>
-                  <div className="flex-1 h-3 relative" style={{ display: 'grid', gridTemplateColumns: 'repeat(20, minmax(0, 1fr))', gap: '2px' }}>
-                    {/* Captions Blocks */}
-                    <div className={`col-span-5 rounded border text-[6.5px] font-mono flex items-center justify-center truncate px-0.5 transition-all duration-300 ${
-                      mockupState === 'preview' && mockupTime < 5 ? 'bg-pinkTheme/20 border-pinkTheme/40 text-pinkTheme shadow-sm shadow-pinkTheme/10' : 'bg-slate-900/30 border-slate-800/20 text-slate-600'
-                    }`}>
-                      "Edit..."
-                    </div>
-                    <div className={`col-span-6 rounded border text-[6.5px] font-mono flex items-center justify-center truncate px-0.5 transition-all duration-300 ${
-                      mockupState === 'preview' && mockupTime >= 5 && mockupTime < 11 ? 'bg-pinkTheme/20 border-pinkTheme/40 text-pinkTheme shadow-sm shadow-pinkTheme/10' : 'bg-slate-900/30 border-slate-800/20 text-slate-600'
-                    }`}>
-                      "Pak..."
-                    </div>
-                    <div className={`col-span-5 rounded border text-[6.5px] font-mono flex items-center justify-center truncate px-0.5 transition-all duration-300 ${
-                      mockupState === 'preview' && mockupTime >= 11 && mockupTime < 16 ? 'bg-pinkTheme/20 border-pinkTheme/40 text-pinkTheme shadow-sm shadow-pinkTheme/10' : 'bg-slate-900/30 border-slate-800/20 text-slate-600'
-                    }`}>
-                      "Auto..."
-                    </div>
-                    <div className={`col-span-4 rounded border text-[6.5px] font-mono flex items-center justify-center truncate px-0.5 transition-all duration-300 ${
-                      mockupState === 'preview' && mockupTime >= 16 ? 'bg-pinkTheme/20 border-pinkTheme/40 text-pinkTheme shadow-sm shadow-pinkTheme/10' : 'bg-slate-900/30 border-slate-800/20 text-slate-600'
-                    }`}>
-                      "Viral..."
-                    </div>
+                  <div className="flex-1 h-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(20, minmax(0,1fr))', gap: '2px' }}>
+                    {[
+                      { span: 5, label: '"Edit..."', active: mockupState==='preview'&&mockupTime<5 },
+                      { span: 6, label: '"Pak..."', active: mockupState==='preview'&&mockupTime>=5&&mockupTime<11 },
+                      { span: 5, label: '"Auto..."', active: mockupState==='preview'&&mockupTime>=11&&mockupTime<16 },
+                      { span: 4, label: '"Viral..."', active: mockupState==='preview'&&mockupTime>=16 }
+                    ].map((b,i) => (
+                      <div key={i} className={`col-span-${b.span} rounded-[3px] text-[6px] font-mono flex items-center justify-center truncate px-0.5 transition-all duration-200`} style={{
+                        background: b.active ? 'linear-gradient(135deg,rgba(212,165,116,0.14),rgba(212,165,116,0.06))' : 'rgba(255,255,255,0.02)',
+                        border: `1px solid ${b.active ? 'rgba(212,165,116,0.22)' : 'rgba(255,255,255,0.035)'}`,
+                        color: b.active ? 'rgba(212,165,116,0.85)' : 'rgba(100,116,139,0.35)',
+                        boxShadow: b.active ? '0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)' : '0 1px 1px rgba(0,0,0,0.15)'
+                      }}>{b.label}</div>
+                    ))}
                   </div>
                 </div>
 
-                {/* A1 Track (Audio Waveform) */}
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-slate-900 border border-slate-800 rounded flex items-center justify-center text-slate-500 shrink-0">
-                    <Music className="w-2 h-2" />
+                {/* A1: Audio waveform track */}
+                <div className="flex items-center gap-1.5">
+                  <div className="w-[14px] h-[14px] rounded-[4px] flex items-center justify-center shrink-0" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
+                    <Music className="w-2 h-2" style={{ color: 'rgba(100,116,139,0.5)' }} />
                   </div>
-                  <div className="flex-1 bg-slate-900/30 border border-slate-800/30 rounded h-3 relative overflow-hidden flex items-center px-1">
-                    {/* Animated visualizer representation */}
+                  <div className="flex-1 h-3 rounded-[3px] relative overflow-hidden flex items-center px-1" style={{ background: 'rgba(255,255,255,0.018)', border: '1px solid rgba(255,255,255,0.035)', boxShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
                     <div className="flex items-center gap-[1px] w-full h-[6px]">
-                      {Array.from({ length: 190 }).map((_, i) => {
-                        const h = Math.sin(i * 0.15) * 2 + 3 + Math.random() * 1;
-                        return (
-                          <div 
-                            key={i} 
-                            className={`w-[1px] rounded-full transition-all duration-350 ${
-                              mockupState === 'preview' ? 'bg-blueTheme/55' : 'bg-slate-700/55'
-                            }`}
-                            style={{ height: `${h}px` }} 
-                          />
-                        );
+                      {Array.from({length:190}).map((_,i)=>{
+                        const h = Math.sin(i*0.15)*2+3+Math.random()*1;
+                        return <div key={i} className="w-[1px] rounded-full" style={{ height:`${h}px`, background: mockupState==='preview'?'rgba(79,209,255,0.5)':'rgba(100,116,139,0.2)' }} />;
                       })}
                     </div>
                   </div>
                 </div>
 
-                {/* Moving Playhead Indicator */}
+                {/* Playhead — glass needle */}
                 {mockupState === 'preview' && (
-                  <div 
-                    className="absolute top-0 bottom-0 w-[1.5px] bg-gradient-to-b from-red-500 to-red-600/40 z-30 pointer-events-none"
-                    style={{ 
-                      left: `calc(32px + (100% - 40px) * ${mockupTime / 20})`,
-                      boxShadow: '0 0 10px rgba(239,68,68,0.6), 0 0 4px rgba(239,68,68,0.3)' 
-                    }}
-                  >
-                    {/* Playhead Pin Handle */}
-                    <div 
-                      className="absolute top-0 -left-[5.25px] w-[12px] h-[12px] rotate-45 shadow-[0_2px_6px_rgba(239,68,68,0.4)] border border-red-400/50"
-                      style={{
-                        background: 'radial-gradient(circle at 35% 35%, #ff6b6b 0%, #ef4444 60%, #bd1c1c 100%)',
-                        borderRadius: '0 50% 50% 50%'
-                      }}
-                    />
+                  <div className="absolute top-0 bottom-0 pointer-events-none z-30" style={{
+                    left: `calc(22px + (100% - 28px) * ${mockupTime/20})`,
+                    width: '1px',
+                    background: 'linear-gradient(180deg, rgba(239,68,68,1) 0%, rgba(239,68,68,0.15) 100%)',
+                    boxShadow: '0 0 4px rgba(239,68,68,0.4)'
+                  }}>
+                    <div style={{
+                      position:'absolute', top:0, left:'-3.5px',
+                      width:'8px', height:'8px',
+                      background:'radial-gradient(circle at 40% 35%,#ff7272,#ef4444)',
+                      borderRadius:'0 50% 50% 50%',
+                      transform:'rotate(45deg)',
+                      boxShadow:'0 1px 4px rgba(239,68,68,0.6)'
+                    }} />
                   </div>
                 )}
               </div>
@@ -1268,34 +1336,62 @@ export default function Home() {
             {/* Waveform divider accent */}
             <WaveformDivider />
 
-            {/* Prompt Input Bar (similar to Fiesta AI input prompt box) */}
-            <div className="border border-purpleTheme/20 bg-[#101826]/90 shadow-md backdrop-blur-md rounded-xl p-2 flex items-center justify-between gap-2 relative z-10 transition-all duration-300 hover:border-purpleLight/20 hover:shadow-lg">
+            {/* Prompt Bar — Cursor/Linear style floating input */}
+            <div className="rounded-xl p-[7px] flex items-center justify-between gap-2 relative z-10 transition-all duration-300 group" style={{
+              background: 'linear-gradient(180deg, rgba(14,20,34,0.96) 0%, rgba(10,15,26,0.94) 100%)',
+              border: '1px solid rgba(61,90,128,0.22)',
+              backdropFilter: 'blur(20px)',
+              boxShadow: [
+                '0 1px 3px rgba(0,0,0,0.4)',
+                '0 4px 16px rgba(0,0,0,0.4)',
+                '0 8px 24px rgba(0,0,0,0.3)',
+                'inset 0 1px 0 rgba(255,255,255,0.055)',
+                'inset 0 -1px 0 rgba(0,0,0,0.2)'
+              ].join(', ')
+            }}>
+              {/* Top specular edge */}
+              <div className="absolute top-0 left-8 right-8 h-px pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08) 30%, rgba(79,209,255,0.1) 50%, rgba(255,255,255,0.08) 70%, transparent)' }} />
+              {/* Breathing border glow */}
+              <div className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: '0 0 0 1px rgba(79,209,255,0.1)', borderRadius: 'inherit' }} />
               <div className="flex items-center gap-2 min-w-0 flex-1">
-                {/* Glowing Sparkles badge */}
-                <div className="w-5.5 h-5.5 rounded-lg bg-gradient-to-br from-purpleLight via-purpleTheme to-blueTheme flex items-center justify-center text-white shrink-0 shadow-sm">
-                  <Sparkles className="w-3 h-3 text-white animate-pulse" />
+                {/* AI orb badge — glass sphere */}
+                <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 relative" style={{
+                  background: 'radial-gradient(circle at 35% 30%, rgba(100,160,255,0.25) 0%, rgba(61,90,128,0.6) 60%, rgba(30,50,90,0.8) 100%)',
+                  border: '1px solid rgba(79,209,255,0.18)',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.08) inset'
+                }}>
+                  <Sparkles className="w-[11px] h-[11px]" style={{ color: 'rgba(150,210,255,0.9)' }} />
                 </div>
-                <div className="text-[10px] md:text-[10.5px] min-w-0 truncate font-mono flex items-center gap-1.5">
-                  <span className="bg-gradient-to-r from-purpleLight to-blueTheme bg-clip-text text-transparent font-extrabold tracking-wide">ai_prompt:</span>
-                  <span className="text-slate-100 font-semibold truncate block">{typedText}</span>
+                <div className="text-[9.5px] md:text-[10px] min-w-0 truncate font-mono flex items-center gap-1">
+                  <span className="font-bold tracking-wide shrink-0" style={{ background: 'linear-gradient(90deg, rgba(245,239,230,0.9), rgba(79,209,255,0.9))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>ai_prompt:</span>
+                  <span className="truncate" style={{ color: 'rgba(203,213,225,0.8)', fontWeight: 500 }}>
+                    <span className="mr-0.5" style={{ color: 'rgba(212,165,116,0.7)', fontSize: '8px' }}>✦</span>
+                    {typedText}
+                  </span>
                   {mockupState === 'typing' && (
-                    <span className="w-1.5 h-3.5 bg-blueTheme shadow-[0_0_3px_rgba(79, 209, 255, 0.2)] animate-pulse inline-block rounded-sm" />
+                    <span className="w-[2px] h-[11px] inline-block rounded-sm animate-pulse" style={{ background: 'rgba(79,209,255,0.8)', boxShadow: '0 0 5px rgba(79,209,255,0.5)', marginLeft: '1px', flexShrink: 0 }} />
                   )}
                 </div>
               </div>
-              
-              <button className={`w-6 h-6 rounded-lg flex items-center justify-center transition-all shrink-0 ${
-                mockupState === 'typing' 
-                  ? 'bg-slate-800/80 border border-slate-700/60 text-slate-400' 
-                  : 'bg-gradient-to-r from-purpleLight via-purpleTheme to-blueTheme text-white shadow-sm scale-105 animate-pulse hover:scale-110'
-              }`}>
-                <ArrowRight className="w-3.5 h-3.5" />
+              <button
+                className="w-6 h-6 rounded-lg flex items-center justify-center transition-all duration-200 shrink-0 hover:scale-105 active:scale-95"
+                style={{
+                  background: mockupState === 'typing'
+                    ? 'rgba(255,255,255,0.04)'
+                    : 'linear-gradient(135deg, rgba(61,90,128,0.9) 0%, rgba(79,209,255,0.85) 100%)',
+                  border: mockupState === 'typing' ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(79,209,255,0.2)',
+                  boxShadow: mockupState !== 'typing'
+                    ? '0 1px 4px rgba(0,0,0,0.4), 0 2px 8px rgba(79,209,255,0.2), inset 0 1px 0 rgba(255,255,255,0.12)'
+                    : '0 1px 2px rgba(0,0,0,0.2)'
+                }}
+              >
+                <ArrowRight className="w-3 h-3" style={{ color: mockupState === 'typing' ? 'rgba(100,116,139,0.5)' : 'rgba(255,255,255,0.95)' }} />
               </button>
             </div>
           </div>
+          </motion.div>
         </div>
-      </div>
-    </header>
+      </header>
 
       {/* SECTION 3: STACKED SCROLL FEATURE CARDS */}
       <StackedFeatureCards navigate={navigate} />

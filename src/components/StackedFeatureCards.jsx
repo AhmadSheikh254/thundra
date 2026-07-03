@@ -131,8 +131,8 @@ const T   = N - 1;
 const NAV = 72;
 
 // ─── SCROLL TIMING ────────────────────────────────────────────────────────────
-const DWELL_VH    = 30;
-const SLIDE_VH    = 80;
+const DWELL_VH    = 20;
+const SLIDE_VH    = 50;
 const SEGMENT_VH  = DWELL_VH + SLIDE_VH;
 const FINAL_VH    = 50;
 const TOTAL_SCROLL_VH = (N - 1) * SEGMENT_VH + FINAL_VH;
@@ -871,8 +871,8 @@ function FeatureCard({ card, index, scrollYProgress }) {
 
   const yNum    = useTransform(
     scrollYProgress,
-    [slideStart, safeSlideEnd],
-    isFirst ? [0, 0] : [120, 0],
+    [slideStart, safeSlideEnd, scaleStart, safeScaleEnd],
+    isFirst ? [0, 0, 0, -20] : [120, 0, 0, -20],
   );
   const ySpring = useSpring(yNum, { stiffness: 350, damping: 35, mass: 0.3 });
   const yPct    = useTransform(ySpring, v => `${v.toFixed(3)}%`);
@@ -880,17 +880,25 @@ function FeatureCard({ card, index, scrollYProgress }) {
   const scaleRaw = useTransform(
     scrollYProgress,
     [slideStart, safeSlideEnd, scaleStart, safeScaleEnd],
-    [0.96, 1.0, 1.0, 0.94]
+    [0.97, 1.0, 1.0, 0.98]
   );
   
   const opacityRaw = useTransform(
     scrollYProgress,
     [slideStart, safeSlideEnd, scaleStart, safeScaleEnd],
-    [1.0, 1.0, 1.0, 0.65]
+    [0.0, 1.0, 1.0, 0.0]
+  );
+
+  const blurRaw = useTransform(
+    scrollYProgress,
+    [slideStart, safeSlideEnd, scaleStart, safeScaleEnd],
+    [0, 0, 0, 4]
   );
 
   const scale      = useSpring(scaleRaw,   { stiffness: 350, damping: 35, mass: 0.3 });
   const opacity    = useSpring(opacityRaw, { stiffness: 350, damping: 35, mass: 0.3 });
+  const blur       = useSpring(blurRaw,    { stiffness: 350, damping: 35, mass: 0.3 });
+  const filter     = useTransform(blur, b => b > 0.1 ? `blur(${b.toFixed(2)}px)` : 'none');
 
   return (
     <motion.div
@@ -905,9 +913,10 @@ function FeatureCard({ card, index, scrollYProgress }) {
         y:              yPct,
         scale:          isLast ? 1 : scale,
         opacity:        isLast ? 1 : opacity,
+        filter:         isLast ? 'none' : filter,
         transformOrigin:'top center',
         zIndex:         index + 1,
-        willChange:     'transform, opacity',
+        willChange:     'transform, opacity, filter',
         pointerEvents:  'none',
       }}
     >
@@ -995,7 +1004,7 @@ function FeatureCard({ card, index, scrollYProgress }) {
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
         }} />
 
-        <div style={{
+        <div className="stacked-card-text-panel" style={{
           position:'relative',
           zIndex:10,
           display:'flex',
@@ -1127,7 +1136,7 @@ function FeatureCard({ card, index, scrollYProgress }) {
           </button>
         </div>
 
-        <div style={{
+        <div className="stacked-card-mockup-panel" style={{
           position:'relative',
           display:'flex',
           alignItems:'center',
@@ -1151,7 +1160,7 @@ export default function StackedFeatureCards({ navigate }) {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024);
+      setIsMobile(window.innerWidth < 768);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -1226,7 +1235,7 @@ export default function StackedFeatureCards({ navigate }) {
     return (
       <section
         id="features"
-        className="relative z-10 px-6 py-16 border-t border-purpleTheme/10 max-w-5xl mx-auto w-full text-center space-y-10"
+        className="relative z-10 px-4 sm:px-6 py-16 border-t border-purpleTheme/10 max-w-5xl mx-auto w-full text-center space-y-10"
       >
         <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet" />
         
@@ -1242,33 +1251,33 @@ export default function StackedFeatureCards({ navigate }) {
           </p>
         </div>
         
-        <div className="space-y-8 text-left max-w-2xl mx-auto">
+        <div className="space-y-8 text-left max-w-md sm:max-w-xl mx-auto">
           {CARDS.map((card) => (
             <div 
               key={card.id} 
-              className="rounded-3xl border border-white/[0.06] p-6 md:p-8 flex flex-col gap-6 relative overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent shadow-xl transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.01] hover:border-white/15 active:scale-[0.99] cursor-pointer hover:shadow-2xl"
+              className="rounded-3xl border border-white/[0.06] p-4 sm:p-6 md:p-8 flex flex-col gap-5 relative overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent shadow-xl transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.01] hover:border-white/15 active:scale-[0.99] cursor-pointer hover:shadow-2xl"
               style={{ background: card.bg }}
             >
               {/* Content */}
-              <div className="space-y-4">
+              <div className="space-y-3.5">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold" style={{ color: card.badge_c, background: card.badge_bg, borderColor: card.badge_b, borderWidth: '1px' }}>
                   <span>{card.emoji}</span>
                   <span>{card.badge}</span>
                 </span>
                 
-                <h3 className="font-heading text-xl md:text-2xl font-black text-white leading-tight whitespace-pre-line">
+                <h3 className="font-heading text-lg sm:text-xl md:text-2xl font-black text-white leading-tight whitespace-pre-line">
                   {card.headline}
                 </h3>
                 
-                <p className="text-xs md:text-sm text-slate-400 leading-relaxed font-body font-medium">
+                <p className="text-[11.5px] sm:text-xs md:text-sm text-slate-450 leading-relaxed font-body font-medium">
                   {card.desc}
                 </p>
                 
-                <ul className="space-y-2 pt-3 border-t border-white/[0.04] text-xs text-slate-300">
+                <ul className="space-y-2 pt-3 border-t border-white/[0.04] text-[11px] sm:text-xs text-slate-350">
                   {card.bullets.map((b, i) => (
                     <li key={i} className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full border border-white/20 flex items-center justify-center shrink-0" style={{ borderColor: `${card.accent}60` }}>
-                        <Check size={9} color={card.accent} strokeWidth={4} />
+                      <div className="w-3.5 h-3.5 rounded-full border border-white/20 flex items-center justify-center shrink-0" style={{ borderColor: `${card.accent}60` }}>
+                        <Check size={8} color={card.accent} strokeWidth={4} />
                       </div>
                       <span className="font-body font-medium">{b}</span>
                     </li>
@@ -1277,7 +1286,7 @@ export default function StackedFeatureCards({ navigate }) {
               </div>
               
               {/* Mockup Preview Wrapper */}
-              <div className="w-full relative rounded-2xl border border-white/[0.06] bg-[#05050c]/85 p-4 overflow-hidden min-h-[260px] flex flex-col justify-between shadow-inner">
+              <div className="w-full relative rounded-2xl border border-white/[0.06] bg-[#05050c]/85 p-3 sm:p-4 overflow-hidden min-h-[240px] flex flex-col justify-between shadow-inner">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:14px_14px] pointer-events-none" />
                 
                 {/* Insights header */}
@@ -1287,14 +1296,14 @@ export default function StackedFeatureCards({ navigate }) {
                 </div>
                 
                 {/* Embedded mockup */}
-                <div className="flex-1 flex items-center justify-center py-4 relative overflow-hidden min-h-[150px]">
-                  <div className="w-full h-full flex items-center justify-center" style={{ transform: 'scale(0.85)', transformOrigin: 'center' }}>
+                <div className="flex-1 flex items-center justify-center py-4 relative overflow-hidden min-h-[140px]">
+                  <div className="w-full h-full flex items-center justify-center mobile-mockup-wrapper" style={{ transformOrigin: 'center' }}>
                     {renderMockup(card.mockup, card.accent, card.accentSec)}
                   </div>
                 </div>
                 
                 {/* Insights Footer */}
-                <div className="grid grid-cols-3 gap-1.5 text-center text-[7.5px] font-mono text-slate-400 pt-2 border-t border-white/[0.03]">
+                <div className="grid grid-cols-3 gap-1.5 text-center text-[7px] sm:text-[7.5px] font-mono text-slate-450 pt-2 border-t border-white/[0.03]">
                   {card.insights.map((ins, i) => (
                     <div key={i} className="bg-white/[0.02] border border-white/[0.04] p-1 rounded-md font-bold">{ins}</div>
                   ))}
