@@ -506,7 +506,7 @@ export default function Home() {
   const [isAnnual, setIsAnnual] = useState(false);
   const [sliderPos, setSliderPos] = useState(50);
   const canvasRef = useRef(null);
-  
+
   // Interactive Comparison video player states and refs
   const [isPlaying, setIsPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(0.0);
@@ -930,12 +930,30 @@ export default function Home() {
       <header className="relative z-10 px-6 md:px-[6%] pt-[90px] pb-6 md:pt-[105px] md:pb-8 lg:pt-[80px] lg:pb-0 lg:h-[calc(100vh-80px)] lg:min-h-[580px] grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 xl:gap-14 items-center max-w-7xl mx-auto w-full">
         {/* Left Side: Copywriting */}
         <div className="space-y-4 lg:space-y-5 text-left">
-          <div className="group inline-flex items-center gap-2 bg-gradient-to-r from-[#4FD1FF]/12 via-[#6FA8FF]/10 to-[#3D5A80]/12 border border-[#4FD1FF]/35 rounded-full px-4.5 py-1.5 text-[10px] md:text-[11px] font-bold tracking-wider uppercase shadow-[0_3px_10px_rgba(0,0,0,0.4)] backdrop-blur-md select-none cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:-translate-y-0.5 hover:border-[#4FD1FF]/50 hover:shadow-[0_0_12px_rgba(79,209,255,0.12)] active:scale-[0.98]">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4FD1FF] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-gradient-to-br from-[#4FD1FF] to-[#3D5A80]"></span>
-            </span>
-            <span className="bg-gradient-to-r from-[#4FD1FF] via-[#6FA8FF] to-[#3D5A80] bg-clip-text text-transparent font-black transition-all duration-300 group-hover:tracking-wider">⚡ Pakistan's First AI Video Agent</span>
+          <div className="hero-badge-wrap">
+            <span aria-hidden className="hero-badge-shadow" />
+            <div
+              className="hero-badge-3d group inline-flex items-center gap-2 bg-gradient-to-r from-[#4FD1FF]/20 via-[#6FA8FF]/14 to-[#3D5A80]/18 border border-[#4FD1FF]/50 rounded-full px-4.5 py-1.5 text-[10px] md:text-[11px] font-bold tracking-wider uppercase select-none cursor-pointer"
+              onMouseMove={(e) => {
+                const r = e.currentTarget.getBoundingClientRect();
+                const px = (e.clientX - r.left) / r.width - 0.5;
+                const py = (e.clientY - r.top) / r.height - 0.5;
+                e.currentTarget.style.setProperty('--rx', `${(-py * 16).toFixed(2)}deg`);
+                e.currentTarget.style.setProperty('--ry', `${(px * 20).toFixed(2)}deg`);
+                e.currentTarget.style.setProperty('--mx', `${((px + 0.5) * 100).toFixed(1)}%`);
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.setProperty('--rx', '0deg');
+                e.currentTarget.style.setProperty('--ry', '0deg');
+              }}
+            >
+              <span aria-hidden className="hero-badge-glass" />
+              <span className="relative flex h-2 w-2" style={{ transform: 'translateZ(22px)' }}>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4FD1FF] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-gradient-to-br from-[#4FD1FF] to-[#3D5A80] shadow-[0_0_6px_rgba(79,209,255,0.8)]"></span>
+              </span>
+              <span className="bg-gradient-to-r from-[#4FD1FF] via-[#6FA8FF] to-[#3D5A80] bg-clip-text text-transparent font-black transition-all duration-300 group-hover:tracking-wider" style={{ transform: 'translateZ(28px)' }}>⚡ Pakistan's First AI Video Agent</span>
+            </div>
           </div>
 
           <h1 
@@ -958,14 +976,14 @@ export default function Home() {
           <div className="flex flex-wrap gap-3 pt-1">
             <button
               onClick={() => navigate('/editor')}
-              className="group bg-gradient-to-r from-purpleTheme to-blueTheme px-6 py-3 rounded-xl font-bold font-heading text-xs uppercase tracking-wider text-white shadow-lg shadow-black/30 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_4px_15px_rgba(79,209,255,0.18)] active:scale-[0.98] flex items-center gap-2 border border-blueTheme/20"
+              className="group premium-btn-glow bg-gradient-to-r from-purpleTheme via-blueTheme to-purpleTheme px-6 py-3 rounded-xl font-bold font-heading text-xs uppercase tracking-wider text-white shadow-lg shadow-black/30 hover:scale-[1.04] active:scale-[0.98] flex items-center gap-2 border border-blueTheme/20"
             >
               <span>Start Editing</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
             </button>
             <button
               onClick={() => navigate('/editor')}
-              className="bg-[#101826]/80 border border-white/[0.06] hover:border-blueTheme/30 px-6 py-3 rounded-xl font-bold font-heading text-xs uppercase tracking-wider text-slate-300 hover:text-white transition-all"
+              className="bg-[#101826]/60 backdrop-blur-md border border-white/[0.06] hover:border-blueTheme/30 px-6 py-3 rounded-xl font-bold font-heading text-xs uppercase tracking-wider text-slate-300 hover:text-white transition-all shadow-[inset_0_1px_0_rgba(245,239,230,0.07)] hover:shadow-[inset_0_1px_0_rgba(245,239,230,0.12),0_4px_14px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 duration-300"
             >
               Watch Demo
             </button>
@@ -983,14 +1001,32 @@ export default function Home() {
           <div className="absolute pointer-events-none" style={{ width: '85%', height: '30px', bottom: '-18px', left: '7.5%', background: 'radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 70%)', filter: 'blur(12px)', borderRadius: '50%' }} />
           {/* Deep ambient glow */}
           <div className="absolute pointer-events-none" style={{ width: '110%', height: '110%', top: '-5%', left: '-5%', background: 'radial-gradient(ellipse at 30% 30%, rgba(61,90,128,0.06) 0%, transparent 55%)', filter: 'blur(60px)' }} />
+          {/* Violet aurora ambient — top-right accent */}
+          <div className="absolute pointer-events-none" style={{ width: '340px', height: '240px', top: '-30px', right: '-50px', background: 'radial-gradient(ellipse at 80% 20%, rgba(168,85,247,0.07) 0%, transparent 60%)', filter: 'blur(36px)' }} />
+          {/* Magenta under-glow — bottom-left accent */}
+          <div className="absolute pointer-events-none" style={{ width: '280px', height: '180px', bottom: '-20px', left: '-30px', background: 'radial-gradient(ellipse at 20% 80%, rgba(244,63,94,0.045) 0%, transparent 60%)', filter: 'blur(32px)' }} />
 
           {/* Wrapper container for floating and HUD frame */}
-          <motion.div
-            className="w-full max-w-[470px] lg:max-w-[490px] xl:max-w-[530px] relative z-10 animate-float mx-auto"
-            whileHover={{ rotateX: 1.5, rotateY: -1.5, scale: 1.008 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 30 }}
-            style={{ transformStyle: 'preserve-3d', perspective: '1200px' }}
+          <div className="w-full max-w-[470px] lg:max-w-[490px] xl:max-w-[530px] relative z-10 animate-float mx-auto" style={{ perspective: '1200px' }}>
+          <div
+            className="hero-studio-tilt w-full relative"
+            onMouseMove={(e) => {
+              const r = e.currentTarget.getBoundingClientRect();
+              const px = (e.clientX - r.left) / r.width - 0.5;
+              const py = (e.clientY - r.top) / r.height - 0.5;
+              e.currentTarget.style.setProperty('--srx', `${(-py * 8).toFixed(2)}deg`);
+              e.currentTarget.style.setProperty('--sry', `${(px * 10).toFixed(2)}deg`);
+              e.currentTarget.style.setProperty('--gx', `${((px + 0.5) * 100).toFixed(1)}%`);
+              e.currentTarget.style.setProperty('--gy', `${((py + 0.5) * 100).toFixed(1)}%`);
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.setProperty('--srx', '0deg');
+              e.currentTarget.style.setProperty('--sry', '0deg');
+            }}
           >
+            {/* Parallax back-plate — violet-rimmed slab behind the glass, revealed by the tilt */}
+            <div aria-hidden className="hero-studio-backplate" />
+
             {/* Premium HUD cinematic frame overlay (sitting outside the overflow-hidden boundaries of the card content) */}
             <CardHUDFrame />
 
@@ -998,7 +1034,9 @@ export default function Home() {
             <div 
               className="w-full rounded-[24px] p-3 md:p-3.5 space-y-2.5 overflow-hidden relative"
               style={{
-                background: 'linear-gradient(155deg, #131d2e 0%, #0e1828 40%, #0b1220 75%, #080f1b 100%)',
+                background: 'linear-gradient(155deg, rgba(19,29,46,0.86) 0%, rgba(14,24,40,0.89) 40%, rgba(11,18,32,0.92) 75%, rgba(8,15,27,0.94) 100%)',
+                backdropFilter: 'blur(24px) saturate(150%)',
+                WebkitBackdropFilter: 'blur(24px) saturate(150%)',
                 border: '1px solid rgba(255,255,255,0.06)',
                 boxShadow: [
                   '0 0 0 1px rgba(255,255,255,0.03)',
@@ -1007,7 +1045,10 @@ export default function Home() {
                   '0 24px 48px rgba(0,0,0,0.5)',
                   '0 48px 80px rgba(0,0,0,0.4)',
                   'inset 0 1px 0 rgba(255,255,255,0.07)',
-                  'inset 0 -1px 0 rgba(0,0,0,0.3)'
+                  'inset 0 -1px 0 rgba(0,0,0,0.3)',
+                  'inset 12px 0 32px rgba(79,209,255,0.025)',
+                  'inset -12px 0 32px rgba(168,85,247,0.03)',
+                  'inset 0 -14px 36px rgba(244,63,94,0.02)'
                 ].join(', ')
               }}
             >
@@ -1022,8 +1063,14 @@ export default function Home() {
               <div className="absolute bottom-0 right-0 w-48 h-28 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 90% 90%, rgba(0,0,0,0.45) 0%, transparent 60%)', zIndex: 1 }} />
               {/* Surface micro-texture — top glass sheen */}
               <div className="absolute inset-[1px] pointer-events-none rounded-[23px]" style={{ background: 'linear-gradient(175deg, rgba(255,255,255,0.032) 0%, rgba(255,255,255,0.008) 25%, transparent 50%)', zIndex: 2 }} />
+              {/* Holographic aurora — slow drifting violet/cyan/magenta wash */}
+              <div aria-hidden className="hero-studio-aurora absolute inset-0 pointer-events-none rounded-[24px]" style={{ zIndex: 1 }} />
               {/* Bottom vignette */}
               <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none rounded-b-[24px]" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.25) 0%, transparent 100%)', zIndex: 3 }} />
+              {/* Cursor-tracking glass glare across the whole window */}
+              <div aria-hidden className="hero-studio-glare absolute inset-0 pointer-events-none rounded-[24px]" style={{ zIndex: 9 }} />
+              {/* Breathing gradient edge light hugging the frame */}
+              <div aria-hidden className="hero-studio-edgeglow" style={{ zIndex: 8 }} />
               {/* macOS title bar — elevated glass surface */}
               <div className="flex items-center justify-between -mx-3 -mt-3 md:-mx-3.5 md:-mt-3.5 px-4 py-2 rounded-t-[23px] border-b relative z-10"
                 style={{
@@ -1099,11 +1146,11 @@ export default function Home() {
                   {[
                     { name: "raw_intro.mp4", size: "42MB", active: true, icon: Film, color: 'rgba(252,100,120,0.95)', borderColor: 'rgba(244,63,94,0.18)', bg: 'linear-gradient(135deg, rgba(244,63,94,0.09), rgba(244,63,94,0.04))' },
                     { name: "lofi_beat.wav", size: "4MB", active: true, icon: Music, color: 'rgba(79,209,255,0.95)', borderColor: 'rgba(79,209,255,0.18)', bg: 'linear-gradient(135deg, rgba(79,209,255,0.09), rgba(79,209,255,0.04))' },
-                    { name: "broll_laser.mp4", size: "12MB", active: mockupState === 'preview', icon: Film, color: 'rgba(245,239,230,0.85)', borderColor: 'rgba(245,239,230,0.15)', bg: 'linear-gradient(135deg, rgba(245,239,230,0.06), rgba(245,239,230,0.02))' }
+                    { name: "broll_laser.mp4", size: "12MB", active: mockupState === 'preview', icon: Film, color: 'rgba(196,160,255,0.95)', borderColor: 'rgba(168,85,247,0.22)', bg: 'linear-gradient(135deg, rgba(168,85,247,0.1), rgba(168,85,247,0.04))' }
                   ].map((file, i) => {
                     const FileIcon = file.icon;
                     return (
-                      <div key={i} className="p-1 px-1.5 rounded-lg flex flex-col gap-0.5 transition-all duration-200" style={{
+                      <div key={i} className="media-card p-1 px-1.5 rounded-lg flex flex-col gap-0.5 cursor-pointer" style={{
                         background: file.active ? file.bg : 'rgba(255,255,255,0.015)',
                         border: `1px solid ${file.active ? file.borderColor : 'rgba(255,255,255,0.035)'}`,
                         boxShadow: file.active ? '0 1px 3px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.04) inset' : '0 1px 2px rgba(0,0,0,0.15)'
@@ -1137,6 +1184,10 @@ export default function Home() {
                   {/* Corner specular highlights */}
                   <div className="absolute top-0 left-0 w-16 h-8 pointer-events-none z-10" style={{ background: 'radial-gradient(ellipse at 5% 5%, rgba(79,209,255,0.04) 0%, transparent 75%)' }} />
                   <div className="absolute top-0 right-0 w-12 h-6 pointer-events-none z-10" style={{ background: 'radial-gradient(ellipse at 90% 5%, rgba(255,255,255,0.02) 0%, transparent 75%)' }} />
+                  {/* Breathing screen glow — premium monitor backlight */}
+                  <div aria-hidden className="hero-monitor-glow z-[4]" />
+                  {/* Drifting diagonal glass reflection */}
+                  <div aria-hidden className="hero-monitor-reflection z-[6]" />
                   {/* Edge vignette */}
                   <div className="absolute inset-0 pointer-events-none z-10" style={{ background: 'radial-gradient(ellipse at 50% 50%, transparent 35%, rgba(0,0,0,0.6) 100%)' }} />
                   {/* Scan line texture */}
@@ -1188,10 +1239,11 @@ export default function Home() {
                       </div>
                       {/* Progress bar — premium */}
                       <div className="w-full h-[3px] rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.04)', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)' }}>
-                        <div className="h-full rounded-full transition-all duration-100" style={{
+                        <div className="progress-fill-shimmer h-full rounded-full transition-all duration-100" style={{
                           width: `${processProgress}%`,
-                          background: 'linear-gradient(90deg, rgba(61,90,128,0.9), rgba(79,209,255,1))',
-                          boxShadow: '0 0 6px rgba(79,209,255,0.5), 0 0 1px rgba(255,255,255,0.6)'
+                          background: 'linear-gradient(90deg, rgba(61,90,128,0.9), rgba(79,209,255,1), rgba(168,85,247,0.9), rgba(79,209,255,1))',
+                          backgroundSize: '200% 100%',
+                          boxShadow: '0 0 8px rgba(79,209,255,0.55), 0 0 1px rgba(255,255,255,0.6)'
                         }} />
                       </div>
                     </div>
@@ -1219,7 +1271,7 @@ export default function Home() {
                         TCR: 00:{Math.floor(mockupTime).toString().padStart(2,'0')}:{Math.floor((mockupTime%1)*30).toString().padStart(2,'0')}
                       </div>
                       {/* Live badge */}
-                      <div className="absolute top-2 left-2 px-2 py-[3px] rounded-md text-[7px] font-bold font-mono text-white tracking-wide z-20 flex items-center gap-1.5" style={{ background: 'rgba(239,68,68,0.14)', border: '1px solid rgba(239,68,68,0.25)', backdropFilter: 'blur(8px)' }}>
+                      <div className="absolute top-2 left-2 px-2 py-[3px] rounded-md text-[7px] font-bold font-mono text-white tracking-wide z-20 flex items-center gap-1.5" style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.2), rgba(239,68,68,0.1))', border: '1px solid rgba(239,68,68,0.35)', backdropFilter: 'blur(8px)', boxShadow: '0 0 12px rgba(239,68,68,0.18), inset 0 1px 0 rgba(255,255,255,0.08)' }}>
                         <span className="relative flex h-[5px] w-[5px]">
                           <span className="animate-ping absolute inset-0 rounded-full bg-red-400 opacity-75"></span>
                           <span className="relative rounded-full h-[5px] w-[5px] bg-red-500"></span>
@@ -1259,16 +1311,16 @@ export default function Home() {
                   </div>
                   <div className="flex-1 h-[18px]" style={{ display: 'grid', gridTemplateColumns: 'repeat(20, minmax(0,1fr))', gap: '2px' }}>
                     {[
-                      { span: 5, label: 'Intro A-Roll', isActive: mockupState==='preview'&&mockupTime<5, activeColor: 'rgba(79,209,255,0.85)', activeBg: 'linear-gradient(135deg,rgba(79,209,255,0.16),rgba(61,90,128,0.2))', activeBorder: 'rgba(79,209,255,0.22)' },
-                      { span: 7, label: 'B-Roll Laser', isActive: mockupState==='preview'&&mockupTime>=5&&mockupTime<12, activeColor: 'rgba(212,165,116,0.9)', activeBg: 'linear-gradient(135deg,rgba(212,165,116,0.14),rgba(61,90,128,0.18))', activeBorder: 'rgba(212,165,116,0.2)' },
-                      { span: 8, label: 'Outro A-Roll', isActive: mockupState==='preview'&&mockupTime>=12, activeColor: 'rgba(79,209,255,0.85)', activeBg: 'linear-gradient(135deg,rgba(79,209,255,0.16),rgba(61,90,128,0.2))', activeBorder: 'rgba(79,209,255,0.22)' }
+                      { span: 5, label: 'Intro A-Roll', isActive: mockupState==='preview'&&mockupTime<5, activeColor: 'rgba(79,209,255,0.95)', activeBg: 'linear-gradient(135deg,rgba(79,209,255,0.2),rgba(61,90,128,0.24))', activeBorder: 'rgba(79,209,255,0.35)', idleColor: 'rgba(79,209,255,0.45)', idleBg: 'linear-gradient(135deg,rgba(79,209,255,0.05),rgba(79,209,255,0.02))', idleBorder: 'rgba(79,209,255,0.12)' },
+                      { span: 7, label: 'B-Roll Laser', isActive: mockupState==='preview'&&mockupTime>=5&&mockupTime<12, activeColor: 'rgba(251,191,36,0.95)', activeBg: 'linear-gradient(135deg,rgba(245,158,11,0.18),rgba(61,90,128,0.2))', activeBorder: 'rgba(245,158,11,0.32)', idleColor: 'rgba(245,158,11,0.45)', idleBg: 'linear-gradient(135deg,rgba(245,158,11,0.045),rgba(245,158,11,0.02))', idleBorder: 'rgba(245,158,11,0.12)' },
+                      { span: 8, label: 'Outro A-Roll', isActive: mockupState==='preview'&&mockupTime>=12, activeColor: 'rgba(196,160,255,0.95)', activeBg: 'linear-gradient(135deg,rgba(168,85,247,0.18),rgba(61,90,128,0.22))', activeBorder: 'rgba(168,85,247,0.34)', idleColor: 'rgba(168,85,247,0.5)', idleBg: 'linear-gradient(135deg,rgba(168,85,247,0.05),rgba(168,85,247,0.02))', idleBorder: 'rgba(168,85,247,0.13)' }
                     ].map((clip,i) => (
-                      <div key={i} className={`col-span-${clip.span} rounded-[4px] text-[6.5px] font-mono font-semibold flex items-center justify-center truncate px-0.5 transition-all duration-200`} style={{
-                        background: clip.isActive ? clip.activeBg : 'linear-gradient(135deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))',
-                        border: `1px solid ${clip.isActive ? clip.activeBorder : 'rgba(255,255,255,0.045)'}`,
-                        color: clip.isActive ? clip.activeColor : 'rgba(100,116,139,0.4)',
+                      <div key={i} className={`timeline-clip col-span-${clip.span} rounded-[4px] text-[6.5px] font-mono font-semibold flex items-center justify-center truncate px-0.5`} style={{
+                        background: clip.isActive ? clip.activeBg : clip.idleBg,
+                        border: `1px solid ${clip.isActive ? clip.activeBorder : clip.idleBorder}`,
+                        color: clip.isActive ? clip.activeColor : clip.idleColor,
                         boxShadow: clip.isActive
-                          ? '0 1px 4px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.05) inset'
+                          ? '0 1px 4px rgba(0,0,0,0.4), 0 0 10px rgba(79,209,255,0.1), 0 1px 0 rgba(255,255,255,0.06) inset'
                           : '0 1px 2px rgba(0,0,0,0.2)'
                       }}>{clip.label}</div>
                     ))}
@@ -1287,7 +1339,7 @@ export default function Home() {
                       { span: 5, label: '"Auto..."', active: mockupState==='preview'&&mockupTime>=11&&mockupTime<16 },
                       { span: 4, label: '"Viral..."', active: mockupState==='preview'&&mockupTime>=16 }
                     ].map((b,i) => (
-                      <div key={i} className={`col-span-${b.span} rounded-[3px] text-[6px] font-mono flex items-center justify-center truncate px-0.5 transition-all duration-200`} style={{
+                      <div key={i} className={`timeline-clip col-span-${b.span} rounded-[3px] text-[6px] font-mono flex items-center justify-center truncate px-0.5`} style={{
                         background: b.active ? 'linear-gradient(135deg,rgba(212,165,116,0.14),rgba(212,165,116,0.06))' : 'rgba(255,255,255,0.02)',
                         border: `1px solid ${b.active ? 'rgba(212,165,116,0.22)' : 'rgba(255,255,255,0.035)'}`,
                         color: b.active ? 'rgba(212,165,116,0.85)' : 'rgba(100,116,139,0.35)',
@@ -1306,7 +1358,7 @@ export default function Home() {
                     <div className="flex items-center gap-[1px] w-full h-[6px]">
                       {Array.from({length:190}).map((_,i)=>{
                         const h = Math.sin(i*0.15)*2+3+Math.random()*1;
-                        return <div key={i} className="w-[1px] rounded-full" style={{ height:`${h}px`, background: mockupState==='preview'?'rgba(79,209,255,0.5)':'rgba(100,116,139,0.2)' }} />;
+                        return <div key={i} className={`w-[1px] rounded-full ${mockupState==='preview' ? 'waveform-bar' : ''}`} style={{ height:`${h}px`, background: mockupState==='preview'?'rgba(52,211,153,0.55)':'rgba(100,116,139,0.2)', animationDelay: `${(i%24)*75}ms` }} />;
                       })}
                     </div>
                   </div>
@@ -1317,16 +1369,16 @@ export default function Home() {
                   <div className="absolute top-0 bottom-0 pointer-events-none z-30" style={{
                     left: `calc(22px + (100% - 28px) * ${mockupTime/20})`,
                     width: '1px',
-                    background: 'linear-gradient(180deg, rgba(239,68,68,1) 0%, rgba(239,68,68,0.15) 100%)',
-                    boxShadow: '0 0 4px rgba(239,68,68,0.4)'
+                    background: 'linear-gradient(180deg, rgba(255,120,120,1) 0%, rgba(239,68,68,0.85) 30%, rgba(239,68,68,0.12) 100%)',
+                    boxShadow: '0 0 6px rgba(239,68,68,0.55), 0 0 14px rgba(239,68,68,0.2)'
                   }}>
                     <div style={{
                       position:'absolute', top:0, left:'-3.5px',
                       width:'8px', height:'8px',
-                      background:'radial-gradient(circle at 40% 35%,#ff7272,#ef4444)',
+                      background:'radial-gradient(circle at 40% 35%,#ffa3a3,#ef4444)',
                       borderRadius:'0 50% 50% 50%',
                       transform:'rotate(45deg)',
-                      boxShadow:'0 1px 4px rgba(239,68,68,0.6)'
+                      boxShadow:'0 1px 5px rgba(239,68,68,0.7), 0 0 10px rgba(239,68,68,0.35), inset 0 1px 0 rgba(255,255,255,0.25)'
                     }} />
                   </div>
                 )}
@@ -1351,8 +1403,9 @@ export default function Home() {
             }}>
               {/* Top specular edge */}
               <div className="absolute top-0 left-8 right-8 h-px pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08) 30%, rgba(79,209,255,0.1) 50%, rgba(255,255,255,0.08) 70%, transparent)' }} />
-              {/* Breathing border glow */}
-              <div className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: '0 0 0 1px rgba(79,209,255,0.1)', borderRadius: 'inherit' }} />
+              {/* Breathing border glow — always alive, stronger on hover */}
+              <div className="prompt-border-breathe absolute inset-0 rounded-xl pointer-events-none" style={{ borderRadius: 'inherit' }} />
+              <div className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: '0 0 0 1px rgba(79,209,255,0.18), 0 0 18px rgba(79,209,255,0.08)', borderRadius: 'inherit' }} />
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 {/* AI orb badge — glass sphere */}
                 <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 relative" style={{
@@ -1374,7 +1427,7 @@ export default function Home() {
                 </div>
               </div>
               <button
-                className="w-6 h-6 rounded-lg flex items-center justify-center transition-all duration-200 shrink-0 hover:scale-105 active:scale-95"
+                className={`w-6 h-6 rounded-lg flex items-center justify-center transition-all duration-200 shrink-0 hover:scale-105 active:scale-95 ${mockupState !== 'typing' ? 'prompt-send-glow' : ''}`}
                 style={{
                   background: mockupState === 'typing'
                     ? 'rgba(255,255,255,0.04)'
@@ -1389,7 +1442,11 @@ export default function Home() {
               </button>
             </div>
           </div>
-          </motion.div>
+
+          {/* Orbiting light ring hugging the window frame */}
+          <div aria-hidden className="hero-studio-ring" />
+          </div>
+          </div>
         </div>
       </header>
 

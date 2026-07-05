@@ -449,6 +449,436 @@ h2 {
   transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* ── 3D HERO BADGE (premium interactive pill) ── */
+@property --badge-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes badge-ring-spin {
+  to {
+    --badge-angle: 360deg;
+  }
+}
+
+.hero-badge-wrap {
+  position: relative;
+  display: inline-block;
+  perspective: 600px;
+  animation: badge-float 5.5s ease-in-out infinite;
+}
+
+@keyframes badge-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* Soft contact shadow beneath the floating glass pill */
+.hero-badge-shadow {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: -12px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5) 0%, rgba(79, 209, 255, 0.08) 45%, transparent 72%);
+  filter: blur(7px);
+  pointer-events: none;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.hero-badge-wrap:hover .hero-badge-shadow {
+  transform: translateY(4px) scaleX(1.08);
+  opacity: 0.7;
+}
+
+.hero-badge-3d {
+  --rx: 0deg;
+  --ry: 0deg;
+  --mx: 50%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--badge-scale, 1));
+  transition: transform 0.16s ease-out, box-shadow 0.35s ease, border-color 0.3s ease;
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.5),
+    0 0 16px rgba(79, 209, 255, 0.1),
+    0 0 36px rgba(79, 209, 255, 0.05),
+    inset 0 1px 0 rgba(245, 239, 230, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.45);
+  will-change: transform;
+}
+
+.hero-badge-3d:hover {
+  --badge-scale: 1.045;
+  border-color: rgba(79, 209, 255, 0.55);
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.55),
+    0 0 24px rgba(79, 209, 255, 0.22),
+    0 0 60px rgba(79, 209, 255, 0.08),
+    inset 0 1px 0 rgba(245, 239, 230, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.hero-badge-3d:active {
+  --badge-scale: 0.97;
+}
+
+/* Inner bevel ring — glass thickness illusion */
+.hero-badge-3d::after {
+  content: '';
+  position: absolute;
+  inset: 1.5px;
+  border-radius: inherit;
+  border: 1px solid transparent;
+  border-top-color: rgba(245, 239, 230, 0.16);
+  border-left-color: rgba(245, 239, 230, 0.06);
+  border-bottom-color: rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+/* Rotating conic light ring hugging the pill border */
+.hero-badge-3d::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--badge-angle),
+    transparent 0%,
+    rgba(79, 209, 255, 0.85) 10%,
+    rgba(111, 168, 255, 0.4) 18%,
+    transparent 32%,
+    transparent 55%,
+    rgba(212, 165, 116, 0.35) 66%,
+    transparent 78%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: badge-ring-spin 7s linear infinite;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.hero-badge-3d:hover::before {
+  animation-duration: 2.6s;
+  opacity: 1;
+}
+
+/* Glass underlay: frosted blur + cursor-tracking specular + shine sweep,
+   kept on a child layer so backdrop-filter doesn't flatten the 3D tilt */
+.hero-badge-glass {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  backdrop-filter: blur(18px) saturate(160%) brightness(1.04);
+  -webkit-backdrop-filter: blur(18px) saturate(160%) brightness(1.04);
+  /* Curved-glass shading: bright crown fading to a darker base */
+  background: linear-gradient(
+    180deg,
+    rgba(245, 239, 230, 0.09) 0%,
+    rgba(245, 239, 230, 0.025) 30%,
+    transparent 48%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
+}
+
+.hero-badge-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(90px 45px at var(--mx) 25%, rgba(245, 239, 230, 0.14), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hero-badge-3d:hover .hero-badge-glass::before {
+  opacity: 1;
+}
+
+.hero-badge-glass::after {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: -40%;
+  width: 26%;
+  height: 220%;
+  background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.22) 50%, transparent 100%);
+  transform: rotate(22deg);
+  opacity: 0;
+}
+
+.hero-badge-3d:hover .hero-badge-glass::after {
+  opacity: 1;
+  left: 140%;
+  transition: left 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+/* ── 3D HERO STUDIO MOCKUP (glass window treatment) ── */
+.hero-studio-tilt {
+  --srx: 0deg;
+  --sry: 0deg;
+  --lift: 0px;
+  transform-style: preserve-3d;
+  transform: translateY(var(--lift)) rotateX(var(--srx)) rotateY(var(--sry)) scale(var(--studio-scale, 1));
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.hero-studio-tilt:hover {
+  --studio-scale: 1.008;
+  --lift: -4px;
+}
+
+/* Parallax back-plate — sits 22px behind the glass in true 3D space,
+   its violet rim peeks out as the window tilts */
+.hero-studio-backplate {
+  position: absolute;
+  inset: -2px;
+  border-radius: 26px;
+  transform: translateZ(-22px) scale(1.012);
+  background: linear-gradient(155deg, rgba(31, 24, 54, 0.9) 0%, rgba(10, 18, 34, 0.95) 45%, rgba(8, 14, 26, 0.98) 100%);
+  border: 1px solid rgba(168, 85, 247, 0.14);
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.55),
+    0 0 30px rgba(168, 85, 247, 0.05),
+    inset 0 1px 0 rgba(245, 239, 230, 0.04);
+  pointer-events: none;
+}
+
+/* Holographic aurora — slow-breathing multicolor wash inside the glass */
+@keyframes studio-aurora-breathe {
+  0%, 100% {
+    filter: hue-rotate(0deg);
+    opacity: 0.85;
+  }
+  50% {
+    filter: hue-rotate(28deg);
+    opacity: 1;
+  }
+}
+
+.hero-studio-aurora {
+  background:
+    radial-gradient(600px 300px at 85% 0%, rgba(168, 85, 247, 0.07) 0%, transparent 55%),
+    radial-gradient(500px 280px at 0% 40%, rgba(79, 209, 255, 0.06) 0%, transparent 55%),
+    radial-gradient(520px 300px at 60% 110%, rgba(244, 63, 94, 0.045) 0%, transparent 60%);
+  background-repeat: no-repeat;
+  mix-blend-mode: screen;
+  animation: studio-aurora-breathe 14s ease-in-out infinite;
+}
+
+/* Slow orbiting light ring around the studio window frame */
+.hero-studio-ring {
+  position: absolute;
+  inset: -1px;
+  border-radius: 25px;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--badge-angle),
+    transparent 0%,
+    rgba(79, 209, 255, 0.65) 7%,
+    rgba(168, 85, 247, 0.45) 15%,
+    rgba(244, 63, 94, 0.28) 22%,
+    transparent 33%,
+    transparent 52%,
+    rgba(212, 165, 116, 0.32) 62%,
+    rgba(79, 209, 255, 0.25) 71%,
+    transparent 82%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: badge-ring-spin 11s linear infinite;
+  pointer-events: none;
+  opacity: 0.5;
+  transition: opacity 0.4s ease;
+}
+
+.hero-studio-tilt:hover .hero-studio-ring {
+  opacity: 0.9;
+  animation-duration: 5s;
+}
+
+/* Cursor-tracking specular glare across the window glass */
+.hero-studio-glare {
+  background: radial-gradient(
+    380px 260px at var(--gx, 50%) var(--gy, 20%),
+    rgba(245, 239, 230, 0.055) 0%,
+    rgba(79, 209, 255, 0.03) 35%,
+    rgba(168, 85, 247, 0.025) 60%,
+    transparent 75%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.hero-studio-tilt:hover .hero-studio-glare {
+  opacity: 1;
+}
+
+/* Breathing gradient edge light hugging the window border */
+@keyframes edge-breathe {
+  0%, 100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.hero-studio-edgeglow {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(79, 209, 255, 0.06),
+    inset 0 1px 12px rgba(79, 209, 255, 0.04),
+    inset 0 -1px 12px rgba(168, 85, 247, 0.04),
+    0 0 22px rgba(79, 209, 255, 0.05),
+    0 0 44px rgba(168, 85, 247, 0.04);
+  animation: edge-breathe 6s ease-in-out infinite;
+  transition: box-shadow 0.4s ease;
+}
+
+.hero-studio-tilt:hover .hero-studio-edgeglow {
+  box-shadow:
+    inset 0 0 0 1px rgba(79, 209, 255, 0.1),
+    inset 0 1px 16px rgba(79, 209, 255, 0.06),
+    inset 0 -1px 16px rgba(168, 85, 247, 0.06),
+    0 0 30px rgba(79, 209, 255, 0.09),
+    0 0 60px rgba(168, 85, 247, 0.06);
+}
+
+/* Monitor: slow diagonal glass reflection drifting across the screen */
+@keyframes monitor-sheen {
+  0% {
+    transform: translateX(-130%) rotate(18deg);
+  }
+  55%, 100% {
+    transform: translateX(230%) rotate(18deg);
+  }
+}
+
+.hero-monitor-reflection {
+  position: absolute;
+  top: -40%;
+  left: 0;
+  width: 34%;
+  height: 180%;
+  background: linear-gradient(to right, transparent 0%, rgba(245, 239, 230, 0.035) 45%, rgba(79, 209, 255, 0.02) 60%, transparent 100%);
+  animation: monitor-sheen 9s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Monitor: breathing screen glow behind content */
+@keyframes screen-glow-breathe {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.hero-monitor-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(45% 55% at 50% 42%, rgba(79, 209, 255, 0.05) 0%, rgba(61, 90, 128, 0.025) 55%, transparent 80%);
+  animation: screen-glow-breathe 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Media bin cards — lift + border glow on hover */
+.media-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.media-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4), 0 0 10px rgba(79, 209, 255, 0.08), 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+  border-color: rgba(79, 209, 255, 0.28) !important;
+}
+
+/* Timeline clips — brighten + glow on hover */
+.timeline-clip {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.timeline-clip:hover {
+  transform: translateY(-0.5px);
+  border-color: rgba(79, 209, 255, 0.35) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45), 0 0 8px rgba(79, 209, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Audio waveform bars — soft breathing pulse (GPU: transform only) */
+@keyframes wave-pulse {
+  0%, 100% {
+    transform: scaleY(0.55);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.waveform-bar {
+  animation: wave-pulse 1.8s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+/* Progress bar fill — moving light shimmer */
+@keyframes progress-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.progress-fill-shimmer {
+  animation: progress-shimmer 1.6s linear infinite;
+}
+
+/* Prompt bar — always-on breathing border glow */
+@keyframes prompt-breathe {
+  0%, 100% {
+    box-shadow: 0 0 0 1px rgba(79, 209, 255, 0.05);
+  }
+  50% {
+    box-shadow: 0 0 0 1px rgba(79, 209, 255, 0.14), 0 0 14px rgba(79, 209, 255, 0.06);
+  }
+}
+
+.prompt-border-breathe {
+  animation: prompt-breathe 4.5s ease-in-out infinite;
+}
+
+/* Prompt send button — ready-state glow pulse */
+@keyframes send-glow {
+  0%, 100% {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(79, 209, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+  50% {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4), 0 2px 14px rgba(79, 209, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+}
+
+.prompt-send-glow {
+  animation: send-glow 2.4s ease-in-out infinite;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
