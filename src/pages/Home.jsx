@@ -928,8 +928,11 @@ export default function Home() {
 
       {/* SECTION 1: HERO SECTION */}
       <header className="relative z-10 px-6 md:px-[6%] pt-[90px] pb-6 md:pt-[105px] md:pb-8 lg:pt-[80px] lg:pb-0 lg:h-[calc(100vh-80px)] lg:min-h-[580px] grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 xl:gap-14 items-center max-w-7xl mx-auto w-full">
+        {/* Hero-scoped radial depth lighting */}
+        <div className="absolute inset-0 pointer-events-none z-0" style={{ background: 'radial-gradient(52% 62% at 26% 42%, rgba(79,209,255,0.045) 0%, transparent 68%), radial-gradient(46% 56% at 78% 52%, rgba(61,90,128,0.06) 0%, transparent 70%)' }} />
+
         {/* Left Side: Copywriting */}
-        <div className="space-y-4 lg:space-y-5 text-left">
+        <div className="space-y-5 lg:space-y-6 text-left relative z-10 animate-[fadeIn_0.7s_ease-out]">
           <div className="hero-badge-wrap">
             <span aria-hidden className="hero-badge-shadow" />
             <div
@@ -956,34 +959,36 @@ export default function Home() {
             </div>
           </div>
 
-          <h1 
-            className="font-heading font-black tracking-tight leading-[1.08] text-white"
-            style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)', textShadow: '0 4px 18px rgba(0, 0, 0, 0.95), 0 2px 4px rgba(0, 0, 0, 0.85)' }}
+          <h1
+            className="font-heading font-black leading-[1.05] text-white"
+            style={{ fontSize: 'clamp(2rem, 5.5vw, 4rem)', letterSpacing: '-0.025em', textShadow: '0 4px 24px rgba(0, 0, 0, 0.95), 0 2px 4px rgba(0, 0, 0, 0.85)' }}
           >
             Edit Videos. <br />
-            <span 
-              className="bg-gradient-to-r from-[#4FD1FF] via-[#F5EFE6] to-[#4FD1FF] bg-clip-text text-transparent animate-shimmer-edge"
+            <span
+              className="bg-gradient-to-r from-[#7ADEFF] via-[#F5EFE6] to-[#6FA8FF] bg-clip-text text-transparent animate-shimmer-edge"
               style={{ textShadow: 'none', WebkitTextFillColor: 'transparent' }}
             >
               Not Timelines.
             </span>
           </h1>
 
-          <p className="text-sm md:text-base text-slate-400 leading-relaxed max-w-lg font-body font-medium">
+          <p className="text-[15px] md:text-base text-slate-300/90 max-w-[540px] font-body font-medium pt-1" style={{ lineHeight: 1.7 }}>
             Upload your footage, tell AI what you want, and get a professionally edited video with captions, music, B-roll, transitions, and color grading.
           </p>
 
-          <div className="flex flex-wrap gap-3 pt-1">
+          <div className="flex flex-wrap gap-4 pt-2 animate-[fadeIn_0.6s_ease-out]">
             <button
               onClick={() => navigate('/editor')}
-              className="group premium-btn-glow bg-gradient-to-r from-purpleTheme via-blueTheme to-purpleTheme px-6 py-3 rounded-xl font-bold font-heading text-xs uppercase tracking-wider text-white shadow-lg shadow-black/30 hover:scale-[1.04] active:scale-[0.98] flex items-center gap-2 border border-blueTheme/20"
+              className="group h-[46px] px-6 rounded-xl font-semibold font-heading text-[12.5px] uppercase text-white flex items-center gap-2 border border-white/[0.14] hover:border-white/25 transition-all ease-out hover:-translate-y-0.5 hover:scale-[1.01] hover:brightness-[1.07] active:scale-[0.98] active:translate-y-0 shadow-[0_1px_2px_rgba(0,0,0,0.4),0_4px_12px_rgba(0,0,0,0.35),0_10px_28px_rgba(20,40,80,0.3),inset_0_1px_0_rgba(255,255,255,0.14)] hover:shadow-[0_2px_4px_rgba(0,0,0,0.4),0_8px_20px_rgba(0,0,0,0.4),0_14px_36px_rgba(20,40,80,0.35),inset_0_1px_0_rgba(255,255,255,0.18)]"
+              style={{ background: 'linear-gradient(135deg, #5B54B8 0%, #3D6FA6 55%, #3A7CA8 100%)', letterSpacing: '0.07em', fontWeight: 600, transitionDuration: '200ms' }}
             >
               <span>Start Editing</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform duration-200 ease-out" />
             </button>
             <button
               onClick={() => navigate('/editor')}
-              className="bg-[#101826]/60 backdrop-blur-md border border-white/[0.06] hover:border-blueTheme/30 px-6 py-3 rounded-xl font-bold font-heading text-xs uppercase tracking-wider text-slate-300 hover:text-white transition-all shadow-[inset_0_1px_0_rgba(245,239,230,0.07)] hover:shadow-[inset_0_1px_0_rgba(245,239,230,0.12),0_4px_14px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 duration-300"
+              className="h-[46px] px-6 rounded-xl font-semibold font-heading text-[12.5px] uppercase text-slate-200 hover:text-white bg-white/[0.04] backdrop-blur-md border border-white/[0.12] hover:border-white/25 hover:bg-white/[0.07] transition-all ease-out hover:-translate-y-0.5 hover:scale-[1.01] active:scale-[0.98] active:translate-y-0 shadow-[0_1px_2px_rgba(0,0,0,0.35),0_3px_10px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(245,239,230,0.09)] hover:shadow-[0_2px_4px_rgba(0,0,0,0.35),0_8px_20px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(245,239,230,0.13)]"
+              style={{ letterSpacing: '0.07em', fontWeight: 600, transitionDuration: '200ms' }}
             >
               Watch Demo
             </button>
@@ -1008,22 +1013,7 @@ export default function Home() {
 
           {/* Wrapper container for floating and HUD frame */}
           <div className="w-full max-w-[470px] lg:max-w-[490px] xl:max-w-[530px] relative z-10 animate-float mx-auto" style={{ perspective: '1200px' }}>
-          <div
-            className="hero-studio-tilt w-full relative"
-            onMouseMove={(e) => {
-              const r = e.currentTarget.getBoundingClientRect();
-              const px = (e.clientX - r.left) / r.width - 0.5;
-              const py = (e.clientY - r.top) / r.height - 0.5;
-              e.currentTarget.style.setProperty('--srx', `${(-py * 8).toFixed(2)}deg`);
-              e.currentTarget.style.setProperty('--sry', `${(px * 10).toFixed(2)}deg`);
-              e.currentTarget.style.setProperty('--gx', `${((px + 0.5) * 100).toFixed(1)}%`);
-              e.currentTarget.style.setProperty('--gy', `${((py + 0.5) * 100).toFixed(1)}%`);
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.setProperty('--srx', '0deg');
-              e.currentTarget.style.setProperty('--sry', '0deg');
-            }}
-          >
+          <div className="hero-studio-tilt w-full relative">
             {/* Parallax back-plate — violet-rimmed slab behind the glass, revealed by the tilt */}
             <div aria-hidden className="hero-studio-backplate" />
 
@@ -1034,10 +1024,10 @@ export default function Home() {
             <div 
               className="w-full rounded-[24px] p-3 md:p-3.5 space-y-2.5 overflow-hidden relative"
               style={{
-                background: 'linear-gradient(155deg, rgba(19,29,46,0.86) 0%, rgba(14,24,40,0.89) 40%, rgba(11,18,32,0.92) 75%, rgba(8,15,27,0.94) 100%)',
+                background: 'linear-gradient(155deg, rgba(26,37,56,0.92) 0%, rgba(19,30,48,0.94) 40%, rgba(15,23,38,0.96) 75%, rgba(11,18,31,0.97) 100%)',
                 backdropFilter: 'blur(24px) saturate(150%)',
                 WebkitBackdropFilter: 'blur(24px) saturate(150%)',
-                border: '1px solid rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.09)',
                 boxShadow: [
                   '0 0 0 1px rgba(255,255,255,0.03)',
                   '0 2px 4px rgba(0,0,0,0.4)',
@@ -1096,7 +1086,7 @@ export default function Home() {
                 
                 {/* File / Project Path Breadcrumbs */}
                 <div className="flex items-center gap-1 text-[9px] font-mono font-medium tracking-wide">
-                  <span className="cursor-pointer transition-colors duration-200" style={{ color: 'rgba(100,116,139,0.5)' }}>projects</span>
+                  <span className="cursor-pointer transition-colors duration-200" style={{ color: 'rgba(148,163,184,0.7)' }}>projects</span>
                   <span style={{ color: 'rgba(100,116,139,0.25)', margin: '0 2px' }}>/</span>
                   <div className="flex items-center gap-1 rounded-md px-1.5 py-0.5" style={{ background: 'rgba(61,90,128,0.15)', border: '1px solid rgba(61,90,128,0.28)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}>
                     <Film className="w-2.5 h-2.5 shrink-0" style={{ color: 'rgba(192,170,255,0.8)' }} />
@@ -1141,7 +1131,7 @@ export default function Home() {
               }}>
                 {/* Panel top reflection */}
                 <div className="absolute top-0 left-2 right-2 h-px rounded-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)' }} />
-                <p className="text-[6.5px] font-bold tracking-[0.2em] uppercase relative z-10" style={{ color: 'rgba(100,116,139,0.55)', letterSpacing: '0.18em' }}>Media Bin</p>
+                <p className="text-[6.5px] font-bold tracking-[0.2em] uppercase relative z-10" style={{ color: 'rgba(148,163,184,0.85)', letterSpacing: '0.18em' }}>Media Bin</p>
                 <div className="space-y-[5px] relative z-10">
                   {[
                     { name: "raw_intro.mp4", size: "42MB", active: true, icon: Film, color: 'rgba(252,100,120,0.95)', borderColor: 'rgba(244,63,94,0.18)', bg: 'linear-gradient(135deg, rgba(244,63,94,0.09), rgba(244,63,94,0.04))' },
@@ -1157,10 +1147,10 @@ export default function Home() {
                       }}>
                         <div className="flex items-center gap-1.5 min-w-0">
                           <FileIcon className="w-3 h-3 shrink-0" style={{ color: file.active ? file.color : 'rgba(100,116,139,0.35)' }} />
-                          <span className="font-mono truncate block font-semibold text-[8px]" style={{ color: file.active ? 'rgba(230,240,255,0.9)' : 'rgba(100,116,139,0.4)' }}>{file.name}</span>
+                          <span className="font-mono truncate block font-semibold text-[8px]" style={{ color: file.active ? 'rgba(238,246,255,0.96)' : 'rgba(148,163,184,0.6)' }}>{file.name}</span>
                         </div>
                         <div className="flex items-center justify-between font-mono text-[6.5px] leading-none">
-                          <span style={{ color: 'rgba(100,116,139,0.5)' }}>{file.size}</span>
+                          <span style={{ color: 'rgba(148,163,184,0.68)' }}>{file.size}</span>
                           {file.active && (
                             <span className="flex items-center gap-0.5 rounded px-[5px] py-0.5 leading-none" style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}>
                               <span className="w-[4px] h-[4px] rounded-full animate-pulse" style={{ background: '#34d399', boxShadow: '0 0 4px rgba(52,211,153,0.9)' }} />
@@ -1209,7 +1199,7 @@ export default function Home() {
                           <Sparkles className="w-3.5 h-3.5" style={{ color: 'rgba(79,209,255,0.55)' }} />
                         </div>
                       </div>
-                      <p className="text-[8.5px] font-mono tracking-[0.14em]" style={{ color: 'rgba(100,116,139,0.55)', letterSpacing: '0.12em' }}>awaiting prompt</p>
+                      <p className="text-[8.5px] font-mono tracking-[0.14em]" style={{ color: 'rgba(148,163,184,0.8)', letterSpacing: '0.12em' }}>awaiting prompt</p>
                     </div>
                   )}
 
@@ -1288,8 +1278,8 @@ export default function Home() {
             <div className="space-y-1.5 pt-1 relative z-10" style={{ borderTop: '1px solid rgba(255,255,255,0.035)' }}>
               {/* Timeline header */}
               <div className="flex items-center justify-between pb-1" style={{ borderBottom: '1px solid rgba(255,255,255,0.025)' }}>
-                <span className="text-[6.5px] font-bold tracking-[0.2em] uppercase" style={{ color: 'rgba(100,116,139,0.5)', letterSpacing: '0.2em' }}>Timeline</span>
-                <div className="flex gap-3 text-[6.5px] font-mono" style={{ color: 'rgba(100,116,139,0.38)' }}>
+                <span className="text-[6.5px] font-bold tracking-[0.2em] uppercase" style={{ color: 'rgba(148,163,184,0.85)', letterSpacing: '0.2em' }}>Timeline</span>
+                <div className="flex gap-3 text-[6.5px] font-mono" style={{ color: 'rgba(148,163,184,0.6)' }}>
                   {['00:00','00:05','00:10','00:15','00:20'].map(t => <span key={t}>{t}</span>)}
                 </div>
               </div>
@@ -1390,15 +1380,16 @@ export default function Home() {
 
             {/* Prompt Bar — Cursor/Linear style floating input */}
             <div className="rounded-xl p-[7px] flex items-center justify-between gap-2 relative z-10 transition-all duration-300 group" style={{
-              background: 'linear-gradient(180deg, rgba(14,20,34,0.96) 0%, rgba(10,15,26,0.94) 100%)',
-              border: '1px solid rgba(61,90,128,0.22)',
-              backdropFilter: 'blur(20px)',
+              background: 'linear-gradient(180deg, rgba(26,38,60,0.98) 0%, rgba(17,26,44,0.97) 100%)',
+              border: '1px solid rgba(79,209,255,0.28)',
+              backdropFilter: 'blur(24px) saturate(140%)',
               boxShadow: [
-                '0 1px 3px rgba(0,0,0,0.4)',
-                '0 4px 16px rgba(0,0,0,0.4)',
-                '0 8px 24px rgba(0,0,0,0.3)',
-                'inset 0 1px 0 rgba(255,255,255,0.055)',
-                'inset 0 -1px 0 rgba(0,0,0,0.2)'
+                '0 2px 4px rgba(0,0,0,0.45)',
+                '0 6px 20px rgba(0,0,0,0.5)',
+                '0 12px 32px rgba(0,0,0,0.35)',
+                '0 0 18px rgba(79,209,255,0.07)',
+                'inset 0 1px 0 rgba(255,255,255,0.1)',
+                'inset 0 -1px 0 rgba(0,0,0,0.25)'
               ].join(', ')
             }}>
               {/* Top specular edge */}
@@ -1409,15 +1400,15 @@ export default function Home() {
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 {/* AI orb badge — glass sphere */}
                 <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 relative" style={{
-                  background: 'radial-gradient(circle at 35% 30%, rgba(100,160,255,0.25) 0%, rgba(61,90,128,0.6) 60%, rgba(30,50,90,0.8) 100%)',
-                  border: '1px solid rgba(79,209,255,0.18)',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.08) inset'
+                  background: 'radial-gradient(circle at 35% 30%, rgba(130,190,255,0.4) 0%, rgba(70,110,170,0.7) 60%, rgba(38,62,110,0.85) 100%)',
+                  border: '1px solid rgba(79,209,255,0.35)',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.55), 0 0 10px rgba(79,209,255,0.2), 0 1px 0 rgba(255,255,255,0.14) inset'
                 }}>
-                  <Sparkles className="w-[11px] h-[11px]" style={{ color: 'rgba(150,210,255,0.9)' }} />
+                  <Sparkles className="w-[11px] h-[11px]" style={{ color: '#CDEBFF', filter: 'drop-shadow(0 0 3px rgba(79,209,255,0.6))' }} />
                 </div>
                 <div className="text-[9.5px] md:text-[10px] min-w-0 truncate font-mono flex items-center gap-1">
-                  <span className="font-bold tracking-wide shrink-0" style={{ background: 'linear-gradient(90deg, rgba(245,239,230,0.9), rgba(79,209,255,0.9))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>ai_prompt:</span>
-                  <span className="truncate" style={{ color: 'rgba(203,213,225,0.8)', fontWeight: 500 }}>
+                  <span className="font-bold tracking-wide shrink-0" style={{ background: 'linear-gradient(90deg, rgba(255,251,244,1), rgba(122,222,255,1))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>ai_prompt:</span>
+                  <span className="truncate" style={{ color: 'rgba(226,236,248,0.92)', fontWeight: 500 }}>
                     <span className="mr-0.5" style={{ color: 'rgba(212,165,116,0.7)', fontSize: '8px' }}>✦</span>
                     {typedText}
                   </span>

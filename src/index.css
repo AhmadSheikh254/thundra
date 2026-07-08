@@ -625,18 +625,14 @@ h2 {
 
 /* ── 3D HERO STUDIO MOCKUP (glass window treatment) ── */
 .hero-studio-tilt {
-  --srx: 0deg;
-  --sry: 0deg;
-  --lift: 0px;
-  transform-style: preserve-3d;
-  transform: translateY(var(--lift)) rotateX(var(--srx)) rotateY(var(--sry)) scale(var(--studio-scale, 1));
-  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: scale(var(--studio-scale, 1)) translateZ(0);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), filter 0.35s ease;
   will-change: transform;
 }
 
 .hero-studio-tilt:hover {
-  --studio-scale: 1.008;
-  --lift: -4px;
+  --studio-scale: 1.01;
+  filter: brightness(1.02);
 }
 
 /* Parallax back-plate — sits 22px behind the glass in true 3D space,
@@ -645,13 +641,12 @@ h2 {
   position: absolute;
   inset: -2px;
   border-radius: 26px;
-  transform: translateZ(-22px) scale(1.012);
-  background: linear-gradient(155deg, rgba(31, 24, 54, 0.9) 0%, rgba(10, 18, 34, 0.95) 45%, rgba(8, 14, 26, 0.98) 100%);
-  border: 1px solid rgba(168, 85, 247, 0.14);
+  transform: scale(1.012);
+  background: linear-gradient(155deg, rgba(28, 34, 46, 0.95) 0%, rgba(16, 21, 32, 0.97) 45%, rgba(10, 14, 22, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.055);
   box-shadow:
     0 30px 60px rgba(0, 0, 0, 0.55),
-    0 0 30px rgba(168, 85, 247, 0.05),
-    inset 0 1px 0 rgba(245, 239, 230, 0.04);
+    inset 0 1px 0 rgba(245, 239, 230, 0.05);
   pointer-events: none;
 }
 
@@ -677,36 +672,20 @@ h2 {
   animation: studio-aurora-breathe 14s ease-in-out infinite;
 }
 
-/* Slow orbiting light ring around the studio window frame */
+/* Graphite frame ring — subtle premium border, soft inner highlight */
 .hero-studio-ring {
   position: absolute;
   inset: -1px;
   border-radius: 25px;
-  padding: 1px;
-  background: conic-gradient(
-    from var(--badge-angle),
-    transparent 0%,
-    rgba(79, 209, 255, 0.65) 7%,
-    rgba(168, 85, 247, 0.45) 15%,
-    rgba(244, 63, 94, 0.28) 22%,
-    transparent 33%,
-    transparent 52%,
-    rgba(212, 165, 116, 0.32) 62%,
-    rgba(79, 209, 255, 0.25) 71%,
-    transparent 82%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: badge-ring-spin 11s linear infinite;
+  border: 1px solid rgba(82, 92, 108, 0.5);
+  box-shadow: inset 0 1px 0 rgba(245, 239, 230, 0.06);
   pointer-events: none;
-  opacity: 0.5;
-  transition: opacity 0.4s ease;
+  transition: box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
 .hero-studio-tilt:hover .hero-studio-ring {
-  opacity: 0.9;
-  animation-duration: 5s;
+  border-color: rgba(96, 108, 126, 0.65);
+  box-shadow: inset 0 1px 0 rgba(245, 239, 230, 0.08), 0 34px 64px rgba(0, 0, 0, 0.5);
 }
 
 /* Cursor-tracking specular glare across the window glass */
@@ -726,38 +705,24 @@ h2 {
   opacity: 1;
 }
 
-/* Breathing gradient edge light hugging the window border */
-@keyframes edge-breathe {
-  0%, 100% {
-    opacity: 0.55;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
+/* Soft inner highlight lining the frame — graphite, no color cast */
 .hero-studio-edgeglow {
   position: absolute;
   inset: 0;
   border-radius: 24px;
   pointer-events: none;
   box-shadow:
-    inset 0 0 0 1px rgba(79, 209, 255, 0.06),
-    inset 0 1px 12px rgba(79, 209, 255, 0.04),
-    inset 0 -1px 12px rgba(168, 85, 247, 0.04),
-    0 0 22px rgba(79, 209, 255, 0.05),
-    0 0 44px rgba(168, 85, 247, 0.04);
-  animation: edge-breathe 6s ease-in-out infinite;
-  transition: box-shadow 0.4s ease;
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+    inset 0 1px 0 rgba(245, 239, 230, 0.07),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35);
+  transition: box-shadow 0.35s ease;
 }
 
 .hero-studio-tilt:hover .hero-studio-edgeglow {
   box-shadow:
-    inset 0 0 0 1px rgba(79, 209, 255, 0.1),
-    inset 0 1px 16px rgba(79, 209, 255, 0.06),
-    inset 0 -1px 16px rgba(168, 85, 247, 0.06),
-    0 0 30px rgba(79, 209, 255, 0.09),
-    0 0 60px rgba(168, 85, 247, 0.06);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(245, 239, 230, 0.09),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35);
 }
 
 /* Monitor: slow diagonal glass reflection drifting across the screen */
@@ -854,10 +819,10 @@ h2 {
 /* Prompt bar — always-on breathing border glow */
 @keyframes prompt-breathe {
   0%, 100% {
-    box-shadow: 0 0 0 1px rgba(79, 209, 255, 0.05);
+    box-shadow: 0 0 0 1px rgba(79, 209, 255, 0.1), 0 0 10px rgba(79, 209, 255, 0.04);
   }
   50% {
-    box-shadow: 0 0 0 1px rgba(79, 209, 255, 0.14), 0 0 14px rgba(79, 209, 255, 0.06);
+    box-shadow: 0 0 0 1px rgba(79, 209, 255, 0.22), 0 0 20px rgba(79, 209, 255, 0.1);
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 /* ─── Background Atmospheric Film Strip ──────────────────────────────────────── */
 // Low-opacity, absolute-position film strip purely for cinematic page atmosphere.
@@ -169,14 +169,18 @@ function BgFilmStrip({ top, left, right, bottom, rotate = 0, opacity = 0.15, blu
 }
 
 export default function GlobalBackground() {
-  const [scrollY, setScrollY] = useState(0);
+  // Parallax via direct DOM write — no per-frame React re-renders of the SVG tree
+  const parallaxRef = useRef(null);
 
   useEffect(() => {
     let ticking = false;
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setScrollY(window.scrollY);
+          if (parallaxRef.current) {
+            // 8% velocity parallax, compositor-only transform
+            parallaxRef.current.style.transform = `translate3d(0, ${-(window.scrollY * 0.08)}px, 0)`;
+          }
           ticking = false;
         });
         ticking = true;
@@ -185,9 +189,6 @@ export default function GlobalBackground() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Parallax translation multiplier (8% velocity)
-  const parallaxOffset = scrollY * 0.08;
 
   return (
     <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden select-none">
@@ -262,10 +263,11 @@ export default function GlobalBackground() {
       />
 
       {/* ── Layer 2: Parallaxing Film Strips ── */}
-      <div 
-        className="absolute inset-x-0 top-0 h-[220vh] pointer-events-none z-[2]" 
-        style={{ 
-          transform: `translateY(${-parallaxOffset}px)`,
+      <div
+        ref={parallaxRef}
+        className="absolute inset-x-0 top-0 h-[220vh] pointer-events-none z-[2]"
+        style={{
+          transform: 'translate3d(0, 0, 0)',
           willChange: 'transform'
         }}
       >
@@ -273,8 +275,8 @@ export default function GlobalBackground() {
         <BgFilmStrip 
           top="-140px" 
           left="-400px" 
-          rotate={-4} 
-          opacity={0.22} 
+          rotate={-4}
+          opacity={0.3}
           blur={3.0} 
           height={76} 
           reversed={false} 
@@ -285,8 +287,8 @@ export default function GlobalBackground() {
         <BgFilmStrip 
           top="250px" 
           left="-500px" 
-          rotate={6} 
-          opacity={0.28} 
+          rotate={6}
+          opacity={0.36}
           blur={0} 
           height={98} 
           reversed={true} 
@@ -297,8 +299,8 @@ export default function GlobalBackground() {
         <BgFilmStrip 
           top="640px" 
           left="-240px" 
-          rotate={-8} 
-          opacity={0.20} 
+          rotate={-8}
+          opacity={0.27}
           blur={1.2} 
           height={68} 
           reversed={false} 
