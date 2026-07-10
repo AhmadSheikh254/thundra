@@ -224,8 +224,7 @@ function BgFilmStrip({ top, left, right, bottom, rotate = 0, opacity = 0.065, bl
       top, left, right, bottom,
       transform: `rotate(${rotate}deg)`,
       transformOrigin: '50% 50%',
-      animation: `bg-film-drift 28s ease-in-out infinite`,
-      animationDelay: animDelay,
+      animation: `bg-film-drift 28s ease-in-out ${animDelay} infinite`,
     }}>
       <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ overflow: 'visible' }}>
         <defs>
@@ -1334,7 +1333,8 @@ export default function Home() {
                       { span: 7, label: 'B-Roll Laser', isActive: mockupState==='preview'&&mockupTime>=5&&mockupTime<12, activeColor: 'rgba(251,191,36,0.95)', activeBg: 'linear-gradient(135deg,rgba(245,158,11,0.18),rgba(61,90,128,0.2))', activeBorder: 'rgba(245,158,11,0.32)', idleColor: 'rgba(245,158,11,0.45)', idleBg: 'linear-gradient(135deg,rgba(245,158,11,0.045),rgba(245,158,11,0.02))', idleBorder: 'rgba(245,158,11,0.12)' },
                       { span: 8, label: 'Outro A-Roll', isActive: mockupState==='preview'&&mockupTime>=12, activeColor: 'rgba(196,160,255,0.95)', activeBg: 'linear-gradient(135deg,rgba(168,85,247,0.18),rgba(61,90,128,0.22))', activeBorder: 'rgba(168,85,247,0.34)', idleColor: 'rgba(168,85,247,0.5)', idleBg: 'linear-gradient(135deg,rgba(168,85,247,0.05),rgba(168,85,247,0.02))', idleBorder: 'rgba(168,85,247,0.13)' }
                     ].map((clip,i) => (
-                      <div key={i} className={`timeline-clip col-span-${clip.span} rounded-[4px] text-[6.5px] font-mono font-semibold flex items-center justify-center truncate px-0.5`} style={{
+                      <div key={i} className="timeline-clip rounded-[4px] text-[6.5px] font-mono font-semibold flex items-center justify-center truncate px-0.5" style={{
+                        gridColumn: `span ${clip.span} / span ${clip.span}`,
                         background: clip.isActive ? clip.activeBg : clip.idleBg,
                         border: `1px solid ${clip.isActive ? clip.activeBorder : clip.idleBorder}`,
                         color: clip.isActive ? clip.activeColor : clip.idleColor,
@@ -1358,7 +1358,8 @@ export default function Home() {
                       { span: 5, label: '"Auto..."', active: mockupState==='preview'&&mockupTime>=11&&mockupTime<16 },
                       { span: 4, label: '"Viral..."', active: mockupState==='preview'&&mockupTime>=16 }
                     ].map((b,i) => (
-                      <div key={i} className={`timeline-clip col-span-${b.span} rounded-[3px] text-[6px] font-mono flex items-center justify-center truncate px-0.5`} style={{
+                      <div key={i} className="timeline-clip rounded-[3px] text-[6px] font-mono flex items-center justify-center truncate px-0.5" style={{
+                        gridColumn: `span ${b.span} / span ${b.span}`,
                         background: b.active ? 'linear-gradient(135deg,rgba(212,165,116,0.14),rgba(212,165,116,0.06))' : 'rgba(255,255,255,0.02)',
                         border: `1px solid ${b.active ? 'rgba(212,165,116,0.22)' : 'rgba(255,255,255,0.035)'}`,
                         color: b.active ? 'rgba(212,165,116,0.85)' : 'rgba(100,116,139,0.35)',
@@ -1375,7 +1376,7 @@ export default function Home() {
                   </div>
                   <div className="flex-1 h-3 rounded-[3px] relative overflow-hidden flex items-center px-1" style={{ background: 'rgba(255,255,255,0.018)', border: '1px solid rgba(255,255,255,0.035)', boxShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
                     <div className="flex items-center gap-[1px] w-full h-[6px]">
-                      {Array.from({length:190}).map((_,i)=>{
+                      {Array.from({length:360}).map((_,i)=>{
                         const h = Math.sin(i*0.15)*2+3+Math.random()*1;
                         return <div key={i} className={`w-[1px] rounded-full ${mockupState==='preview' ? 'waveform-bar' : ''}`} style={{ height:`${h}px`, background: mockupState==='preview'?'rgba(52,211,153,0.55)':'rgba(100,116,139,0.2)', animationDelay: `${(i%24)*75}ms` }} />;
                       })}
@@ -1476,7 +1477,7 @@ export default function Home() {
       {/* SECTION 4: BEFORE VS AFTER COMPARISON */}
       <section 
         ref={sectionRef}
-        className="relative z-10 px-6 md:px-[6%] py-16 md:py-24 max-w-4xl mx-auto w-full text-center space-y-10 border-t border-purpleTheme/10"
+        className="relative z-10 px-6 md:px-[6%] py-10 md:py-16 max-w-4xl mx-auto w-full text-center space-y-10 border-t border-purpleTheme/10"
         style={{ background: 'radial-gradient(circle at 50% 0%, rgba(61,90,128,0.06) 0%, transparent 60%)' }}
       >
         <div className="space-y-2">
@@ -1670,7 +1671,7 @@ export default function Home() {
 
       {/* SECTION 5: AI PROCESSING PIPELINE FLOW CHART */}
       <section 
-        className="relative z-10 px-6 md:px-[6%] py-16 md:py-24 max-w-7xl mx-auto w-full text-center space-y-12 border-t border-purpleTheme/10"
+        className="relative z-10 px-6 md:px-[6%] py-10 md:py-16 max-w-7xl mx-auto w-full text-center space-y-12 border-t border-purpleTheme/10"
         style={{ background: 'radial-gradient(circle at 50% 0%, rgba(79,209,255,0.06) 0%, transparent 60%)' }}
       >
         <div className="space-y-3">
@@ -1735,7 +1736,7 @@ export default function Home() {
 
       {/* SECTION 6: WHY THUNDRA AI - COMPARISON TABLE */}
       <section 
-        className="relative z-10 px-6 md:px-[6%] py-16 md:py-24 max-w-4xl mx-auto w-full text-center space-y-12 border-t border-purpleTheme/10"
+        className="relative z-10 px-6 md:px-[6%] py-10 md:py-16 max-w-4xl mx-auto w-full text-center space-y-12 border-t border-purpleTheme/10"
         style={{ background: 'radial-gradient(circle at 50% 0%, rgba(79,209,255,0.05) 0%, transparent 60%)' }}
       >
         <div className="space-y-2">
@@ -1777,298 +1778,330 @@ export default function Home() {
       {/* SECTION 7: PRICING PLANS */}
       <section 
         id="pricing" 
-        className="relative z-10 px-6 md:px-[6%] py-24 md:py-32 max-w-6xl mx-auto w-full text-center space-y-12 border-t border-purpleTheme/10"
-        style={{ 
-          backgroundColor: '#060913',
+        className="relative z-10 px-6 md:px-[6%] py-10 md:py-16 max-w-6xl mx-auto w-full text-center border-t border-white/[0.04] overflow-hidden"
+        style={{
+          background: '#040711',
           backgroundImage: `
-            radial-gradient(circle at 50% 30%, rgba(79, 209, 255, 0.08) 0%, transparent 65%),
-            linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px)
+            radial-gradient(ellipse 65% 55% at 50% 10%, rgba(13,22,41,0.5) 0%, transparent 60%),
+            radial-gradient(ellipse 55% 45% at 50% 60%, rgba(79,209,255,0.02) 0%, transparent 50%),
+            linear-gradient(rgba(255, 255, 255, 0.006) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.006) 1px, transparent 1px)
           `,
-          backgroundSize: '100% 100%, 44px 44px, 44px 44px',
+          backgroundSize: '100% 100%, 100% 100%, 48px 48px, 48px 48px',
           backgroundPosition: 'center top'
         }}
       >
-        <div className="space-y-4">
-          <span className="text-xs font-bold text-[#4FD1FF] uppercase tracking-widest bg-[#4FD1FF]/10 border border-[#4FD1FF]/20 px-3.5 py-1.5 rounded-full inline-block">
-            Flexible pricing
+        {/* Soft vignette and cinematic noise */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'radial-gradient(ellipse at center, transparent 40%, rgba(4,7,17,0.7) 100%)'
+        }} />
+
+        {/* ── Section Header ── */}
+        <div className="relative z-10 space-y-4 mb-10 md:mb-14">
+          <span className="inline-flex items-center gap-1.5 text-[9px] font-semibold text-[#4FD1FF] uppercase tracking-[0.2em] px-2.5 py-1 rounded-full border border-white/[0.04] bg-white/[0.02]" style={{
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.2)'
+          }}>
+            <Sparkles className="w-2.5 h-2.5 text-[#4FD1FF]" />
+            Pricing
           </span>
-          <h2 className="text-3xl md:text-5xl font-black font-heading text-white tracking-tight">
+          <h2 className="text-3xl md:text-[2.6rem] font-extrabold text-white tracking-[-0.03em] leading-[1.1]" style={{ fontFamily: 'Inter, sans-serif' }}>
             One Plan. Unlimited Power.
           </h2>
-          <p className="text-xs md:text-sm text-slate-400 max-w-lg mx-auto leading-relaxed font-body">
+          <p className="text-xs md:text-sm text-slate-405 max-w-[580px] mx-auto leading-relaxed">
             Stop paying for 5 separate editing services. Get a complete professional AI production studio under a single premium subscription.
           </p>
         </div>
 
-        <div className="relative max-w-5xl mx-auto pt-6">
-          {/* Main Versus Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-stretch relative">
+        <div className="relative max-w-[960px] mx-auto">
+          {/* ── Pricing Cards Grid ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch relative">
             
-            {/* Left Column: Traditional Production (Pain Points) */}
+            {/* ── Left Card: Traditional Production ── */}
             <div 
-              className="rounded-3xl p-8 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1.5 border relative backdrop-blur-xl group overflow-hidden text-left"
+              className="rounded-[18px] p-5 md:p-5.5 flex flex-col h-full transition-all duration-500 ease-out hover:-translate-y-1 border relative text-left group"
               style={{
-                backgroundColor: '#0E0E11',
-                borderColor: 'rgba(255, 255, 255, 0.05)',
-                boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6)'
+                background: 'linear-gradient(165deg, rgba(16,16,20,0.88) 0%, rgba(10,10,13,0.95) 100%)',
+                borderColor: 'rgba(255,255,255,0.045)',
+                boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5), inset 0 1px 1px 0px rgba(255,255,255,0.05)',
+                backdropFilter: 'blur(20px)'
               }}
             >
-              {/* Top subtle red indicator bar */}
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-red-500/20 via-red-500/40 to-red-500/20" />
+              {/* Subtle top accent */}
+              <div className="absolute top-0 left-6 right-6 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(239,68,68,0.06), transparent)' }} />
 
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <span className="text-[9px] font-mono font-bold text-red-400 tracking-widest uppercase bg-red-950/20 border border-red-500/15 px-2.5 py-0.5 rounded-md inline-block">
+              <div className="space-y-3 flex-1">
+                <div className="space-y-1">
+                  <span className="inline-flex items-center text-[8px] font-semibold text-red-400/50 uppercase tracking-[0.1em] bg-red-500/[0.02] border border-red-500/10 px-2 py-0.5 rounded">
                     Individual Subscriptions
                   </span>
-                  <h3 className="text-xl font-bold text-white font-heading tracking-tight">Traditional Production</h3>
-                  <p className="text-xs text-slate-400">What you pay separately for basic creator tools every month</p>
+                  <h3 className="text-sm font-bold text-white/90 tracking-[-0.01em]" style={{ fontFamily: 'Inter, sans-serif' }}>Traditional Production</h3>
+                  <p className="text-[9.5px] text-slate-500 leading-relaxed">What you pay separately for basic creator tools every month</p>
                 </div>
 
-                <div className="flex items-baseline gap-1.5 py-1">
-                  <span className="text-4xl lg:text-5xl font-black text-red-500 font-heading">$114</span>
-                  <span className="text-xs text-slate-500 font-mono">/ month</span>
-                  <span className="text-[10px] text-red-450/90 font-bold ml-3 bg-red-950/30 border border-red-500/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                <div className="flex items-baseline gap-1.5 py-0.5">
+                  <span className="text-2xl lg:text-3xl font-extrabold text-red-400/60 tracking-[-0.02em]" style={{ fontFamily: 'Inter, sans-serif' }}>$114</span>
+                  <span className="text-[9.5px] text-slate-500 font-medium">/ month</span>
+                  <span className="text-[8px] text-red-400/40 font-semibold ml-2 bg-red-500/[0.02] border border-red-500/[0.04] px-2 py-0.5 rounded-full tracking-wide">
                     ~ PKR 32,000/mo
                   </span>
                 </div>
 
-                <ul className="space-y-2 pt-5 border-t border-white/[0.05]">
+                <ul className="space-y-0.5 pt-2.5 border-t border-white/[0.03]">
                   {[
-                    { icon: <Film className="w-4 h-4 text-slate-500 shrink-0" />, name: "Adobe Premiere Pro (Editing Suite)", price: "$24/mo" },
-                    { icon: <Database className="w-4 h-4 text-slate-500 shrink-0" />, name: "Premium Stock Video Platform", price: "$30/mo" },
-                    { icon: <MessageSquare className="w-4 h-4 text-slate-500 shrink-0" />, name: "AI Auto-Captioner Utility", price: "$15/mo" },
-                    { icon: <Music className="w-4 h-4 text-slate-500 shrink-0" />, name: "AI Voice-Over & Audio Enhancer", price: "$20/mo" },
-                    { icon: <Sparkles className="w-4 h-4 text-slate-500 shrink-0" />, name: "Cinematic LUTs & Preset Packs", price: "$25/mo" },
+                    { icon: <Film className="w-3 h-3 text-slate-500 shrink-0" />, name: "Adobe Premiere Pro (Editing Suite)", price: "$24/mo" },
+                    { icon: <Database className="w-3 h-3 text-slate-500 shrink-0" />, name: "Premium Stock Video Platform", price: "$30/mo" },
+                    { icon: <MessageSquare className="w-3 h-3 text-slate-500 shrink-0" />, name: "AI Auto-Captioner Utility", price: "$15/mo" },
+                    { icon: <Music className="w-3 h-3 text-slate-500 shrink-0" />, name: "AI Voice-Over & Audio Enhancer", price: "$20/mo" },
+                    { icon: <Sparkles className="w-3 h-3 text-slate-500 shrink-0" />, name: "Cinematic LUTs & Preset Packs", price: "$25/mo" },
                   ].map((item, idx) => (
-                    <li key={idx} className="flex items-center justify-between text-xs text-slate-350 py-3 border-b border-white/[0.04] last:border-0">
-                      <div className="flex items-center gap-3 min-w-0">
+                    <li key={idx} className="flex items-center justify-between text-[10.5px] py-1.5 border-b border-white/[0.015] last:border-0 transition-colors duration-200 hover:bg-white/[0.015] rounded px-1 -mx-1 group/row">
+                      <div className="flex items-center gap-2 min-w-0">
                         {item.icon}
-                        <span className="truncate text-slate-300 font-medium">{item.name}</span>
+                        <span className="truncate text-slate-400 font-medium">{item.name}</span>
                       </div>
-                      <span className="font-mono text-red-400 font-semibold shrink-0 ml-4">{item.price}</span>
+                      <span className="font-mono text-red-400/40 font-semibold shrink-0 ml-3 text-[9.5px]">{item.price}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="space-y-3.5 pt-6 mt-6 border-t border-white/[0.05]">
-                <div className="flex items-start gap-3 text-xs text-red-400/90 font-medium">
-                  <div className="w-4.5 h-4.5 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <X className="w-2.5 h-2.5 text-red-400 stroke-[3]" />
+              <div className="space-y-1.5 pt-3 mt-3 border-t border-white/[0.03]">
+                {[
+                  "Multiple separate service renewals to keep track of",
+                  "Constant tab switching, manual asset importing, and render lag",
+                  "Steep software complexity and heavy learning curve"
+                ].map((text, idx) => (
+                  <div key={idx} className="flex items-start gap-2 text-[9.5px] text-slate-550 font-medium">
+                    <div className="w-3.5 h-3.5 rounded-full bg-red-500/[0.01] border border-red-500/[0.04] flex items-center justify-center shrink-0 mt-0.5">
+                      <X className="w-1.5 h-1.5 text-red-400/30 stroke-[2]" />
+                    </div>
+                    <span>{text}</span>
                   </div>
-                  <span>Multiple separate service renewals to keep track of</span>
-                </div>
-                <div className="flex items-start gap-3 text-xs text-red-400/90 font-medium">
-                  <div className="w-4.5 h-4.5 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <X className="w-2.5 h-2.5 text-red-400 stroke-[3]" />
-                  </div>
-                  <span>Constant tab switching, manual asset importing, and render lag</span>
-                </div>
-                <div className="flex items-start gap-3 text-xs text-red-400/90 font-medium">
-                  <div className="w-4.5 h-4.5 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <X className="w-2.5 h-2.5 text-red-400 stroke-[3]" />
-                  </div>
-                  <span>Steep software complexity and heavy learning curve</span>
-                </div>
+                ))}
               </div>
             </div>
 
-            {/* Middle VS Badge (Desktop) */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:flex items-center justify-center z-30 pointer-events-none">
-              <div className="relative">
-                {/* Glowing aura rings */}
-                <div className="absolute -inset-5 bg-[#4FD1FF] rounded-full blur-xl opacity-35 animate-pulse" />
-                <div className="absolute -inset-1 bg-[#4FD1FF] rounded-full blur-sm opacity-50" />
-                {/* Outer ring */}
-                <div className="w-14 h-14 rounded-full bg-[#131b24] border border-[#4FD1FF]/40 flex items-center justify-center shadow-[0_0_25px_rgba(79,209,255,0.35)]">
-                  <span className="font-heading font-black text-sm text-[#4FD1FF] tracking-widest pl-[2px]">VS</span>
-                </div>
+            {/* ── VS Divider (Desktop) ── */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:flex items-center justify-center z-30 pointer-events-none" style={{
+              animation: 'vs-float 5s infinite ease-in-out'
+            }}>
+              {/* Soft breathing glow ring behind */}
+              <div className="absolute -inset-2.5 rounded-full blur-md opacity-15 bg-[#4FD1FF]" style={{
+                animation: 'vs-breathe 5s infinite ease-in-out'
+              }} />
+              <div className="w-9 h-9 rounded-full flex items-center justify-center border border-white/[0.06]" style={{
+                background: 'linear-gradient(135deg, rgba(20,25,38,0.95) 0%, rgba(10,14,22,0.98) 100%)',
+                boxShadow: '0 6px 18px -4px rgba(0,0,0,0.6), inset 0 1px 1px 0px rgba(255,255,255,0.06)'
+              }}>
+                <span className="font-extrabold text-[9px] text-[#4FD1FF]/75 tracking-[0.15em] pl-[1px]" style={{ fontFamily: 'Inter, sans-serif' }}>VS</span>
               </div>
             </div>
 
-            {/* Mobile VS Badge (Stacks in flow) */}
-            <div className="lg:hidden flex items-center justify-center py-4 pointer-events-none">
-              <div className="relative">
-                <div className="absolute -inset-4 bg-[#4FD1FF] rounded-full blur-lg opacity-35 animate-pulse" />
-                <div className="w-11 h-11 rounded-full bg-[#131b24] border border-[#4FD1FF]/30 flex items-center justify-center shadow-[0_0_15px_rgba(79,209,255,0.25)]">
-                  <span className="font-heading font-black text-xs text-[#4FD1FF]">VS</span>
+            {/* ── VS Divider (Mobile) ── */}
+            <div className="lg:hidden flex items-center justify-center -my-1 pointer-events-none">
+              <div className="flex items-center gap-2.5 w-full">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent to-white/[0.04]" />
+                <div className="w-8 h-8 rounded-full flex items-center justify-center border border-white/[0.06]" style={{
+                  background: 'linear-gradient(135deg, rgba(20,25,38,0.95) 0%, rgba(10,14,22,0.98) 100%)',
+                  boxShadow: '0 3px 8px rgba(0,0,0,0.5), inset 0 1px 1px 0px rgba(255,255,255,0.06)'
+                }}>
+                  <span className="font-extrabold text-[8px] text-[#4FD1FF]/75 tracking-[0.12em] pl-[0.5px]" style={{ fontFamily: 'Inter, sans-serif' }}>VS</span>
                 </div>
+                <div className="flex-1 h-px bg-gradient-to-l from-transparent to-white/[0.04]" />
               </div>
             </div>
 
-            {/* Right Column: Thundra Premium Plan */}
+            {/* ── Right Card: Thundra AI (Hero) ── */}
             <div 
-              className="rounded-3xl p-8 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1.5 border relative overflow-hidden group text-left"
+              className="rounded-[18px] p-5 md:p-5.5 flex flex-col h-full transition-all duration-500 ease-out hover:-translate-y-1 border relative overflow-hidden group text-left"
               style={{
-                backgroundColor: '#0B1220',
-                borderColor: 'rgba(79, 209, 255, 0.25)',
-                boxShadow: '0 25px 65px rgba(79, 209, 255, 0.15), 0 0 45px rgba(79, 209, 255, 0.04)'
+                background: 'linear-gradient(165deg, rgba(10,20,38,0.78) 0%, rgba(6,12,24,0.93) 100%)',
+                borderColor: 'rgba(79, 209, 255, 0.22)',
+                boxShadow: '0 16px 40px -12px rgba(0, 0, 0, 0.6), 0 0 30px 0px rgba(79, 209, 255, 0.02), inset 0 1px 1px 0px rgba(255, 255, 255, 0.12)',
+                backdropFilter: 'blur(20px)'
               }}
             >
-              {/* Cyan Neon Edge Lightbar Reflection */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[220px] h-[3px] bg-gradient-to-r from-[#4FD1FF] via-[#3D5A80] to-[#4FD1FF] rounded-b-full shadow-[0_1px_15px_rgba(79,209,255,0.85)]" />
+              {/* Premium glass reflection overlay */}
+              <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.015] to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-700" />
+              {/* Soft top edge glow */}
+              <div className="absolute top-0 left-8 right-8 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(79,209,255,0.25), transparent)' }} />
+              {/* Ambient radial behind card */}
+              <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[300px] h-[200px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(ellipse, rgba(79,209,255,0.02) 0%, transparent 70%)' }} />
 
-              <div className="space-y-6 relative z-10">
+              <div className="space-y-3 relative z-10 flex-1">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    {/* Pulsing Thundra Logo Icon */}
-                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#3D5A80] to-[#4FD1FF] flex items-center justify-center shadow-[inset_0_1px_4px_rgba(255,255,255,0.3)]">
-                      <Sparkles className="w-4.5 h-4.5 text-white animate-pulse" />
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-5.5 h-5.5 rounded-md flex items-center justify-center" style={{
+                      background: 'linear-gradient(135deg, rgba(61,90,128,0.5) 0%, rgba(79,209,255,0.3) 100%)',
+                      boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)'
+                    }}>
+                      <Sparkles className="w-3 h-3 text-white/90" />
                     </div>
-                    <span className="font-heading font-extrabold text-xl text-white tracking-tight">Thundra AI</span>
+                    <span className="font-extrabold text-sm text-white tracking-[-0.01em]" style={{ fontFamily: 'Inter, sans-serif' }}>Thundra AI</span>
                   </div>
 
-                  <span className="bg-[#4FD1FF]/10 border border-[#4FD1FF]/30 text-[#4FD1FF] text-[9px] font-black uppercase tracking-wider px-3 py-1 rounded-md shadow-sm">
+                  <span className="inline-flex items-center text-[7.5px] font-semibold text-[#4FD1FF]/85 uppercase tracking-[0.1em] px-2 py-0.5 rounded border border-[#4FD1FF]/10" style={{
+                    background: 'linear-gradient(135deg, rgba(79,209,255,0.04) 0%, rgba(61,90,128,0.02) 100%)'
+                  }}>
                     ⚡ Unified Suite
                   </span>
                 </div>
 
-                {/* Subtitle description */}
-                <p className="text-xs text-slate-400">Everything you need for viral video production, combined under a single state-of-the-art AI workspace.</p>
+                <p className="text-[10px] text-slate-400 leading-relaxed">Everything you need for viral video production, combined under a single state-of-the-art AI workspace.</p>
 
-                {/* Interactive Billing Cards Selector */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
-                  
-                  {/* Monthly Tab Selection Card */}
+                {/* ── Billing Toggle Cards ── */}
+                <div className="grid grid-cols-2 gap-2.5">
+                  {/* Monthly */}
                   <div 
                     onClick={() => setIsAnnual(false)}
-                    className={`cursor-pointer rounded-2xl p-4 border transition-all duration-300 text-left relative flex flex-col justify-between h-[85px] select-none ${
+                    className={`cursor-pointer rounded-xl p-2.5 border transition-all duration-300 text-left relative select-none hover:-translate-y-[1px] ${
                       !isAnnual 
-                        ? 'bg-[#101b2b]/95 border-[#4FD1FF] shadow-[0_0_18px_rgba(79,209,255,0.2)]' 
-                        : 'bg-[#15202b]/40 border-white/[0.04] hover:border-white/[0.08] hover:bg-[#15202b]/60'
+                        ? 'border-[#4FD1FF]/35' 
+                        : 'border-white/[0.04] hover:border-white/[0.08]'
                     }`}
+                    style={{
+                      background: !isAnnual 
+                        ? 'linear-gradient(135deg, rgba(79, 209, 255, 0.08) 0%, rgba(20, 30, 50, 0.8) 100%)' 
+                        : 'rgba(255, 255, 255, 0.015)',
+                      boxShadow: !isAnnual 
+                        ? '0 6px 18px -3px rgba(79, 209, 255, 0.15), inset 0 1px 1px 0px rgba(255, 255, 255, 0.08)' 
+                        : '0 4px 12px -2px rgba(0, 0, 0, 0.3), inset 0 1px 1px 0px rgba(255, 255, 255, 0.02)'
+                    }}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-lg font-black text-white font-heading">
-                        $19<span className="text-[10px] text-slate-450 font-normal font-sans tracking-normal">/mo</span>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm font-extrabold text-white tracking-[-0.01em]" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        $19<span className="text-[9.5px] text-slate-500 font-normal tracking-normal">/mo</span>
                       </span>
-                      {/* Check radio indicator */}
-                      <div className={`w-4 h-4 rounded-full flex items-center justify-center transition-colors ${
-                        !isAnnual ? 'bg-white text-slate-950 shadow-sm' : 'border border-[#4FD1FF]/30'
+                      <div className={`w-3 h-3 rounded-full flex items-center justify-center transition-all duration-200 ${
+                        !isAnnual 
+                          ? 'bg-gradient-to-br from-[#4FD1FF] to-[#3D5A80] shadow-[0_0_6px_rgba(79,209,255,0.3)] text-slate-950' 
+                          : 'border border-white/20 bg-white/[0.01]'
                       }`}>
-                        {!isAnnual && <Check className="w-3 h-3 stroke-[3] text-slate-950" />}
+                        {!isAnnual && <Check className="w-2 h-2 stroke-[3] text-slate-950" />}
                       </div>
                     </div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Monthly Billing</span>
+                    <span className="text-[7.5px] font-semibold text-slate-550 uppercase tracking-[0.1em]">Monthly</span>
                   </div>
 
-                  {/* Yearly Tab Selection Card */}
+                  {/* Annual */}
                   <div 
                     onClick={() => setIsAnnual(true)}
-                    className={`cursor-pointer rounded-2xl p-4 border transition-all duration-300 text-left relative flex flex-col justify-between h-[85px] select-none ${
+                    className={`cursor-pointer rounded-xl p-2.5 border transition-all duration-300 text-left relative select-none hover:-translate-y-[1px] ${
                       isAnnual 
-                        ? 'bg-[#101b2b]/95 border-[#4FD1FF] shadow-[0_0_18px_rgba(79,209,255,0.2)]' 
-                        : 'bg-[#15202b]/40 border-white/[0.04] hover:border-white/[0.08] hover:bg-[#15202b]/60'
+                        ? 'border-[#4FD1FF]/35' 
+                        : 'border-white/[0.04] hover:border-white/[0.08]'
                     }`}
+                    style={{
+                      background: isAnnual 
+                        ? 'linear-gradient(135deg, rgba(79, 209, 255, 0.08) 0%, rgba(20, 30, 50, 0.8) 100%)' 
+                        : 'rgba(255, 255, 255, 0.015)',
+                      boxShadow: isAnnual 
+                        ? '0 6px 18px -3px rgba(79, 209, 255, 0.15), inset 0 1px 1px 0px rgba(255, 255, 255, 0.08)' 
+                        : '0 4px 12px -2px rgba(0, 0, 0, 0.3), inset 0 1px 1px 0px rgba(255, 255, 255, 0.02)'
+                    }}
                   >
-                    {/* Floating popular banner */}
-                    <span className="absolute -top-2.5 right-4 bg-[#4FD1FF] border border-[#4FD1FF]/40 text-slate-950 text-[7px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded shadow-sm leading-none">
+                    {/* Best Value badge */}
+                    <span className="absolute -top-2 right-2 text-[6.5px] font-bold uppercase tracking-[0.1em] px-2 py-0.2 rounded-full border border-[#4FD1FF]/15" style={{
+                      background: 'linear-gradient(135deg, rgba(79, 209, 255, 0.12) 0%, rgba(79, 209, 255, 0.04) 100%)',
+                      color: '#4FD1FF',
+                      backdropFilter: 'blur(4px)',
+                      boxShadow: '0 1px 6px rgba(79,209,255,0.05)'
+                    }}>
                       Best Value
                     </span>
                     
-                    <div className="flex items-center justify-between mt-1">
-                      <div className="flex items-baseline gap-1.5">
-                        <span className="text-xs text-slate-500 line-through font-mono font-bold">$228</span>
-                        <span className="text-lg font-black text-white font-heading">
-                          $15<span className="text-[10px] text-slate-450 font-normal font-sans tracking-normal">/mo</span>
+                    <div className="flex items-center justify-between mb-1 mt-0.5">
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-[9.5px] text-slate-550 line-through font-mono font-medium">$228</span>
+                        <span className="text-sm font-extrabold text-white tracking-[-0.01em]" style={{ fontFamily: 'Inter, sans-serif' }}>
+                          $15<span className="text-[9.5px] text-slate-500 font-normal tracking-normal">/mo</span>
                         </span>
                       </div>
-                      {/* Check radio indicator */}
-                      <div className={`w-4 h-4 rounded-full flex items-center justify-center transition-colors ${
-                        isAnnual ? 'bg-white text-slate-950 shadow-sm' : 'border border-[#4FD1FF]/30'
+                      <div className={`w-3 h-3 rounded-full flex items-center justify-center transition-all duration-200 ${
+                        isAnnual 
+                          ? 'bg-gradient-to-br from-[#4FD1FF] to-[#3D5A80] shadow-[0_0_6px_rgba(79,209,255,0.3)] text-slate-950' 
+                          : 'border border-white/20 bg-white/[0.01]'
                       }`}>
-                        {isAnnual && <Check className="w-3 h-3 stroke-[3] text-slate-950" />}
+                        {isAnnual && <Check className="w-2 h-2 stroke-[3] text-slate-950" />}
                       </div>
                     </div>
-                    
-                    <div className="flex items-center justify-between text-[8px] font-bold tracking-tight">
-                      <span className="text-[#4FD1FF] uppercase">Save 20% (Billed Yearly)</span>
-                      <span className="text-[#4FD1FF] bg-[#4FD1FF]/12 border border-[#4FD1FF]/20 px-1.5 py-0.2 rounded font-extrabold">+ Free Presets</span>
+                    <div className="flex items-center justify-between text-[7.5px] font-semibold">
+                      <span className="text-[#4FD1FF]/60 uppercase tracking-[0.08em]">Save 20%</span>
+                      <span className="text-[#4FD1FF]/50 bg-[#4FD1FF]/[0.03] border border-[#4FD1FF]/10 px-1 rounded">+ Free Presets</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Ultimate Presets Present Highlight Banner */}
-                <div className="bg-black/60 border border-[#4FD1FF]/15 rounded-full py-2 px-4 flex items-center justify-center gap-2.5 shadow-[inset_0_1px_8px_rgba(79,209,255,0.06)]">
-                  <span className="text-xs">🎁</span>
-                  <span className="text-[9.5px] font-black text-[#4FD1FF] uppercase tracking-widest font-heading select-none text-center">
+                {/* Bonus banner */}
+                <div className="flex items-center justify-center gap-1 py-1 px-2.5 rounded-lg border border-[#4FD1FF]/[0.05]" style={{
+                  background: 'linear-gradient(135deg, rgba(79,209,255,0.02) 0%, rgba(0,0,0,0.15) 100%)'
+                }}>
+                  <span className="text-[10px]">🎁</span>
+                  <span className="text-[8px] font-semibold text-[#4FD1FF]/55 uppercase tracking-[0.1em] text-center">
                     Ultimate Presets, LUTs, & Cinematic Sound Pack Included
                   </span>
                 </div>
 
-                {/* Premium Features List with Checkmarks and ToolBadges */}
-                <ul className="space-y-0.5 pt-2 border-t border-[#4FD1FF]/15">
-                  <li className="flex items-center justify-between text-xs text-slate-200 font-semibold border-b border-[#1c2a37] py-3.5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-5 h-5 rounded-full bg-[#4FD1FF]/15 border border-[#4FD1FF]/30 flex items-center justify-center shrink-0">
-                        <Check className="w-3 h-3 text-[#4FD1FF] stroke-[3]" />
+                {/* ── Feature List ── */}
+                <ul className="space-y-0.5 pt-2.5 border-t border-white/[0.04]">
+                  <li className="flex items-center justify-between text-[11px] text-slate-300 font-medium py-1.5 border-b border-white/[0.02] transition-colors duration-200 hover:bg-white/[0.01] rounded px-1 -mx-1">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3.5 h-3.5 rounded-full bg-[#4FD1FF]/[0.06] flex items-center justify-center shrink-0 border border-[#4FD1FF]/08">
+                        <Check className="w-2.2 h-2.2 text-[#4FD1FF]/80 stroke-[2.5]" />
                       </div>
                       <span>All Premium AI Editing Models & Tools</span>
                     </div>
-                    {/* Compact logo badges of the suite tools */}
-                    <div className="flex items-center -space-x-1.5 bg-slate-950/80 border border-white/[0.06] p-1 rounded-lg select-none">
-                      <div className="w-4 h-4 rounded-full bg-slate-900 flex items-center justify-center border border-slate-750" title="AI Video Cutter">
-                        <Film className="w-2.5 h-2.5 text-[#4FD1FF]" />
+                    <div className="flex items-center -space-x-1 bg-white/[0.01] border border-white/[0.03] p-0.5 rounded select-none">
+                      <div className="w-3.2 h-3.2 rounded-full bg-slate-900/80 flex items-center justify-center border border-white/[0.04]" title="AI Video Cutter">
+                        <Film className="w-1.8 h-1.8 text-[#4FD1FF]/70" />
                       </div>
-                      <div className="w-4 h-4 rounded-full bg-slate-900 flex items-center justify-center border border-slate-750" title="Audio Beat Sync">
-                        <Music className="w-2.5 h-2.5 text-[#4FD1FF]" />
+                      <div className="w-3.2 h-3.2 rounded-full bg-slate-900/80 flex items-center justify-center border border-white/[0.04]" title="Audio Beat Sync">
+                        <Music className="w-1.8 h-1.8 text-[#4FD1FF]/70" />
                       </div>
-                      <div className="w-4 h-4 rounded-full bg-slate-900 flex items-center justify-center border border-slate-750" title="Urdu/English Captions">
-                        <MessageSquare className="w-2.5 h-2.5 text-[#4FD1FF]" />
+                      <div className="w-3.2 h-3.2 rounded-full bg-slate-900/80 flex items-center justify-center border border-white/[0.04]" title="Urdu/English Captions">
+                        <MessageSquare className="w-1.8 h-1.8 text-[#4FD1FF]/70" />
                       </div>
-                      <div className="w-4.5 h-4.5 rounded-full bg-slate-900 flex items-center justify-center border border-slate-750" title="AI Special Effects">
-                        <Sparkles className="w-2.5 h-2.5 text-[#4FD1FF]" />
+                      <div className="w-3.2 h-3.2 rounded-full bg-slate-900/80 flex items-center justify-center border border-white/[0.04]" title="AI Special Effects">
+                        <Sparkles className="w-1.8 h-1.8 text-[#4FD1FF]/70" />
                       </div>
                     </div>
                   </li>
 
-                  <li className="flex items-center gap-3 text-xs text-slate-200 font-semibold border-b border-[#1c2a37] py-3.5">
-                    <div className="w-5 h-5 rounded-full bg-[#4FD1FF]/15 border border-[#4FD1FF]/30 flex items-center justify-center shrink-0">
-                      <Check className="w-3 h-3 text-[#4FD1FF] stroke-[3]" />
-                    </div>
-                    <span>Side-by-side comparison & rendering validation</span>
-                  </li>
-
-                  <li className="flex items-center gap-3 text-xs text-slate-200 font-semibold border-b border-[#1c2a37] py-3.5">
-                    <div className="w-5 h-5 rounded-full bg-[#4FD1FF]/15 border border-[#4FD1FF]/30 flex items-center justify-center shrink-0">
-                      <Check className="w-3 h-3 text-[#4FD1FF] stroke-[3]" />
-                    </div>
-                    <span>Unlimited video edits & 4K production exports</span>
-                  </li>
-
-                  <li className="flex items-center gap-3 text-xs text-slate-200 font-semibold border-b border-[#1c2a37] py-3.5">
-                    <div className="w-5 h-5 rounded-full bg-[#4FD1FF]/15 border border-[#4FD1FF]/30 flex items-center justify-center shrink-0">
-                      <Check className="w-3 h-3 text-[#4FD1FF] stroke-[3]" />
-                    </div>
-                    <span>Instant contextual B-Roll matching & auto silence cuts</span>
-                  </li>
-
-                  <li className="flex items-center gap-3 text-xs text-slate-200 font-semibold border-b border-[#1c2a37] py-3.5">
-                    <div className="w-5 h-5 rounded-full bg-[#4FD1FF]/15 border border-[#4FD1FF]/30 flex items-center justify-center shrink-0">
-                      <Check className="w-3 h-3 text-[#4FD1FF] stroke-[3]" />
-                    </div>
-                    <span>Urdu, Roman Urdu, & English auto captions generator</span>
-                  </li>
-
-                  <li className="flex items-center gap-3 text-xs text-slate-200 font-semibold py-3.5">
-                    <div className="w-5 h-5 rounded-full bg-[#4FD1FF]/15 border border-[#4FD1FF]/30 flex items-center justify-center shrink-0">
-                      <Check className="w-3 h-3 text-[#4FD1FF] stroke-[3]" />
-                    </div>
-                    <span>Add-on features: Voice-cloning & team workspace nodes</span>
-                  </li>
+                  {[
+                    "Side-by-side comparison & rendering validation",
+                    "Unlimited video edits & 4K production exports",
+                    "Instant contextual B-Roll matching & auto silence cuts",
+                    "Urdu, Roman Urdu, & English auto captions generator",
+                    "Add-on features: Voice-cloning & team workspace nodes"
+                  ].map((feature, idx) => (
+                    <li key={idx} className={`flex items-center gap-2 text-[11px] text-slate-300 font-medium py-1.5 ${idx < 4 ? 'border-b border-white/[0.02]' : ''} transition-colors duration-200 hover:bg-white/[0.01] rounded px-1 -mx-1`}>
+                      <div className="w-3.5 h-3.5 rounded-full bg-[#4FD1FF]/[0.06] flex items-center justify-center shrink-0 border border-[#4FD1FF]/08">
+                        <Check className="w-2.2 h-2.2 text-[#4FD1FF]/80 stroke-[2.5]" />
+                      </div>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
-              {/* Get Started Now CTA Button */}
-              <div className="pt-8 relative z-10">
+              {/* ── CTA Button ── */}
+              <div className="pt-4 relative z-10">
                 <button 
                   onClick={() => navigate('/editor')}
-                  className="w-full py-4 rounded-full bg-gradient-to-r from-[#2f4b75] via-[#2563eb] to-[#4FD1FF] premium-btn-glow active:scale-[0.99] hover:scale-[1.01] text-white font-heading font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 border border-[#4FD1FF]/30 shadow-md"
+                  className="w-full h-[46px] rounded-lg text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 border border-white/10 hover:border-white/18 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(37,99,235,0.22)] active:scale-[0.98] group/btn relative overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%)',
+                    boxShadow: 'inset 0 1px 0px 0px rgba(255, 255, 255, 0.25), 0 3px 8px rgba(37, 99, 235, 0.15)',
+                    fontFamily: 'Inter, sans-serif'
+                  }}
                 >
-                  <span>Get Started Now</span>
-                  <ArrowRight className="w-4.5 h-4.5 animate-pulse" />
+                  {/* Premium moving shimmer line */}
+                  <div className="absolute inset-0 overflow-hidden rounded-lg pointer-events-none">
+                    <div className="w-full h-full bg-gradient-to-r from-transparent via-white/[0.15] to-transparent" style={{ transform: 'translateX(-100%) skewX(-15deg)', animation: 'cta-shimmer 6s infinite ease-in-out' }} />
+                  </div>
+                  <span className="relative z-10">Get Started Now</span>
+                  <ArrowRight className="w-3.5 h-3.5 relative z-10 transition-transform duration-300 ease-out group-hover/btn:translate-x-0.5" />
                 </button>
               </div>
 
@@ -2077,10 +2110,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* SECTION 8: FAQ SECTION */}
       <section 
-        className="relative z-10 px-6 md:px-[6%] py-16 md:py-24 max-w-3xl mx-auto w-full text-center space-y-10 border-t border-purpleTheme/10"
+        className="relative z-10 px-6 md:px-[6%] py-10 md:py-16 max-w-3xl mx-auto w-full text-center space-y-10 border-t border-purpleTheme/10"
         style={{ background: 'radial-gradient(circle at 50% 0%, rgba(245,239,230,0.04) 0%, transparent 60%)' }}
       >
         <div className="space-y-2">
@@ -2127,33 +2159,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION 9: FINAL CALL TO ACTION */}
-      <section 
-        className="relative z-10 px-6 md:px-[6%] py-16 md:py-24 max-w-7xl mx-auto w-full text-center border-t border-purpleTheme/10"
-        style={{ background: 'radial-gradient(circle at 50% 0%, rgba(61,90,128,0.06) 0%, transparent 70%)' }}
-      >
-        <div className="max-w-4xl mx-auto bg-gradient-to-br from-purpleTheme/15 via-[#080811] to-blueTheme/5 border border-purpleTheme/20 p-8 md:p-16 rounded-3xl relative overflow-hidden space-y-6">
-          <div className="absolute top-[-50px] right-[-50px] w-64 h-64 bg-purpleTheme/5 rounded-full blur-[80px]" />
-          
-          <div className="space-y-3 relative z-10">
-            <h2 className="text-3xl md:text-5xl font-black font-heading text-white tracking-tight">
-              Ready to Edit Videos Smarter?
-            </h2>
-            <p className="text-xs md:text-sm text-slate-400 max-w-lg mx-auto leading-relaxed">
-              Let Thundra AI handle the tedious timeline cuts, transcribing, and grades while you focus entirely on creating great content.
-            </p>
-          </div>
-
-          <div className="pt-2 relative z-10">
-            <button
-              onClick={() => navigate('/editor')}
-              className="bg-gradient-to-r from-purpleTheme to-blueTheme px-8 py-4 rounded-xl font-bold font-heading text-xs uppercase tracking-wider text-white shadow-lg shadow-black/40 hover:shadow-[0_4px_20px_rgba(79,209,255,0.12)] hover:scale-[1.03] transition-all inline-flex items-center gap-2"
-            >
-              <span>Start Editing Now ⚡</span>
-            </button>
-          </div>
-        </div>
-      </section>
 
       {/* FOOTER */}
       <Footer />

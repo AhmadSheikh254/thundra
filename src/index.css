@@ -1007,6 +1007,80 @@ h2 {
   88% { opacity: 1; }
   100% { transform: translateX(300px); opacity: 0; }
 }
+@keyframes sfc-breathe {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+@keyframes sfc-drift-xy {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-26px, -18px); }
+}
+@keyframes sfc-rise {
+  0% { transform: translateY(0); opacity: 0; }
+  15% { opacity: 0.55; }
+  85% { opacity: 0.55; }
+  100% { transform: translateY(-130px); opacity: 0; }
+}
+@keyframes sfc-float-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes sfc-vignette {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.9; }
+}
+/* Seamless film-strip conveyor — one 66px pattern period per loop segment */
+@keyframes sfc-strip-slide {
+  from { transform: translateX(0); }
+  to { transform: translateX(-264px); }
+}
+@keyframes sfc-strip-glow {
+  0% { transform: translateX(-160%); opacity: 0; }
+  8% { opacity: 0.9; }
+  42% { transform: translateX(560%); opacity: 0.9; }
+  46%, 100% { transform: translateX(560%); opacity: 0; }
+}
+@keyframes sfc-chip {
+  0%, 22%, 100% { opacity: 0.82; transform: scale(1); }
+  10% { opacity: 1; transform: scale(1.035); }
+}
+@keyframes sfc-breathe-scale {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.012); }
+}
+@keyframes sfc-depth {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+@keyframes sfc-packet {
+  0% { offset-distance: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+@keyframes sfc-bar {
+  0% { transform: scaleX(0.25); }
+  20% { transform: scaleX(1); }
+  88% { transform: scaleX(1); }
+  100% { transform: scaleX(0.25); }
+}
+@keyframes sfc-cmp-win {
+  0%, 100% { transform: translateX(-45%); }
+  33% { transform: translateX(-33%); }
+  66% { transform: translateX(-57%); }
+}
+@keyframes sfc-cmp-in {
+  0%, 100% { transform: translateX(45%); }
+  33% { transform: translateX(33%); }
+  66% { transform: translateX(57%); }
+}
+@keyframes sfc-grain {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-14px, 8px); }
+  50% { transform: translate(10px, -12px); }
+  75% { transform: translate(-6px, -6px); }
+  100% { transform: translate(0, 0); }
+}
 
 /* Respect reduced motion for card atmospheres */
 @media (prefers-reduced-motion: reduce) {
@@ -1076,6 +1150,24 @@ h2 {
   .mobile-mockup-wrapper {
     transform: scale(0.85); /* Default scale for tablets and desktops */
   }
+}
+
+/* ── PRICING SECTION ANIMATIONS ── */
+@keyframes vs-float {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
+  50% { transform: translate(-50%, -50%) translateY(-3px); }
+}
+@keyframes vs-breathe {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.45; }
+}
+@keyframes cta-shimmer {
+  0% { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(200%) skewX(-15deg); }
+}
+@keyframes pricing-card-glow {
+  0%, 100% { opacity: 0.03; }
+  50% { opacity: 0.06; }
 }
 
 /* ── REDUCED MOTION PREFERENCE ── */

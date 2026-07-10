@@ -259,7 +259,7 @@ function CaptionsMockup({ a, sec }) {
             {Array.from({ length: 36 }).map((_, i) => {
               const h = Math.abs(Math.sin(i * 0.55)) * 11 + 2;
               const s1 = i < 18;
-              return <div key={i} className="flex-1 rounded-full" style={{ height: h, background: s1 ? `${a}B3` : 'rgba(255,255,255,0.35)' }} />;
+              return <div key={i} className="flex-1 rounded-full" style={{ height: h, background: s1 ? `${a}B3` : 'rgba(255,255,255,0.35)', transformOrigin: 'bottom', animation: `sfc-eq 1.7s ease-in-out ${(i % 12) * 0.14}s infinite` }} />;
             })}
           </div>
           <div className="flex gap-2">
@@ -297,12 +297,16 @@ function CaptionsMockup({ a, sec }) {
           </button>
         </div>
       </div>
+      {/* Ambient glow pulse around the preview device */}
+      <div className="absolute right-3 top-3 bottom-3 w-[43%] pointer-events-none rounded-xl" style={{ background: `radial-gradient(60% 55% at 50% 45%, ${a}14, transparent 72%)`, filter: 'blur(22px)', animation: 'sfc-breathe 8s ease-in-out infinite' }} />
       {/* RIGHT — modern phone preview */}
       <div className="w-[42%] aspect-[9/16] rounded-xl relative overflow-hidden flex flex-col justify-end p-3 shrink-0" style={{ background: 'linear-gradient(170deg, #1B1E28 0%, #13151D 55%, #0C0E14 100%)', border: '1px solid rgba(255,255,255,0.12)', boxShadow: `0 10px 26px rgba(0,0,0,0.55), 0 0 22px ${a}10, inset 0 1px 0 rgba(255,255,255,0.09)` }}>
         {/* Notch */}
         <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-full bg-black/70 border border-white/[0.06] z-10" />
-        {/* Screen glow */}
-        <div className="absolute inset-0 pointer-events-none" style={{ background: `radial-gradient(70% 55% at 50% 38%, ${a}0D 0%, transparent 65%)` }} />
+        {/* Screen glow — breathing */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: `radial-gradient(70% 55% at 50% 38%, ${a}0D 0%, transparent 65%)`, animation: 'sfc-breathe 7s ease-in-out infinite' }} />
+        {/* Moving screen light reflection */}
+        <div className="absolute pointer-events-none" style={{ top: '-45%', left: 0, width: '34%', height: '190%', background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.05) 50%, transparent)', animation: 'monitor-sheen 11s ease-in-out infinite' }} />
         {/* Status bar */}
         <div className="absolute top-4 left-2 right-2 flex justify-between items-center z-10">
           <div className="px-1.5 py-0.5 rounded bg-black/50 border border-white/[0.08] text-[6px] font-mono text-white/70 flex items-center gap-1">
@@ -312,8 +316,10 @@ function CaptionsMockup({ a, sec }) {
         </div>
         {/* Apple-keynote captions */}
         <div className="relative z-10 flex flex-col items-center gap-1.5 mb-2">
-          <div className="px-2.5 py-1.5 rounded-lg text-center max-w-full" style={{ background: 'rgba(10,11,16,0.72)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 6px 18px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)' }}>
-            <span className="text-[9.5px] font-semibold text-white tracking-wide" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>AI edits videos in minutes.</span>
+          <div className="relative overflow-hidden px-2.5 py-1.5 rounded-lg text-center max-w-full" style={{ background: 'rgba(10,11,16,0.72)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 6px 18px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)' }}>
+            {/* Caption highlight shimmer */}
+            <span aria-hidden className="absolute pointer-events-none" style={{ top: '-60%', left: 0, width: '30%', height: '220%', background: `linear-gradient(to right, transparent, ${a}30 50%, transparent)`, animation: 'monitor-sheen 6.5s ease-in-out infinite' }} />
+            <span className="relative text-[9.5px] font-semibold text-white tracking-wide" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>AI edits videos in minutes.</span>
           </div>
           <div className="px-2 py-0.5 rounded-md" style={{ background: `${a}1F`, border: `1px solid ${a}40` }}>
             <span className="text-[6.5px] font-mono font-bold tracking-wider uppercase" style={{ color: '#EAE5FF' }}>Automatic Caption Generation</span>
@@ -339,17 +345,19 @@ function BRollMockup({ a, sec }) {
     <div className="relative w-full rounded-2xl border border-white/[0.1] bg-black/55 backdrop-blur-xl p-4 flex gap-4 shadow-2xl overflow-hidden text-left">
       <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:10px_10px] pointer-events-none" />
       <div className="flex-[1.1] flex flex-col gap-3">
-        <div className="flex flex-col gap-1.5 bg-black/50 border border-white/[0.04] rounded-lg p-3">
+        <div className="relative overflow-hidden flex flex-col gap-1.5 bg-black/50 border border-white/[0.04] rounded-lg p-3">
+          {/* Cyan scan line passing across the analyzer */}
+          <div className="absolute top-0 bottom-0 w-[1.5px] pointer-events-none" style={{ left: 8, background: `linear-gradient(180deg, transparent, ${a}AA, transparent)`, boxShadow: `0 0 8px ${a}70`, animation: 'sfc-scan 8s ease-in-out infinite' }} />
           <span className="text-[8px] font-mono text-cyan-400 uppercase tracking-widest">AI CONTEXT ANALYZER</span>
           <p className="text-[9.5px] font-mono text-white/60 leading-relaxed mt-1">
-            "Welcome to our new <span className="px-1 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-bold">#workspace</span>. Here we code in the <span className="px-1 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-bold">#cloud</span> with massive performance <span className="px-1 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-bold">#growth</span>."
+            "Welcome to our new <span className="inline-block px-1 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-bold" style={{ animation: 'sfc-chip 8s ease-in-out 1.2s infinite' }}>#workspace</span>. Here we code in the <span className="inline-block px-1 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-bold" style={{ animation: 'sfc-chip 8s ease-in-out 2.6s infinite' }}>#cloud</span> with massive performance <span className="inline-block px-1 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-bold" style={{ animation: 'sfc-chip 8s ease-in-out 4s infinite' }}>#growth</span>."
           </p>
         </div>
         <div className="flex flex-col gap-2 bg-white/[0.02] border border-white/[0.04] p-2.5 rounded-lg">
           <span className="text-[7px] font-mono text-white/30 uppercase tracking-wider">AI SEARCH CRITERIA</span>
           <div className="flex flex-wrap gap-1.5">
             {['Tech Office', 'Servers', 'Cinematic Bokeh', 'Modern Desk'].map((tag, i) => (
-              <span key={i} className="text-[7.5px] font-mono px-1.5 py-0.5 rounded bg-cyan-950/40 border border-cyan-500/20 text-cyan-400">
+              <span key={i} className="text-[7.5px] font-mono px-1.5 py-0.5 rounded bg-cyan-950/40 border border-cyan-500/20 text-cyan-400" style={{ animation: `sfc-chip 9s ease-in-out ${i * 2.2}s infinite` }}>
                 🔍 {tag}
               </span>
             ))}
@@ -363,7 +371,9 @@ function BRollMockup({ a, sec }) {
           { file: 'datacenter_racks.mp4', match: 95, tag: 'servers' },
           { file: 'charts_growth.mp4', match: 92, tag: 'growth' }
         ].map((item, idx) => (
-          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-xl border transition-all duration-300" style={{ background: idx === 0 ? `${a}12` : 'rgba(255,255,255,0.01)', borderColor: idx === 0 ? `${a}35` : 'rgba(255,255,255,0.03)', boxShadow: idx === 0 ? `0 10px 20px ${a}08` : 'none' }}>
+          <div key={idx} className="relative overflow-hidden flex items-center gap-2.5 p-2 rounded-xl border transition-all duration-300" style={{ background: idx === 0 ? `${a}12` : 'rgba(255,255,255,0.01)', borderColor: idx === 0 ? `${a}35` : 'rgba(255,255,255,0.03)', boxShadow: idx === 0 ? `0 10px 20px ${a}08` : 'none', animation: idx === 0 ? 'sfc-breathe-scale 7s ease-in-out infinite' : 'none' }}>
+            {/* Slow highlight sweep */}
+            <span aria-hidden className="absolute pointer-events-none" style={{ top: '-50%', left: 0, width: '30%', height: '200%', background: `linear-gradient(to right, transparent, ${a}14 50%, transparent)`, animation: `monitor-sheen 14s ease-in-out ${idx * 4.5}s infinite` }} />
             <div className="w-10 h-7 rounded-lg relative overflow-hidden bg-slate-900 border border-white/10 flex items-center justify-center flex-shrink-0">
               <div className="absolute inset-0" style={{ background: `linear-gradient(to top right, ${a}30, transparent)` }} />
               <Play size={8} className="animate-pulse" style={{ color: idx === 0 ? a : 'rgba(255,255,255,0.3)' }} />
@@ -460,7 +470,7 @@ function MusicMockup({ a, sec }) {
 
 function ColorMockup({ a, sec }) {
   return (
-    <div className="relative w-full rounded-2xl border border-white/[0.1] bg-black/55 backdrop-blur-xl p-4 flex gap-4 shadow-2xl overflow-hidden text-left">
+    <div className="relative w-full rounded-2xl border border-white/[0.1] bg-black/55 backdrop-blur-xl p-4 flex gap-4 shadow-2xl overflow-hidden text-left" style={{ animation: 'sfc-depth 26s ease-in-out infinite' }}>
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:11px_11px] pointer-events-none" />
       <div className="flex-[0.9] flex flex-col justify-between gap-3">
         <div className="flex flex-col gap-1.5">
@@ -470,7 +480,10 @@ function ColorMockup({ a, sec }) {
             { n: 'Fuji Astia', active: false, desc: 'Vintage warm tones' },
             { n: 'Cyberpunk Red', active: false, desc: 'Neon blue & red tint' }
           ].map((lut, idx) => (
-            <div key={idx} className="p-2 rounded-lg border text-left transition-all duration-300" style={{ background: lut.active ? `${a}15` : 'rgba(255,255,255,0.01)', borderColor: lut.active ? `${a}40` : 'rgba(255,255,255,0.03)', opacity: lut.active ? 1 : 0.6 }}>
+            <div key={idx} className="relative overflow-hidden p-2 rounded-lg border text-left transition-all duration-300" style={{ background: lut.active ? `${a}15` : 'rgba(255,255,255,0.01)', borderColor: lut.active ? `${a}40` : 'rgba(255,255,255,0.03)', opacity: lut.active ? 1 : 0.6, animation: lut.active ? 'sfc-breathe-scale 8s ease-in-out infinite' : 'none' }}>
+              {lut.active && (
+                <span aria-hidden className="absolute pointer-events-none" style={{ top: '-50%', left: 0, width: '32%', height: '200%', background: `linear-gradient(to right, transparent, ${a}1C 50%, transparent)`, animation: 'monitor-sheen 9s ease-in-out infinite' }} />
+              )}
               <div className="flex items-center gap-1.5">
                 <div className="w-2.5 h-2.5 rounded-full" style={{ background: `linear-gradient(to top right, ${a}, ${sec})` }} />
                 <span className="text-[9px] font-mono font-bold text-white leading-none">{lut.n}</span>
@@ -489,12 +502,18 @@ function ColorMockup({ a, sec }) {
         <div className="relative aspect-[16/10] bg-slate-900 border border-white/10 rounded-xl overflow-hidden shadow-lg">
           <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom right, ${a}40, ${sec}20, #070B12)` }} />
           <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded border border-white/20 text-[6px] font-mono font-bold text-white z-10" style={{ background: a }}>AFTER (GRADED)</div>
-          <div className="absolute inset-y-0 left-0 w-[55%] bg-slate-950 border-r border-white/50 z-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 opacity-80" />
-            <div className="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-black/60 border border-white/[0.08] text-[6px] font-mono text-white/60">BEFORE (RAW LOG)</div>
+          {/* BEFORE window — full-width layer slid left; inner counter-slides so content stays fixed */}
+          <div className="absolute inset-y-0 left-0 w-full bg-slate-950 border-r border-white/50 z-0 overflow-hidden" style={{ animation: 'sfc-cmp-win 24s ease-in-out infinite' }}>
+            <div className="absolute inset-0" style={{ animation: 'sfc-cmp-in 24s ease-in-out infinite' }}>
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 opacity-80" />
+              <div className="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-black/60 border border-white/[0.08] text-[6px] font-mono text-white/60">BEFORE (RAW LOG)</div>
+            </div>
           </div>
-          <div className="absolute left-[55%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white text-black flex items-center justify-center shadow-lg border border-white/50 text-[7px] font-black z-20 cursor-ew-resize">
-            ↔
+          {/* Handle rail — same window motion keeps the handle on the divider */}
+          <div className="absolute inset-0 z-20 pointer-events-none" style={{ animation: 'sfc-cmp-win 24s ease-in-out infinite' }}>
+            <div className="absolute left-full top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white text-black flex items-center justify-center shadow-lg border border-white/50 text-[7px] font-black cursor-ew-resize">
+              ↔
+            </div>
           </div>
         </div>
         <div className="bg-white/[0.02] border border-white/[0.04] p-2.5 rounded-lg flex flex-col gap-2">
@@ -505,7 +524,7 @@ function ColorMockup({ a, sec }) {
             <div key={i} className="flex items-center gap-2">
               <span className="text-[7.5px] font-mono text-white/50 w-14 text-left">{slider.n}</span>
               <div className="flex-1 h-1.5 bg-black/40 rounded-full overflow-hidden relative">
-                <div className="h-full rounded-full" style={{ width: slider.pct, background: a }} />
+                <div className="h-full rounded-full" style={{ width: slider.pct, background: a, transformOrigin: 'left', animation: `sfc-bar 12s ease-in-out ${i * 0.6}s infinite` }} />
               </div>
               <span className="text-[7.5px] font-mono font-bold w-6 text-right" style={{ color: a }}>{slider.val}</span>
             </div>
@@ -602,12 +621,21 @@ function renderCardPatterns(card, isAlt) {
     case 'silence':
       return (
         <>
-          {/* Frequency line field */}
+          {/* Frequency line field — breathing */}
           <div style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.55,
-            backgroundImage: `repeating-linear-gradient(180deg, transparent 0px, transparent 26px, ${card.accent}09 26px, ${card.accent}09 27px)`,
+            position: 'absolute', inset: 0, pointerEvents: 'none',
+            backgroundImage: `repeating-linear-gradient(180deg, transparent 0px, transparent 26px, ${card.accent}0B 26px, ${card.accent}0B 27px)`,
             WebkitMaskImage: `radial-gradient(70% 85% at ${isAlt ? '30%' : '70%'} 50%, white, transparent)`,
-            maskImage: `radial-gradient(70% 85% at ${isAlt ? '30%' : '70%'} 50%, white, transparent)`
+            maskImage: `radial-gradient(70% 85% at ${isAlt ? '30%' : '70%'} 50%, white, transparent)`,
+            animation: 'sfc-breathe 7s ease-in-out infinite'
+          }} />
+          {/* Slow volumetric audio glow — deep layer */}
+          <div style={{
+            position: 'absolute', width: 420, height: 300,
+            right: isAlt ? 'auto' : '4%', left: isAlt ? '4%' : 'auto', top: '20%',
+            background: `radial-gradient(ellipse, ${card.accent}10, transparent 65%)`,
+            filter: 'blur(36px)', pointerEvents: 'none',
+            animation: 'sfc-breathe 11s ease-in-out 2s infinite'
           }} />
           {/* Moving waveform trails */}
           <svg viewBox="0 0 600 200" preserveAspectRatio="none" style={{
@@ -651,7 +679,7 @@ function renderCardPatterns(card, isAlt) {
             position: 'absolute', width: 190, height: 190, borderRadius: '50%',
             border: `1px solid ${card.accent}38`,
             right: isAlt ? 'auto' : '14%', left: isAlt ? '14%' : 'auto', top: '28%',
-            pointerEvents: 'none', animation: 'sfc-pulse 4.5s ease-out infinite', animationDelay: '2.2s'
+            pointerEvents: 'none', animation: 'sfc-pulse 4.5s ease-out 2.2s infinite'
           }} />
           {/* Playhead + engine tag */}
           <div style={{
@@ -683,11 +711,49 @@ function renderCardPatterns(card, isAlt) {
             WebkitMaskImage: 'linear-gradient(180deg, transparent 4%, white 28%, white 76%, transparent 96%)',
             maskImage: 'linear-gradient(180deg, transparent 4%, white 28%, white 76%, transparent 96%)'
           }} />
+          {/* Large ultra-soft purple aurora — slow moving */}
+          <div style={{
+            position: 'absolute', inset: '-18%', pointerEvents: 'none',
+            background: `radial-gradient(55% 48% at 68% 30%, ${card.accent}14 0%, transparent 68%), radial-gradient(48% 42% at 28% 78%, rgba(124,58,237,0.12) 0%, transparent 68%)`,
+            filter: 'blur(30px)',
+            animation: 'sfc-drift-xy 22s ease-in-out infinite'
+          }} />
+          {/* Drifting violet mesh gradient — deep layer */}
+          <div style={{
+            position: 'absolute', inset: '-10%', pointerEvents: 'none',
+            background: `radial-gradient(42% 38% at 74% 24%, ${card.accent}12 0%, transparent 70%), radial-gradient(38% 34% at 22% 72%, rgba(124,58,237,0.1) 0%, transparent 70%)`,
+            animation: 'sfc-drift-xy 16s ease-in-out infinite reverse'
+          }} />
+          {/* Floating horizontal light bands */}
+          {[
+            { t: '26%', h: 22, d: '0s', dur: '17s' }, { t: '48%', h: 16, d: '4s', dur: '21s' }, { t: '68%', h: 26, d: '8s', dur: '19s' }
+          ].map((b, i) => (
+            <div key={`band-${i}`} style={{
+              position: 'absolute', left: '-6%', right: '-6%', top: b.t, height: b.h,
+              background: `linear-gradient(90deg, transparent, ${card.accent}12 45%, rgba(255,255,255,0.05) 55%, transparent)`,
+              filter: 'blur(8px)', opacity: 0.65, pointerEvents: 'none',
+              animation: `sfc-drift-x ${b.dur} ease-in-out ${b.d} infinite`
+            }} />
+          ))}
+          {/* Tiny glowing particles drifting upward */}
+          {[
+            { s: '12%', t: '78%', d: '0s', sz: 2.5 }, { s: '26%', t: '85%', d: '2.5s', sz: 2 },
+            { s: '38%', t: '80%', d: '5s', sz: 3 }, { s: '18%', t: '90%', d: '7.5s', sz: 2 },
+            { s: '32%', t: '92%', d: '10s', sz: 2.5 }
+          ].map((p, i) => (
+            <div key={`rise-${i}`} style={{
+              position: 'absolute', width: p.sz, height: p.sz, borderRadius: '50%',
+              right: isAlt ? 'auto' : p.s, left: isAlt ? p.s : 'auto', top: p.t,
+              background: card.accent, boxShadow: `0 0 6px ${card.accent}90`, opacity: 0,
+              pointerEvents: 'none', animation: `sfc-rise 12s linear ${p.d} infinite`
+            }} />
+          ))}
           {/* Lavender key light + white fill light */}
           <div style={{
             position: 'absolute', right: '-6%', top: '-12%', width: 480, height: 320,
-            background: `radial-gradient(ellipse, ${card.accent}16, transparent 65%)`,
-            filter: 'blur(28px)', pointerEvents: 'none'
+            background: `radial-gradient(ellipse, ${card.accent}18, transparent 65%)`,
+            filter: 'blur(28px)', pointerEvents: 'none',
+            animation: 'sfc-breathe 9s ease-in-out infinite'
           }} />
           <div style={{
             position: 'absolute', left: '6%', bottom: '-14%', width: 380, height: 240,
@@ -707,13 +773,13 @@ function renderCardPatterns(card, isAlt) {
             width: 170, height: 28, borderRadius: 8,
             background: `${card.accent}14`, border: `1px solid ${card.accent}30`,
             backdropFilter: 'blur(6px)', boxShadow: '0 10px 22px rgba(0,0,0,0.3)',
-            pointerEvents: 'none', animation: 'sfc-float 11s ease-in-out infinite', animationDelay: '2s'
+            pointerEvents: 'none', animation: 'sfc-float 11s ease-in-out 2s infinite'
           }} />
           <div style={{
             position: 'absolute', right: isAlt ? 'auto' : '9%', left: isAlt ? '9%' : 'auto', bottom: '18%',
             width: 120, height: 22, borderRadius: 7,
             background: 'rgba(196,181,253,0.05)', border: `1px solid ${card.accent}20`,
-            pointerEvents: 'none', animation: 'sfc-float 13s ease-in-out infinite', animationDelay: '4s'
+            pointerEvents: 'none', animation: 'sfc-float 13s ease-in-out 4s infinite'
           }} />
           {/* Violet ambient particles */}
           {[
@@ -725,13 +791,14 @@ function renderCardPatterns(card, isAlt) {
               position: 'absolute', width: p.sz, height: p.sz, borderRadius: '50%',
               right: isAlt ? 'auto' : p.s, left: isAlt ? p.s : 'auto', top: p.t,
               background: card.accent, opacity: 0.4, boxShadow: `0 0 8px ${card.accent}90`,
-              pointerEvents: 'none', animation: 'sfc-float 7.5s ease-in-out infinite', animationDelay: p.d
+              pointerEvents: 'none', animation: `sfc-float 7.5s ease-in-out ${p.d} infinite`
             }} />
           ))}
-          {/* Graphite vignette */}
+          {/* Graphite vignette — soft breathing */}
           <div style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
-            background: 'radial-gradient(90% 85% at 50% 40%, transparent 58%, rgba(6,7,11,0.5) 100%)'
+            background: 'radial-gradient(90% 85% at 50% 40%, transparent 58%, rgba(6,7,11,0.55) 100%)',
+            animation: 'sfc-vignette 13s ease-in-out infinite'
           }} />
         </>
       );
@@ -739,30 +806,56 @@ function renderCardPatterns(card, isAlt) {
     case 'broll':
       return (
         <>
-          {/* Holographic vision grid */}
+          {/* Holographic vision grid — slow drift */}
           <div style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none',
-            backgroundImage: `linear-gradient(${card.accent}07 1px, transparent 1px), linear-gradient(90deg, ${card.accent}07 1px, transparent 1px)`,
+            position: 'absolute', inset: '-40px', pointerEvents: 'none',
+            backgroundImage: `linear-gradient(${card.accent}09 1px, transparent 1px), linear-gradient(90deg, ${card.accent}09 1px, transparent 1px)`,
             backgroundSize: '34px 34px',
             WebkitMaskImage: `radial-gradient(55% 70% at ${isAlt ? '32%' : '68%'} 45%, white, transparent)`,
-            maskImage: `radial-gradient(55% 70% at ${isAlt ? '32%' : '68%'} 45%, white, transparent)`
+            maskImage: `radial-gradient(55% 70% at ${isAlt ? '32%' : '68%'} 45%, white, transparent)`,
+            animation: 'sfc-drift-xy 30s ease-in-out infinite reverse, sfc-breathe 34s ease-in-out infinite'
           }} />
-          {/* Moving connection node network */}
-          <svg style={{
+          {/* AI data connection flow — ultra-thin paths with travelling light packets */}
+          <svg viewBox="0 0 520 420" style={{
             position: 'absolute',
-            right: isAlt ? 'auto' : '-5%', left: isAlt ? '-5%' : 'auto', top: '10%',
-            width: '520px', height: '420px', opacity: 0.4, pointerEvents: 'none'
+            right: isAlt ? 'auto' : '-4%', left: isAlt ? '-4%' : 'auto', top: '12%',
+            width: '520px', height: '420px', opacity: 0.5, pointerEvents: 'none'
           }}>
-            <line x1="80" y1="120" x2="240" y2="200" stroke={card.accent} strokeWidth="1.5" strokeDasharray="5 5" style={{ animation: 'sfc-dash 1.4s linear infinite' }} />
-            <line x1="240" y1="200" x2="380" y2="130" stroke={card.accent} strokeWidth="1.5" strokeDasharray="5 5" style={{ animation: 'sfc-dash 1.8s linear infinite' }} />
-            <line x1="240" y1="200" x2="180" y2="310" stroke={card.accent} strokeWidth="1.5" strokeDasharray="5 5" style={{ animation: 'sfc-dash 2.2s linear infinite' }} />
-            <line x1="180" y1="310" x2="360" y2="330" stroke={card.accent} strokeWidth="1.5" strokeDasharray="5 5" style={{ animation: 'sfc-dash 1.6s linear infinite' }} />
-            <circle cx="80" cy="120" r="16" fill={`${card.accent}1a`} stroke={card.accent} strokeWidth="1.5" />
-            <circle cx="240" cy="200" r="22" fill={`${card.accent}2a`} stroke={card.accent} strokeWidth="2" />
-            <circle cx="380" cy="130" r="14" fill={`${card.accent}1a`} stroke={card.accent} strokeWidth="1.5" />
-            <circle cx="180" cy="310" r="18" fill={`${card.accent}1a`} stroke={card.accent} strokeWidth="1.5" />
-            <circle cx="360" cy="330" r="20" fill={`${card.accent}1a`} stroke={card.accent} strokeWidth="1.5" />
+            <path d="M 40 90 L 210 90 L 210 200 L 420 200" fill="none" stroke={card.accent} strokeWidth="0.8" opacity="0.22" />
+            <path d="M 80 330 L 260 330 L 260 250 L 470 250" fill="none" stroke={card.accent} strokeWidth="0.8" opacity="0.18" />
+            <path d="M 470 110 L 320 110 L 320 160 L 120 160" fill="none" stroke={card.accent} strokeWidth="0.8" opacity="0.15" />
           </svg>
+          {[
+            { p: "M 40 90 L 210 90 L 210 200 L 420 200", dur: '11s', del: '0s' },
+            { p: "M 80 330 L 260 330 L 260 250 L 470 250", dur: '14s', del: '4s' },
+            { p: "M 470 110 L 320 110 L 320 160 L 120 160", dur: '12s', del: '8s' }
+          ].map((f, i) => (
+            <div key={`pkt-${i}`} style={{
+              position: 'absolute',
+              right: isAlt ? 'auto' : '-4%', left: isAlt ? '-4%' : 'auto', top: '12%',
+              width: '520px', height: '420px', pointerEvents: 'none'
+            }}>
+              <div style={{
+                width: 3.5, height: 3.5, borderRadius: '50%',
+                background: card.accent, boxShadow: `0 0 6px ${card.accent}, 0 0 10px ${card.accent}60`,
+                offsetPath: `path('${f.p}')`, offsetRotate: '0deg', opacity: 0,
+                animation: `sfc-packet ${f.dur} linear ${f.del} infinite`
+              }} />
+            </div>
+          ))}
+          {/* Floating ambient particles */}
+          {[
+            { s: '16%', t: '28%', d: '0s', sz: 2.5 }, { s: '34%', t: '20%', d: '2.5s', sz: 2 },
+            { s: '10%', t: '52%', d: '5s', sz: 3 }, { s: '28%', t: '66%', d: '7.5s', sz: 2 },
+            { s: '42%', t: '44%', d: '10s', sz: 2.5 }, { s: '22%', t: '80%', d: '12.5s', sz: 2 }
+          ].map((p, i) => (
+            <div key={`amb-${i}`} style={{
+              position: 'absolute', width: p.sz, height: p.sz, borderRadius: '50%',
+              right: isAlt ? 'auto' : p.s, left: isAlt ? p.s : 'auto', top: p.t,
+              background: card.accent, opacity: 0.2, boxShadow: `0 0 5px ${card.accent}50`,
+              pointerEvents: 'none', animation: `sfc-float 15s ease-in-out ${p.d} infinite`
+            }} />
+          ))}
           {/* Camera tracking brackets */}
           {[
             { t: '26%', s: '10%', bt: true, bl: true }, { t: '26%', s: '38%', bt: true, bl: false },
@@ -823,6 +916,14 @@ function renderCardPatterns(card, isAlt) {
             background: `conic-gradient(from 0deg, transparent 0deg, transparent 322deg, ${card.accent}1E 340deg, transparent 358deg)`,
             animation: 'sfc-spin-slow 20s linear infinite'
           }} />
+          {/* Counter-rotating deep sweep — parallax layer */}
+          <div style={{
+            position: 'absolute',
+            right: isAlt ? 'auto' : '-18%', left: isAlt ? '-18%' : 'auto', top: '-20%',
+            width: 720, height: 720, borderRadius: '50%', pointerEvents: 'none',
+            background: `conic-gradient(from 180deg, transparent 0deg, transparent 330deg, ${card.accent}0E 345deg, transparent 359deg)`,
+            animation: 'sfc-spin-slow 34s linear infinite reverse'
+          }} />
           {/* Equalizer glow — bottom */}
           <div style={{
             position: 'absolute', bottom: 0, height: 90,
@@ -835,7 +936,7 @@ function renderCardPatterns(card, isAlt) {
                 flex: 1, height: `${Math.abs(Math.sin(i * 0.7)) * 62 + 18}px`,
                 background: `linear-gradient(to top, ${card.accent}, transparent)`,
                 borderRadius: '2px 2px 0 0', transformOrigin: 'bottom',
-                animation: 'sfc-eq 2.6s ease-in-out infinite', animationDelay: `${(i % 7) * 0.28}s`
+                animation: `sfc-eq 2.6s ease-in-out ${(i % 7) * 0.28}s infinite`
               }} />
             ))}
           </div>
@@ -849,7 +950,7 @@ function renderCardPatterns(card, isAlt) {
               position: 'absolute', width: p.sz, height: p.sz, borderRadius: '50%',
               right: isAlt ? 'auto' : p.s, left: isAlt ? p.s : 'auto', top: p.t,
               background: card.accent, opacity: 0.42, boxShadow: `0 0 8px ${card.accent}90`,
-              pointerEvents: 'none', animation: 'sfc-float 8s ease-in-out infinite', animationDelay: p.d
+              pointerEvents: 'none', animation: `sfc-float 8s ease-in-out ${p.d} infinite`
             }} />
           ))}
           {/* BPM tag */}
@@ -872,29 +973,55 @@ function renderCardPatterns(card, isAlt) {
     case 'color':
       return (
         <>
-          {/* Anamorphic light streaks */}
+          {/* Soft horizontal light beam — slow drift behind the UI */}
           <div style={{
-            position: 'absolute', top: '30%', height: 2, width: '62%',
+            position: 'absolute', top: '44%', left: '-10%', right: '-10%', height: 60,
+            background: 'linear-gradient(90deg, transparent, rgba(245,239,230,0.045) 40%, rgba(244,63,94,0.03) 60%, transparent)',
+            filter: 'blur(14px)', pointerEvents: 'none',
+            animation: 'sfc-drift-x 30s ease-in-out infinite'
+          }} />
+          {/* Cinematic volumetric light sweep */}
+          <div style={{
+            position: 'absolute', top: '-45%', left: 0, width: '32%', height: '190%',
+            background: `linear-gradient(to right, transparent, ${card.accent}10 40%, rgba(245,239,230,0.05) 55%, transparent)`,
+            pointerEvents: 'none', animation: 'monitor-sheen 21s ease-in-out infinite'
+          }} />
+          {/* Slow glass reflection pass */}
+          <div style={{
+            position: 'absolute', top: '-45%', left: 0, width: '22%', height: '190%',
+            background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.035) 50%, transparent)',
+            pointerEvents: 'none', animation: 'monitor-sheen 29s ease-in-out 8s infinite'
+          }} />
+          {/* Large blurred red cinematic glow — drifting */}
+          <div style={{
+            position: 'absolute', top: '32%', width: 380, height: 300,
             right: isAlt ? 'auto' : '2%', left: isAlt ? '2%' : 'auto',
-            background: `linear-gradient(90deg, transparent, ${card.accent}99, transparent)`,
-            filter: 'blur(3px)', pointerEvents: 'none', animation: 'sfc-streak 11s ease-in-out infinite'
+            background: `radial-gradient(ellipse, ${card.accent}16, transparent 66%)`,
+            filter: 'blur(40px)', pointerEvents: 'none',
+            animation: 'sfc-drift-xy 24s ease-in-out infinite'
           }} />
+          {/* Floating cinema dust */}
+          {[
+            { s: '14%', t: '30%', d: '0s', sz: 2.5, c: 'rgba(245,239,230,0.9)' },
+            { s: '30%', t: '48%', d: '2.8s', sz: 2, c: 'rgba(245,239,230,0.8)' },
+            { s: '20%', t: '64%', d: '5.6s', sz: 3, c: `${card.accent}CC` },
+            { s: '36%', t: '24%', d: '8.4s', sz: 2, c: `${card.accent}AA` },
+            { s: '10%', t: '82%', d: '4.2s', sz: 2.5, c: 'rgba(245,239,230,0.7)' }
+          ].map((p, i) => (
+            <div key={`dust-${i}`} style={{
+              position: 'absolute', width: p.sz, height: p.sz, borderRadius: '50%',
+              right: isAlt ? 'auto' : p.s, left: isAlt ? p.s : 'auto', top: p.t,
+              background: p.c, boxShadow: `0 0 5px ${card.accent}50`, opacity: 0,
+              pointerEvents: 'none', animation: `sfc-rise 24s linear ${p.d} infinite`
+            }} />
+          ))}
+          {/* Soft lens glow — slow breathing */}
           <div style={{
-            position: 'absolute', top: '52%', height: 1.5, width: '48%',
-            right: isAlt ? 'auto' : '8%', left: isAlt ? '8%' : 'auto',
-            background: 'linear-gradient(90deg, transparent, rgba(245,239,230,0.55), transparent)',
-            filter: 'blur(2px)', pointerEvents: 'none', animation: 'sfc-streak 15s ease-in-out infinite', animationDelay: '3s'
-          }} />
-          {/* Film strip edge with sprockets */}
-          <div style={{
-            position: 'absolute', top: 0, bottom: 0, width: 40,
-            right: isAlt ? 'auto' : 0, left: isAlt ? 0 : 'auto',
-            backgroundImage: 'repeating-linear-gradient(180deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 11px, transparent 11px, transparent 28px)',
-            borderLeft: isAlt ? 'none' : '1px solid rgba(255,255,255,0.06)',
-            borderRight: isAlt ? '1px solid rgba(255,255,255,0.06)' : 'none',
-            opacity: 0.5, pointerEvents: 'none',
-            WebkitMaskImage: 'linear-gradient(180deg, transparent 2%, white 20%, white 80%, transparent 98%)',
-            maskImage: 'linear-gradient(180deg, transparent 2%, white 20%, white 80%, transparent 98%)'
+            position: 'absolute', top: '24%', width: 120, height: 120, borderRadius: '50%',
+            right: isAlt ? 'auto' : '22%', left: isAlt ? '22%' : 'auto',
+            background: `radial-gradient(circle, rgba(245,239,230,0.1) 0%, ${card.accent}0A 40%, transparent 70%)`,
+            filter: 'blur(14px)', pointerEvents: 'none',
+            animation: 'sfc-breathe 26s ease-in-out 5s infinite'
           }} />
           {/* LUT swatch strip */}
           <div style={{
@@ -905,7 +1032,8 @@ function renderCardPatterns(card, isAlt) {
             {['#F43F5E', '#D4A574', '#14B8A6', '#3B82F6', '#F5EFE6'].map((c, i) => (
               <div key={i} style={{
                 width: 14, height: 14, borderRadius: 3, background: `${c}30`,
-                border: `1px solid ${c}50`, boxShadow: i === 0 ? `0 0 8px ${c}40` : 'none'
+                border: `1px solid ${c}50`, boxShadow: `0 0 8px ${c}40`,
+                animation: `sfc-chip 8s ease-in-out ${i * 1.6}s infinite`
               }} />
             ))}
             <span style={{
@@ -922,22 +1050,25 @@ function renderCardPatterns(card, isAlt) {
             <path d="M 0 140 Q 80 15 160 120 T 310 30" fill="none" stroke={card.accent} strokeWidth="2.5" />
             <path d="M 0 120 Q 100 50 190 95 T 310 60" fill="none" stroke={card.accentSec || '#D4A574'} strokeWidth="1.5" strokeDasharray="3 3" />
           </svg>
-          {/* Cinematic bloom */}
+          {/* Cinematic bloom — radial pulse behind preview panel */}
           <div style={{
             position: 'absolute', top: '20%', width: 340, height: 260,
             right: isAlt ? 'auto' : '10%', left: isAlt ? '10%' : 'auto',
-            background: `radial-gradient(ellipse, ${card.accent}12, transparent 65%)`,
-            filter: 'blur(34px)', pointerEvents: 'none'
+            background: `radial-gradient(ellipse, ${card.accent}14, transparent 65%)`,
+            filter: 'blur(34px)', pointerEvents: 'none',
+            animation: 'sfc-breathe 18s ease-in-out infinite'
           }} />
-          {/* Heavy film grain (local) */}
+          {/* Heavy film grain — animated jitter (oversized layer, transform-only) */}
           <div style={{
-            position: 'absolute', inset: 0, opacity: 0.025, pointerEvents: 'none',
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")`
+            position: 'absolute', inset: '-20px', opacity: 0.03, pointerEvents: 'none',
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")`,
+            animation: 'sfc-grain 0.9s steps(2) infinite'
           }} />
-          {/* Exposure vignette */}
+          {/* Exposure vignette — very slow breathing */}
           <div style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
-            background: 'radial-gradient(85% 75% at 50% 45%, transparent 48%, rgba(8,4,7,0.6) 100%)'
+            background: 'radial-gradient(85% 75% at 50% 45%, transparent 48%, rgba(8,4,7,0.65) 100%)',
+            animation: 'sfc-vignette 28s ease-in-out infinite'
           }} />
         </>
       );
@@ -945,13 +1076,90 @@ function renderCardPatterns(card, isAlt) {
     case 'agent':
       return (
         <>
-          {/* Digital blueprint grid */}
+          {/* Large moving emerald aurora */}
           <div style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none',
+            position: 'absolute', inset: '-16%', pointerEvents: 'none',
+            background: `radial-gradient(52% 46% at 72% 26%, ${card.accent}12 0%, transparent 66%), radial-gradient(44% 40% at 24% 76%, rgba(79,209,255,0.08) 0%, transparent 66%)`,
+            filter: 'blur(28px)',
+            animation: 'sfc-drift-xy 20s ease-in-out infinite'
+          }} />
+          {/* Floating blurred green light blobs */}
+          <div style={{
+            position: 'absolute', width: 200, height: 160, top: '18%',
+            right: isAlt ? 'auto' : '30%', left: isAlt ? '30%' : 'auto',
+            background: `radial-gradient(ellipse, ${card.accent}14, transparent 65%)`,
+            filter: 'blur(26px)', pointerEvents: 'none',
+            animation: 'sfc-float 12s ease-in-out infinite'
+          }} />
+          <div style={{
+            position: 'absolute', width: 150, height: 130, bottom: '22%',
+            right: isAlt ? 'auto' : '8%', left: isAlt ? '8%' : 'auto',
+            background: `radial-gradient(ellipse, ${card.accent}10, transparent 65%)`,
+            filter: 'blur(22px)', pointerEvents: 'none',
+            animation: 'sfc-float 15s ease-in-out 3s infinite'
+          }} />
+          {/* Digital blueprint grid — slow parallax */}
+          <div style={{
+            position: 'absolute', inset: '-44px', pointerEvents: 'none',
             backgroundImage: `linear-gradient(${card.accent}08 1px, transparent 1px), linear-gradient(90deg, ${card.accent}08 1px, transparent 1px)`,
             backgroundSize: '44px 44px',
             WebkitMaskImage: `radial-gradient(60% 75% at ${isAlt ? '32%' : '68%'} 40%, white, transparent)`,
-            maskImage: `radial-gradient(60% 75% at ${isAlt ? '32%' : '68%'} 40%, white, transparent)`
+            maskImage: `radial-gradient(60% 75% at ${isAlt ? '32%' : '68%'} 40%, white, transparent)`,
+            animation: 'sfc-drift-xy 26s ease-in-out infinite reverse, sfc-breathe 30s ease-in-out infinite'
+          }} />
+          {/* Subtle digital fog — very slow drift */}
+          <div style={{
+            position: 'absolute', inset: '-12%', pointerEvents: 'none',
+            background: `radial-gradient(48% 40% at 60% 55%, rgba(255,255,255,0.025) 0%, transparent 70%), radial-gradient(40% 36% at 30% 30%, ${card.accent}08 0%, transparent 70%)`,
+            filter: 'blur(24px)',
+            animation: 'sfc-drift-xy 32s ease-in-out infinite'
+          }} />
+          {/* Soft cyan glow — breathing */}
+          <div style={{
+            position: 'absolute', bottom: '10%', width: 260, height: 200,
+            right: isAlt ? 'auto' : '34%', left: isAlt ? '34%' : 'auto',
+            background: 'radial-gradient(ellipse, rgba(79,209,255,0.09), transparent 66%)',
+            filter: 'blur(28px)', pointerEvents: 'none',
+            animation: 'sfc-breathe 24s ease-in-out 4s infinite'
+          }} />
+          {/* AI network paths + slow moving nodes */}
+          <svg style={{
+            position: 'absolute',
+            right: isAlt ? 'auto' : '4%', left: isAlt ? '4%' : 'auto',
+            bottom: '20%', width: 340, height: 180, opacity: 0.32, pointerEvents: 'none',
+            animation: 'sfc-float-soft 22s ease-in-out infinite'
+          }}>
+            <path d="M 20 140 L 90 140 L 90 70 L 180 70" fill="none" stroke={card.accent} strokeWidth="1.2" strokeDasharray="5 6" style={{ animation: 'sfc-dash 3.2s linear infinite' }} />
+            <path d="M 180 70 L 250 70 L 250 120 L 320 120" fill="none" stroke={card.accent} strokeWidth="1.2" strokeDasharray="5 6" style={{ animation: 'sfc-dash 3.8s linear infinite' }} />
+            <circle cx="20" cy="140" r="4" fill={`${card.accent}30`} stroke={card.accent} strokeWidth="1" />
+            <circle cx="90" cy="70" r="3" fill={`${card.accent}25`} stroke={card.accent} strokeWidth="1" />
+            <circle cx="180" cy="70" r="5" fill={`${card.accent}35`} stroke={card.accent} strokeWidth="1.2" />
+            <circle cx="250" cy="120" r="3" fill={`${card.accent}25`} stroke={card.accent} strokeWidth="1" />
+            <circle cx="320" cy="120" r="4" fill={`${card.accent}30`} stroke={card.accent} strokeWidth="1" />
+          </svg>
+          {/* Soft pulse around execution node */}
+          <div style={{
+            position: 'absolute', top: '13.5%', width: 54, height: 54, borderRadius: '50%',
+            right: isAlt ? 'auto' : 'calc(6% + 22px)', left: isAlt ? 'calc(6% + 340px)' : 'auto',
+            border: `1px solid ${card.accent}45`,
+            pointerEvents: 'none', animation: 'sfc-pulse 5.5s ease-out infinite'
+          }} />
+          {/* Tiny glowing data dots */}
+          {[
+            { s: '24%', t: '36%', d: '0s', sz: 2 }, { s: '40%', t: '60%', d: '3s', sz: 2.5 }, { s: '12%', t: '46%', d: '6s', sz: 2 }
+          ].map((p, i) => (
+            <div key={`data-${i}`} style={{
+              position: 'absolute', width: p.sz, height: p.sz, borderRadius: '50%',
+              right: isAlt ? 'auto' : p.s, left: isAlt ? p.s : 'auto', top: p.t,
+              background: card.accent, opacity: 0.35, boxShadow: `0 0 5px ${card.accent}80`,
+              pointerEvents: 'none', animation: `sfc-float 11s ease-in-out ${p.d} infinite`
+            }} />
+          ))}
+          {/* Soft light sweep across the panel */}
+          <div style={{
+            position: 'absolute', top: '-45%', left: 0, width: '26%', height: '190%',
+            background: `linear-gradient(to right, transparent, ${card.accent}0C 45%, rgba(255,255,255,0.03) 55%, transparent)`,
+            pointerEvents: 'none', animation: 'monitor-sheen 14s ease-in-out 2s infinite'
           }} />
           {/* AI pipeline flow diagram */}
           <svg style={{
@@ -968,6 +1176,8 @@ function renderCardPatterns(card, isAlt) {
                 stroke={card.accent} strokeWidth="1.4" strokeDasharray="4 4"
                 style={{ animation: `sfc-dash ${1.2 + i * 0.4}s linear infinite` }} />
             ))}
+            {/* Pipeline progress glow travelling */}
+            <circle cx={0} cy={43} r={3.2} fill={card.accent} style={{ animation: 'sfc-flow 4.6s linear infinite', filter: `drop-shadow(0 0 5px ${card.accent})` }} />
             <text x={24} y={47} fontFamily="monospace" fontSize="8" fontWeight="800" fill={`${card.accent}CC`}>INPUT</text>
             <text x={134} y={47} fontFamily="monospace" fontSize="8" fontWeight="800" fill={`${card.accent}CC`}>PARSE</text>
             <text x={241} y={47} fontFamily="monospace" fontSize="8" fontWeight="800" fill={`${card.accent}CC`}>EDIT</text>
@@ -982,11 +1192,12 @@ function renderCardPatterns(card, isAlt) {
             background: 'rgba(3,10,7,0.55)', backdropFilter: 'blur(4px)',
             display: 'flex', flexDirection: 'column', gap: '10px',
             boxShadow: `0 14px 34px rgba(0,0,0,0.4), 0 0 22px ${card.accent}0D, inset 0 1px 0 rgba(255,255,255,0.05)`,
-            opacity: 0.85, pointerEvents: 'none'
+            opacity: 0.85, pointerEvents: 'none',
+            animation: 'sfc-float-soft 12s ease-in-out infinite'
           }}>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              <div style={{ width: '45px', height: '12px', background: `${card.accent}25`, borderRadius: '4px' }} />
-              <div style={{ width: '80px', height: '12px', background: 'rgba(255,255,255,0.04)', borderRadius: '4px' }} />
+              <div style={{ width: '45px', height: '12px', background: `${card.accent}25`, borderRadius: '4px', animation: 'sfc-breathe 3.4s ease-in-out infinite' }} />
+              <div style={{ width: '80px', height: '12px', background: 'rgba(255,255,255,0.04)', borderRadius: '4px', animation: 'sfc-breathe 3.4s ease-in-out 1.7s infinite' }} />
             </div>
             <div style={{ width: '100%', height: '1px', background: 'rgba(255,255,255,0.06)' }} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '7px', fontFamily: 'monospace', fontSize: '9px', color: `${card.accent}BB` }}>
@@ -1010,16 +1221,29 @@ function renderCardPatterns(card, isAlt) {
               <div key={i} style={{
                 position: 'absolute', top: -2, left: 0, width: 5, height: 5, borderRadius: '50%',
                 background: card.accent, boxShadow: `0 0 8px ${card.accent}90`,
-                animation: 'sfc-flow 5.5s linear infinite', animationDelay: `${i * 1.4}s`
+                animation: `sfc-flow 5.5s linear ${i * 1.4}s infinite`
               }} />
             ))}
           </div>
-          {/* Terminal glow + code glyph */}
+          {/* Soft digital dust — deep layer */}
+          {[
+            { s: '14%', t: '24%', d: '0s', sz: 3 }, { s: '36%', t: '52%', d: '2.4s', sz: 2.5 },
+            { s: '20%', t: '70%', d: '4.8s', sz: 3.5 }
+          ].map((p, i) => (
+            <div key={`dust-${i}`} style={{
+              position: 'absolute', width: p.sz, height: p.sz, borderRadius: '50%',
+              right: isAlt ? 'auto' : p.s, left: isAlt ? p.s : 'auto', top: p.t,
+              background: card.accent, opacity: 0.28, boxShadow: `0 0 6px ${card.accent}60`,
+              pointerEvents: 'none', animation: `sfc-float 10s ease-in-out ${p.d} infinite`
+            }} />
+          ))}
+          {/* Terminal glow — breathing */}
           <div style={{
             position: 'absolute', bottom: '-8%', width: 320, height: 200,
             right: isAlt ? 'auto' : '20%', left: isAlt ? '20%' : 'auto',
-            background: `radial-gradient(ellipse, ${card.accent}10, transparent 65%)`,
-            filter: 'blur(30px)', pointerEvents: 'none'
+            background: `radial-gradient(ellipse, ${card.accent}12, transparent 65%)`,
+            filter: 'blur(30px)', pointerEvents: 'none',
+            animation: 'sfc-breathe 8s ease-in-out infinite'
           }} />
           <div style={{
             position: 'absolute',
@@ -1396,7 +1620,7 @@ export default function StackedFeatureCards({ navigate }) {
     return (
       <section
         id="features"
-        className="relative z-10 px-4 sm:px-6 py-16 border-t border-purpleTheme/10 max-w-5xl mx-auto w-full text-center space-y-10"
+        className="relative z-10 px-4 sm:px-6 py-10 border-t border-purpleTheme/10 max-w-5xl mx-auto w-full text-center space-y-8"
       >
         <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet" />
         
@@ -1484,7 +1708,7 @@ export default function StackedFeatureCards({ navigate }) {
     >
       <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet" />
       
-      <div style={{ textAlign:'center', padding:'80px 24px 16px' }}>
+      <div style={{ textAlign:'center', padding:'50px 24px 10px' }}>
         <span style={{ fontSize:11, fontWeight:700, color:'#4FD1FF', textTransform:'uppercase', letterSpacing:'.14em', fontFamily:"'Space Grotesk',sans-serif", display:'block', marginBottom:14 }}>
           Powerful Capabilities
         </span>
@@ -1535,7 +1759,7 @@ export default function StackedFeatureCards({ navigate }) {
         </motion.div>
       </div>
 
-      <div style={{ height:80 }}/>
+      <div style={{ height:20 }}/>
     </section>
   );
 }
