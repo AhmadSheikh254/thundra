@@ -51,6 +51,10 @@ export default function Navbar() {
 
   const isLinkActive = (path) => location.pathname === path;
 
+  const prefersReducedMotion = typeof window !== 'undefined'
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    : false;
+
   return (
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl transition-all duration-300">
       {/* Floating Capsule Body */}
@@ -167,7 +171,7 @@ export default function Navbar() {
         >
           <div className="w-4 h-4 relative flex flex-col justify-center items-center">
             <span className={`w-3.5 h-[1.5px] bg-current absolute transition-all duration-300 ${mobileMenuOpen ? 'rotate-45' : '-translate-y-1'}`} />
-            <span className={`w-3.5 h-[1.5px] bg-current absolute transition-all duration-200 ${mobileMenuOpen ? 'opacity-0 scale-x-0' : ''}`} />
+            <span className={`w-3.5 h-[1.5px] bg-current transition-all duration-200 ${mobileMenuOpen ? 'opacity-0 scale-x-0' : ''}`} />
             <span className={`w-3.5 h-[1.5px] bg-current absolute transition-all duration-300 ${mobileMenuOpen ? '-rotate-45' : 'translate-y-1'}`} />
           </div>
         </button>
@@ -176,10 +180,10 @@ export default function Navbar() {
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -8 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -8 }}
-              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: -8 }}
+              animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
+              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: -8 }}
+              transition={prefersReducedMotion ? { duration: 0.1 } : { duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="absolute top-[calc(100%+8px)] left-0 right-0 bg-[#101826]/95 border border-[#3D5A80]/20 rounded-3xl p-5 flex flex-col gap-3.5 z-50 backdrop-blur-xl shadow-2xl"
             >
               <Link 

@@ -87,6 +87,7 @@ function BgFilmStrip({ top, left, right, bottom, rotate = 0, opacity = 0.15, blu
       transform: `rotate(${rotate}deg)`,
       transformOrigin: '50% 50%',
       overflow: 'visible',
+      willChange: 'transform',
     }}>
       <div 
         className={reversed ? "animate-film-slide-reverse" : "animate-film-slide"}
@@ -112,25 +113,23 @@ function BgFilmStrip({ top, left, right, bottom, rotate = 0, opacity = 0.15, blu
               <stop offset="85%" stopColor="#080D18" stopOpacity="0.75" />
               <stop offset="100%" stopColor="#080D18" stopOpacity="0.75" />
             </linearGradient>
-            <filter id={`shadow-${uid}`} x="-20%" y="-20%" width="140%" height="140%">
+            <filter id={`shadow-${uid}`} x="-10%" y="-10%" width="120%" height="120%">
               {/* Dark backing shadow for separation */}
-              <feDropShadow dx="0" dy="3" stdDeviation="4" floodColor="#000000" floodOpacity="0.4" result="shadow" />
-              {/* Soft neon cyan ambient glow */}
-              <feDropShadow dx="0" dy="0" stdDeviation="2.5" floodColor="#4FD1FF" floodOpacity="0.32" />
+              <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#000000" floodOpacity="0.35" />
             </filter>
           </defs>
 
-          {/* Group wrapping all elements to apply the shadow/glow filter uniformly */}
+          {/* Group wrapping all elements to apply the shadow filter */}
           <g filter={`url(#shadow-${uid})`}>
             {/* Main film strip body */}
             <path d={ribbonD} fill={`url(#bgr-${uid})`} />
 
             {/* Outer borders (top/bottom edges of the film strip) */}
-            <path d={ribbonD} fill="none" stroke="rgba(79, 209, 255, 0.55)" strokeWidth="0.8" />
+            <path d={ribbonD} fill="none" stroke="rgba(79, 209, 255, 0.4)" strokeWidth="0.8" />
 
             {/* Inner rail lines */}
-            <path d={innerRailTopD} fill="none" stroke="rgba(111, 168, 255, 0.45)" strokeWidth="0.6" />
-            <path d={innerRailBottomD} fill="none" stroke="rgba(111, 168, 255, 0.45)" strokeWidth="0.6" />
+            <path d={innerRailTopD} fill="none" stroke="rgba(111, 168, 255, 0.3)" strokeWidth="0.6" />
+            <path d={innerRailBottomD} fill="none" stroke="rgba(111, 168, 255, 0.3)" strokeWidth="0.6" />
 
             {/* Vertical frame separation lines - light separators dividing the frames */}
             {frameLines.map((fl, i) => (
@@ -140,7 +139,7 @@ function BgFilmStrip({ top, left, right, bottom, rotate = 0, opacity = 0.15, blu
                 y1={-STRIP_HEIGHT / 2}
                 x2={0}
                 y2={STRIP_HEIGHT / 2}
-                stroke="rgba(111, 168, 255, 0.45)"
+                stroke="rgba(111, 168, 255, 0.3)"
                 strokeWidth="0.8"
                 transform={`translate(${fl.x}, ${fl.y}) rotate(${fl.angle})`}
               />
@@ -156,7 +155,7 @@ function BgFilmStrip({ top, left, right, bottom, rotate = 0, opacity = 0.15, blu
                 height={ph}
                 rx={rx}
                 fill="none"
-                stroke="rgba(79, 209, 255, 0.55)"
+                stroke="rgba(79, 209, 255, 0.4)"
                 strokeWidth="0.8"
                 transform={`translate(${sh.x}, ${sh.y}) rotate(${sh.angle})`}
               />
@@ -214,6 +213,15 @@ export default function GlobalBackground() {
         }
         .animate-film-slide-reverse {
           animation: film-slide-x-slow-reverse var(--duration, 50s) ease-in-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-film-slide,
+          .animate-film-slide-reverse,
+          .animate-drift-slow,
+          .animate-drift-slower {
+            animation: none !important;
+            transform: none !important;
+          }
         }
       `}</style>
       

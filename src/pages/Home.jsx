@@ -1492,7 +1492,7 @@ export default function Home() {
                 style={{ filter: 'none' }}
                 muted={true}
                 playsInline
-                preload="auto"
+                preload="metadata"
               />
             </div>
 
@@ -1508,7 +1508,7 @@ export default function Home() {
                 style={{ filter: 'none' }}
                 muted={isMuted}
                 playsInline
-                preload="auto"
+                preload="metadata"
                 onTimeUpdate={handleTimeUpdate}
               />
             </div>
