@@ -148,12 +148,12 @@ function App() {
     if (prefersReducedMotion) return;
 
     const lenis = new Lenis({
-      duration: 1.6,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easeOutExpo
       smoothWheel: true,
       smoothTouch: false,
-      wheelMultiplier: 0.8,
-      touchMultiplier: 1.2,
+      wheelMultiplier: 0.65, // natural, premium control
+      touchMultiplier: 1.0,
     });
 
     let rafId;

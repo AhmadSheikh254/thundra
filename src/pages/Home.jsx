@@ -851,7 +851,33 @@ export default function Home() {
     const nodeCount = Math.min(12, Math.floor((canvas.width * canvas.height) / 80000));
     const nodes = Array.from({ length: nodeCount }, () => new Node());
 
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const drawStatic = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < LINK_DIST) {
+            const alpha = (1 - dist / LINK_DIST) * 0.05;
+            ctx.strokeStyle = `rgba(61, 90, 128, ${alpha})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      nodes.forEach(n => { n.draw(); });
+    };
+
     const animate = () => {
+      animId = requestAnimationFrame(animate);
+      if (window.scrollY > window.innerHeight + 100) return;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       t += 0.008;
 
@@ -888,14 +914,17 @@ export default function Home() {
 
       // Draw nodes
       nodes.forEach(n => { n.update(); n.draw(); });
-
-      animId = requestAnimationFrame(animate);
     };
-    animate();
+
+    if (prefersReducedMotion) {
+      drawStatic();
+    } else {
+      animate();
+    }
 
     return () => {
       window.removeEventListener('resize', resize);
-      cancelAnimationFrame(animId);
+      if (animId) cancelAnimationFrame(animId);
     };
   }, []);
 
