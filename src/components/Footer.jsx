@@ -19,11 +19,17 @@ export default function Footer() {
 
   return (
     <footer className="relative z-10 bg-[#070B12] pt-20 pb-8 px-6 md:px-[6%] border-t border-[#3D5A80]/15 shrink-0 overflow-hidden">
+      {/* Top specular hairline */}
+      <div aria-hidden className="absolute top-0 left-[10%] right-[10%] h-px pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08) 30%, rgba(79,209,255,0.14) 50%, rgba(255,255,255,0.08) 70%, transparent)' }} />
       {/* Background Decorative Mesh Lights */}
-      <div className="absolute top-0 left-1/4 -translate-x-1/2 w-80 h-80 bg-[#3D5A80]/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 translate-x-1/2 w-96 h-96 bg-blueTheme/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 left-1/4 -translate-x-1/2 w-80 h-80 bg-[#3D5A80]/5 rounded-full blur-[100px] pointer-events-none" style={{ animation: 'sfc-breathe 16s ease-in-out infinite' }} />
+      <div className="absolute bottom-0 right-1/4 translate-x-1/2 w-96 h-96 bg-blueTheme/5 rounded-full blur-[120px] pointer-events-none" style={{ animation: 'sfc-breathe 20s ease-in-out 6s infinite' }} />
+      {/* Tiny ambient particles */}
+      {[{ l: '16%', t: '26%', d: '0s' }, { l: '72%', t: '18%', d: '4s' }, { l: '48%', t: '55%', d: '8s' }, { l: '88%', t: '65%', d: '11s' }].map((p, i) => (
+        <div key={i} aria-hidden className="absolute w-[2.5px] h-[2.5px] rounded-full bg-blueTheme pointer-events-none" style={{ left: p.l, top: p.t, opacity: 0.16, boxShadow: '0 0 4px rgba(79,209,255,0.5)', animation: `sfc-float 13s ease-in-out ${p.d} infinite` }} />
+      ))}
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-white/[0.04]">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 relative" style={{ borderBottom: '1px solid transparent', borderImage: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.09) 25%, rgba(79,209,255,0.12) 50%, rgba(255,255,255,0.09) 75%, transparent) 1' }}>
         
         {/* Column 1: Info and Subscription */}
         <div className="space-y-6 lg:col-span-1">
@@ -205,7 +211,7 @@ export default function Footer() {
                 href={soc.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-[#4FD1FF]/45 hover:bg-slate-900/80 transition-all duration-300"
+                className="p-1.5 rounded-lg border border-white/[0.08] text-slate-400 hover:text-white hover:border-[#4FD1FF]/45 hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(0,0,0,0.4),0_0_10px_rgba(79,209,255,0.15)] transition-all duration-400 ease-out" style={{ background: 'linear-gradient(170deg, rgba(15,23,40,0.8), rgba(9,13,24,0.85))', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 2px 5px rgba(0,0,0,0.3)' }}
               >
                 {soc.icon}
               </a>

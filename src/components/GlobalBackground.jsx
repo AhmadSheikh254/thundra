@@ -95,6 +95,7 @@ function BgFilmStrip({ top, left, right, bottom, rotate = 0, opacity = 0.15, blu
           width: '100%',
           height: '100%',
           '--duration': `${animDuration}s`,
+          willChange: 'transform',
         }}
       >
         <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ overflow: 'visible' }}>

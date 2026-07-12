@@ -967,19 +967,19 @@ h2 {
 
 /* ── FEATURE CARD ATMOSPHERES (GPU-only: transform/opacity) ── */
 @keyframes sfc-pulse {
-  0% { transform: scale(0.5); opacity: 0.62; }
+  0% { transform: scale(0.5); opacity: 0.7; }
   100% { transform: scale(1.75); opacity: 0; }
 }
 @keyframes sfc-drift-x {
   0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(56px); }
+  50% { transform: translateX(64px); }
 }
 @keyframes sfc-float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-18px); }
 }
 @keyframes sfc-eq {
-  0%, 100% { transform: scaleY(0.26); }
+  0%, 100% { transform: scaleY(0.22); }
   50% { transform: scaleY(1); }
 }
 @keyframes sfc-dash {
@@ -1008,26 +1008,26 @@ h2 {
   100% { transform: translateX(300px); opacity: 0; }
 }
 @keyframes sfc-breathe {
-  0%, 100% { opacity: 0.5; }
+  0%, 100% { opacity: 0.45; }
   50% { opacity: 1; }
 }
 @keyframes sfc-drift-xy {
   0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(-26px, -18px); }
+  50% { transform: translate(-30px, -21px); }
 }
 @keyframes sfc-rise {
   0% { transform: translateY(0); opacity: 0; }
-  15% { opacity: 0.55; }
-  85% { opacity: 0.55; }
+  15% { opacity: 0.62; }
+  85% { opacity: 0.62; }
   100% { transform: translateY(-130px); opacity: 0; }
 }
 @keyframes sfc-float-soft {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-7px); }
+  50% { transform: translateY(-8px); }
 }
 @keyframes sfc-vignette {
-  0%, 100% { opacity: 0.55; }
-  50% { opacity: 0.9; }
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.95; }
 }
 /* Seamless film-strip conveyor — one 66px pattern period per loop segment */
 @keyframes sfc-strip-slide {
@@ -1036,17 +1036,62 @@ h2 {
 }
 @keyframes sfc-strip-glow {
   0% { transform: translateX(-160%); opacity: 0; }
-  8% { opacity: 0.9; }
-  42% { transform: translateX(560%); opacity: 0.9; }
+  8% { opacity: 1; }
+  42% { transform: translateX(560%); opacity: 1; }
   46%, 100% { transform: translateX(560%); opacity: 0; }
 }
+/* Pipeline connector data packet */
+@keyframes pipe-flow {
+  0% { transform: translateX(0); opacity: 0; }
+  18% { opacity: 1; }
+  82% { opacity: 1; }
+  100% { transform: translateX(30px); opacity: 0; }
+}
+
+/* ── CARD 1 (AI Audio Engine) — bolder curves, premium easing ── */
+@keyframes sfc1-drift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(78px); }
+}
+@keyframes sfc1-breathe {
+  0%, 100% { opacity: 0.38; }
+  50% { opacity: 1; }
+}
+@keyframes sfc1-pulse {
+  0% { transform: scale(0.45); opacity: 0.82; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+@keyframes sfc1-eq {
+  0%, 100% { transform: scaleY(0.32); }
+  50% { transform: scaleY(1.06); }
+}
+@keyframes sfc1-wave {
+  0%, 100% { transform: scaleY(0.82); }
+  50% { transform: scaleY(1.1); }
+}
+
+/* ── CARD 3 — AI Visual Match Engine ── */
+@keyframes sfc3-stage {
+  0%, 24%, 100% { opacity: 0.38; transform: scale(1); }
+  8%, 16% { opacity: 1; transform: scale(1.05); }
+}
+@keyframes sfc3-core {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+/* LUT swatch wave — long soft rise/fall, no blink */
+@keyframes sfc-swatch {
+  0%, 26%, 100% { opacity: 0.68; transform: scale(1); }
+  12% { opacity: 1; transform: scale(1.09); }
+}
 @keyframes sfc-chip {
-  0%, 22%, 100% { opacity: 0.82; transform: scale(1); }
-  10% { opacity: 1; transform: scale(1.035); }
+  0%, 22%, 100% { opacity: 0.78; transform: scale(1); }
+  10% { opacity: 1; transform: scale(1.045); }
 }
 @keyframes sfc-breathe-scale {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.012); }
+  50% { transform: scale(1.016); }
 }
 @keyframes sfc-depth {
   0%, 100% { transform: translateY(0); }

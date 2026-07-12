@@ -153,13 +153,14 @@ export default function Navbar() {
 
         {/* CTA Workspace Button */}
         <div className="hidden md:block">
-          <Link 
-            to="/projects" 
+          <Link
+            to="/projects"
             onClick={(e) => handleNavigation('/projects', e)}
-            className="relative group overflow-hidden bg-gradient-to-r from-purpleTheme to-blueTheme px-5 py-2 text-[10px] font-extrabold uppercase tracking-widest rounded-full shadow-md shadow-black/35 hover:shadow-[0_4px_12px_rgba(79,209,255,0.12)] hover:scale-[1.03] transition-all duration-300 text-white flex items-center gap-1.5 border border-purpleLight/20"
+            className="group relative h-[38px] px-4.5 rounded-xl overflow-hidden border-2 border-[#3D6FA6] bg-slate-900 text-white text-[10px] font-bold uppercase tracking-[0.02em] flex items-center gap-1.5 transform transition-all duration-500 hover:scale-105 hover:border-[#6DD6FF] hover:text-[#BDE9FF] active:scale-[0.98] before:absolute before:w-6 before:h-6 before:content-[''] before:right-1.5 before:top-1 before:z-10 before:bg-[#4A6CF7] before:rounded-full before:blur-lg before:opacity-70 before:transition-all before:duration-500 after:absolute after:z-10 after:w-10 after:h-10 after:content-[''] after:bg-[#57C7FF] after:right-4 after:top-2 after:rounded-full after:blur-lg after:opacity-70 after:transition-all after:duration-500 hover:before:right-7 hover:before:-bottom-2 hover:before:blur hover:after:-right-4 hover:after:scale-110"
+            style={{ fontFamily: 'Inter, sans-serif' }}
           >
-            <span>Workspace</span>
-            <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform duration-300" />
+            <span className="relative z-20">Workspace</span>
+            <ArrowRight className="relative z-20 w-3 h-3 group-hover:translate-x-1 transition-transform duration-500" />
           </Link>
         </div>
 
@@ -237,9 +238,10 @@ export default function Navbar() {
               <Link 
                 to="/projects"
                 onClick={(e) => handleNavigation('/projects', e)}
-                className="w-full text-center bg-gradient-to-r from-purpleTheme to-blueTheme py-3 text-xs font-bold uppercase tracking-wider rounded-xl text-white border border-[#F5EFE6]/20 shadow-md"
+                className="relative w-full overflow-hidden text-center py-3 text-xs font-bold uppercase tracking-[0.02em] rounded-xl text-white border-2 border-[#57C7FF]/30 bg-[#0A1322]/90 backdrop-blur-md shadow-[0_8px_28px_rgba(87,199,255,0.12),inset_0_1px_0_rgba(255,255,255,0.1)] before:absolute before:content-[''] before:w-6 before:h-6 before:right-2 before:top-1.5 before:bg-[#4A6CF7] before:rounded-full before:blur-lg before:opacity-40 after:absolute after:content-[''] after:w-9 after:h-9 after:right-5 after:top-2 after:bg-[#57C7FF] after:rounded-full after:blur-lg after:opacity-40"
+                style={{ fontFamily: 'Inter, sans-serif' }}
               >
-                Workspace
+                <span className="relative z-10">Workspace</span>
               </Link>
             </motion.div>
           )}

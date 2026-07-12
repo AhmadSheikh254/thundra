@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import Lenis from 'lenis';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Home from './pages/Home';
-import Editor from './pages/Editor';
-import SavedProjects from './pages/SavedProjects';
-import Processing from './pages/Processing';
-import HowItWorks from './pages/HowItWorks';
-import Assistant from './pages/Assistant';
 import GlobalBackground from './components/GlobalBackground';
+
+const Home = lazy(() => import('./pages/Home'));
+const Editor = lazy(() => import('./pages/Editor'));
+const SavedProjects = lazy(() => import('./pages/SavedProjects'));
+const Processing = lazy(() => import('./pages/Processing'));
+const HowItWorks = lazy(() => import('./pages/HowItWorks'));
+const Assistant = lazy(() => import('./pages/Assistant'));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -129,14 +130,16 @@ function AppContent() {
     <div className="relative min-h-screen bg-[#070B12] text-[#F8F8FF] overflow-x-hidden font-body">
       <GlobalBackground />
       <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
-          <Route path="/how-it-works" element={<AnimatedPage><HowItWorks /></AnimatedPage>} />
-          <Route path="/processing" element={<AnimatedPage><Processing /></AnimatedPage>} />
-          <Route path="/editor" element={<AnimatedPage><Editor /></AnimatedPage>} />
-          <Route path="/projects" element={<AnimatedPage><SavedProjects /></AnimatedPage>} />
-          <Route path="/assistant" element={<AnimatedPage><Assistant /></AnimatedPage>} />
-        </Routes>
+        <Suspense fallback={null}>
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
+            <Route path="/how-it-works" element={<AnimatedPage><HowItWorks /></AnimatedPage>} />
+            <Route path="/processing" element={<AnimatedPage><Processing /></AnimatedPage>} />
+            <Route path="/editor" element={<AnimatedPage><Editor /></AnimatedPage>} />
+            <Route path="/projects" element={<AnimatedPage><SavedProjects /></AnimatedPage>} />
+            <Route path="/assistant" element={<AnimatedPage><Assistant /></AnimatedPage>} />
+          </Routes>
+        </Suspense>
       </AnimatePresence>
     </div>
   );
