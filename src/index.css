@@ -1070,6 +1070,66 @@ h2 {
   50% { transform: scaleY(1.1); }
 }
 
+/* Relay particles: node → core (first half), core → node (second half) */
+@keyframes sfc-relay-a {
+  0% { offset-distance: 0%; opacity: 0; }
+  4% { opacity: 1; }
+  46% { opacity: 1; }
+  50% { offset-distance: 100%; opacity: 0; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+@keyframes sfc-relay-b {
+  0%, 50% { offset-distance: 0%; opacity: 0; }
+  54% { opacity: 1; }
+  96% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+/* Scene graph: living connections + rotating Best Match */
+@keyframes sfc-linkfade {
+  0%, 100% { opacity: 0; }
+  10%, 44% { opacity: 1; }
+  54% { opacity: 0; }
+}
+@keyframes sfc-best {
+  0%, 4% { opacity: 0; }
+  9%, 42% { opacity: 1; }
+  48%, 100% { opacity: 0; }
+}
+
+/* Magnetic timeline: clip auto-insert cycle + companions */
+@keyframes sfc-insert {
+  0% { opacity: 0; transform: translateY(-9px) scale(0.96); }
+  7% { opacity: 1; transform: translateY(-3px) scale(1.02); }
+  13% { transform: translateY(0) scale(1); }
+  86% { opacity: 1; transform: translateY(0) scale(1); }
+  96%, 100% { opacity: 0; transform: translateY(0) scale(0.99); }
+}
+@keyframes sfc-badge {
+  0%, 15% { opacity: 0; }
+  22%, 80% { opacity: 1; }
+  90%, 100% { opacity: 0; }
+}
+@keyframes sfc-sweep-y {
+  0% { transform: translateY(0); opacity: 0; }
+  10%, 85% { opacity: 1; }
+  100% { transform: translateY(52px); opacity: 0; }
+}
+@keyframes sfc-sweep-x {
+  from { transform: translateX(0%); }
+  to { transform: translateX(100%); }
+}
+
+/* Cinematic film-strip conveyor (seamless, duplicated track) */
+@keyframes sfc-strip-conv {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+@keyframes sfc-hl {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.045); }
+}
+
 /* ── CARD 3 — AI Visual Match Engine ── */
 @keyframes sfc3-stage {
   0%, 24%, 100% { opacity: 0.38; transform: scale(1); }

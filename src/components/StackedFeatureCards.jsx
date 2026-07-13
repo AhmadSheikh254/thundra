@@ -140,77 +140,144 @@ const CONTAINER_VH    = TOTAL_SCROLL_VH + 100;
 
 // ─── MOCKUPS ──────────────────────────────────────────────────────────────────
 function SilenceMockup({ a, sec }) {
+  const nodes = [
+    { n: 'Audio Detection', side: 'l', top: '15%' },
+    { n: 'Silence Detection', side: 'l', top: '50%' },
+    { n: 'Breath Removal', side: 'l', top: '85%' },
+    { n: 'Filler Word Filter', side: 'r', top: '15%' },
+    { n: 'Noise Cleanup', side: 'r', top: '50%' },
+    { n: 'Caption Sync', side: 'r', top: '85%' }
+  ];
+  const stats = [
+    { l: 'Silence Removed', v: '36s' }, { l: 'Processing', v: '99%' },
+    { l: 'Latency', v: '18ms' }, { l: 'Engine', v: 'ACTIVE', dot: true }
+  ];
+
+  // Measured symmetric routing. Left paths run node → ring; right paths run
+  // ring → node, so relay particles always travel in flow direction.
+  const rootRef = React.useRef(null);
+  const coreRef = React.useRef(null);
+  const nodeRefs = React.useRef({});
+  const [net, setNet] = React.useState({ left: [], right: [], w: 0, h: 0 });
+
+  React.useLayoutEffect(() => {
+    const measure = () => {
+      const root = rootRef.current, core = coreRef.current;
+      if (!root || !core) return;
+      const rr = root.getBoundingClientRect();
+      if (!rr.width) return;
+      const cr = core.getBoundingClientRect();
+      const cx = cr.left + cr.width / 2 - rr.left;
+      const cy = cr.top + cr.height / 2 - rr.top;
+      const R = cr.width / 2 + 2;
+      const ringPt = (tx, ty) => {
+        const dx = tx - cx, dy = ty - cy, len = Math.hypot(dx, dy) || 1;
+        return [cx + (dx / len) * R, cy + (dy / len) * R];
+      };
+      // Single symmetric S-curve: both control points at the horizontal midpoint.
+      const curve = (x1, y1, x2, y2) => {
+        const mx = (x1 + x2) / 2;
+        return `M ${x1.toFixed(1)} ${y1.toFixed(1)} C ${mx.toFixed(1)} ${y1.toFixed(1)} ${mx.toFixed(1)} ${y2.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+      };
+      const left = [], right = [];
+      nodes.forEach(node => {
+        const el = nodeRefs.current[node.n];
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        const nx = node.side === 'l' ? r.right - rr.left + 3 : r.left - rr.left - 3;
+        const ny = r.top + r.height / 2 - rr.top;
+        const [ex, ey] = ringPt(nx, ny);
+        if (node.side === 'l') left.push(curve(nx, ny, ex, ey));
+        else right.push(curve(ex, ey, nx, ny));
+      });
+      setNet({ left, right, w: rr.width, h: rr.height });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (rootRef.current) ro.observe(rootRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  const allPaths = [...net.left, ...net.right];
+
   return (
-    <div className="relative w-full rounded-2xl border border-white/[0.1] bg-black/55 backdrop-blur-xl p-4 flex flex-col gap-3.5 shadow-2xl overflow-hidden text-left">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
-      <div className="relative flex flex-col gap-1.5 bg-black/60 border border-white/[0.04] rounded-lg px-3 py-2">
-        <div className="flex justify-between text-[8px] font-mono text-white/45 tracking-wider">
-          <span>00:00</span>
-          <span>00:02</span>
-          <span>00:04</span>
-          <span>00:06</span>
-          <span>00:08</span>
-        </div>
-        <div className="h-2 flex justify-between items-end opacity-20">
-          {Array.from({ length: 25 }).map((_, i) => (
-            <div key={i} style={{ width: 1, height: i % 6 === 0 ? 8 : i % 3 === 0 ? 5 : 3, background: '#fff' }} />
+    <div ref={rootRef} className="relative w-full rounded-2xl border border-white/[0.12] bg-black/55 backdrop-blur-xl p-4 flex flex-col gap-4 overflow-hidden text-left" style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.45), 0 22px 54px rgba(0,0,0,0.55), 0 0 34px rgba(79,209,255,0.06), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.4)' }}>
+      {/* Subtle panning grid */}
+      <div className="absolute inset-[-40px] pointer-events-none" style={{ backgroundImage: `linear-gradient(${a}0A 1px, transparent 1px), linear-gradient(90deg, ${a}0A 1px, transparent 1px)`, backgroundSize: '26px 26px', WebkitMaskImage: 'radial-gradient(62% 70% at 50% 42%, white, transparent)', maskImage: 'radial-gradient(62% 70% at 50% 42%, white, transparent)', opacity: 0.35, animation: 'sfc-drift-xy 26s cubic-bezier(0.45,0,0.55,1) infinite' }} />
+      {/* Top specular hairline */}
+      <div aria-hidden className="absolute top-0 left-6 right-6 h-px pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.16) 30%, rgba(79,209,255,0.2) 50%, rgba(255,255,255,0.16) 70%, transparent)' }} />
+      {/* Radial scan sweep */}
+      <div aria-hidden className="absolute pointer-events-none" style={{ top: '-45%', left: 0, width: '30%', height: '190%', background: `linear-gradient(to right, transparent, ${a}10 45%, rgba(255,255,255,0.03) 55%, transparent)`, animation: 'monitor-sheen 7s ease-in-out infinite' }} />
+      {/* Symmetric spoke connections */}
+      {net.w > 0 && (
+        <svg className="absolute inset-0 pointer-events-none" width="100%" height="100%" viewBox={`0 0 ${net.w} ${net.h}`}>
+          {allPaths.map((d, i) => (
+            <path key={i} d={d} fill="none" stroke={a} strokeWidth="1.4" strokeOpacity="0.4" strokeLinecap="round" strokeDasharray="3.5 5.5" style={{ animation: `sfc-dash ${3 + (i % 3) * 0.5}s linear infinite` }} />
           ))}
+        </svg>
+      )}
+      {/* Relay particles: one per path — node → core, then core → opposite node */}
+      {net.left.map((d, i) => (
+        <div key={'ra' + i} aria-hidden className="absolute left-0 top-0 pointer-events-none" style={{ width: 4, height: 4, borderRadius: '50%', background: a, boxShadow: `0 0 6px ${a}, 0 0 10px ${a}50`, offsetPath: `path('${d}')`, offsetRotate: '0deg', opacity: 0, animation: `sfc-relay-a 5.2s cubic-bezier(0.45,0,0.55,1) ${i * 0.45}s infinite` }} />
+      ))}
+      {net.right.map((d, i) => (
+        <div key={'rb' + i} aria-hidden className="absolute left-0 top-0 pointer-events-none" style={{ width: 4, height: 4, borderRadius: '50%', background: a, boxShadow: `0 0 6px ${a}, 0 0 10px ${a}50`, offsetPath: `path('${d}')`, offsetRotate: '0deg', opacity: 0, animation: `sfc-relay-b 5.2s cubic-bezier(0.45,0,0.55,1) ${i * 0.45}s infinite` }} />
+      ))}
+      {/* Processing stage */}
+      <div className="relative z-10 h-[200px]">
+        {/* Floating processing nodes — equal size, mirrored, center-aligned */}
+        {nodes.map((node, i) => (
+          <div key={node.n} ref={el => { nodeRefs.current[node.n] = el; }} className="absolute w-[104px] -translate-y-1/2 px-2 py-[4px] rounded-md border text-[7.5px] font-mono font-bold flex items-center gap-1" style={{
+            [node.side === 'l' ? 'left' : 'right']: 0,
+            top: node.top,
+            justifyContent: node.side === 'l' ? 'flex-start' : 'flex-end',
+            color: 'rgba(255,255,255,0.8)',
+            background: `linear-gradient(180deg, ${a}10, rgba(255,255,255,0.02))`,
+            borderColor: `${a}30`,
+            boxShadow: `inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 6px rgba(0,0,0,0.35)`,
+            animation: `sfc-chip 12s cubic-bezier(0.45,0,0.55,1) ${i * 2}s infinite`
+          }}>
+            {node.side === 'l' && <span className="w-[5px] h-[5px] rounded-full shrink-0" style={{ background: a, boxShadow: `0 0 4px ${a}` }} />}
+            <span className="truncate">{node.n}</span>
+            {node.side === 'r' && <span className="w-[5px] h-[5px] rounded-full shrink-0" style={{ background: a, boxShadow: `0 0 4px ${a}` }} />}
+          </div>
+        ))}
+        {/* AI Core */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+          <div ref={coreRef} className="relative w-[110px] h-[110px] flex items-center justify-center">
+            {/* Pulsing scan ring */}
+            <div className="absolute inset-0 rounded-full border" style={{ borderColor: `${a}38`, animation: 'sfc-pulse 4.5s cubic-bezier(0.25,0.46,0.45,0.94) infinite' }} />
+            {/* Breathing outer ring — soft, no heavy glow */}
+            <div className="absolute inset-0 rounded-full border" style={{ borderColor: `${a}2E`, boxShadow: `0 0 10px ${a}10, inset 0 0 8px ${a}0A`, animation: 'sfc-breathe 6s cubic-bezier(0.45,0,0.55,1) infinite' }} />
+            {/* Concentric guide circle */}
+            <div className="absolute inset-[10px] rounded-full border" style={{ borderColor: 'rgba(255,255,255,0.05)' }} />
+            {/* Thin segmented rotating ring */}
+            <svg className="absolute inset-[7px]" viewBox="0 0 74 74" style={{ animation: 'sfc-spin-slow 10s linear infinite' }}>
+              <circle cx="37" cy="37" r="32" fill="none" stroke={a} strokeWidth="1.6" strokeLinecap="round" strokeDasharray="14 12" strokeOpacity="0.5" />
+            </svg>
+            {/* Counter-rotating inner segments */}
+            <svg className="absolute inset-[18px]" viewBox="0 0 58 58" style={{ animation: 'sfc-spin-slow 16s linear infinite reverse' }}>
+              <circle cx="29" cy="29" r="24" fill="none" stroke={a} strokeWidth="1" strokeLinecap="round" strokeDasharray="6 14" strokeOpacity="0.32" />
+            </svg>
+            {/* Core orb */}
+            <div className="relative w-[46px] h-[46px] rounded-full flex items-center justify-center" style={{ background: `radial-gradient(circle at 35% 30%, ${a}42 0%, rgba(5,14,26,0.92) 70%)`, border: `1px solid ${a}4A`, boxShadow: `0 0 12px ${a}20, inset 0 1px 0 rgba(255,255,255,0.14)`, animation: 'sfc3-core 4s cubic-bezier(0.45,0,0.55,1) infinite' }}>
+              <Scissors size={16} style={{ color: '#DFF3FF', filter: `drop-shadow(0 0 4px ${a})` }} />
+            </div>
+          </div>
+          <span className="block text-[6.5px] font-mono uppercase tracking-[0.2em] mt-3 leading-none" style={{ color: `${a}AA` }}>AI Cut Engine</span>
         </div>
       </div>
-      <div className="relative bg-black/50 border border-white/[0.04] rounded-xl p-3 flex flex-col gap-3">
-        <div className="flex gap-1.5 h-6">
-          <div className="flex-1 flex items-center justify-between px-2 rounded text-[8px] font-mono text-white/70" style={{ background: `linear-gradient(to right, ${sec}20, ${a}10)`, border: `1px solid ${sec}30` }}>
-            <span>📹 raw_footage_01.mp4</span>
-            <span className="text-[7.5px] font-bold" style={{ color: a }}>V1</span>
+      {/* Processing status bar */}
+      <div className="relative z-10 grid grid-cols-4 gap-1.5 pt-2.5 border-t border-white/[0.06]">
+        {stats.map((st, i) => (
+          <div key={st.l} className="flex flex-col items-center gap-[3px] px-1 py-2 rounded-lg border border-white/[0.07]" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.012))', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), 0 2px 5px rgba(0,0,0,0.3)' }}>
+            <span className="text-[5.5px] font-mono text-white/45 uppercase tracking-[0.14em] text-center leading-none">{st.l}</span>
+            <span className="flex items-center gap-1 text-[10px] font-mono font-black leading-none" style={{ color: a, animation: `sfc-vignette ${6 + i}s cubic-bezier(0.45,0,0.55,1) ${i * 1.2}s infinite` }}>
+              {st.dot && <span className="w-1 h-1 rounded-full shrink-0" style={{ background: a, boxShadow: `0 0 5px ${a}`, animation: 'sfc-breathe 2.4s ease-in-out infinite' }} />}
+              {st.v}
+            </span>
           </div>
-          <div className="w-[12%] h-full bg-red-500/10 border border-dashed border-red-500/40 rounded flex items-center justify-center text-[7px] text-red-400 font-mono">
-            CUT
-          </div>
-          <div className="flex-[1.5] flex items-center justify-between px-2 rounded text-[8px] font-mono text-white/70" style={{ background: `linear-gradient(to right, ${sec}20, ${a}10)`, border: `1px solid ${sec}30` }}>
-            <span>raw_footage_02.mp4</span>
-            <span className="text-[7.5px] font-bold" style={{ color: a }}>V1</span>
-          </div>
-        </div>
-        <div className="relative h-14 bg-black/40 rounded border border-white/[0.03] flex items-center px-2 overflow-hidden">
-          {/* DAW zero-crossing guide line */}
-          <div className="absolute left-2 right-2 top-1/2 h-px pointer-events-none" style={{ background: `linear-gradient(90deg, transparent, ${a}25, transparent)` }} />
-          <div className="w-full flex items-center justify-between h-8 gap-[2px]">
-            {Array.from({ length: 44 }).map((_, i) => {
-              const isCut = i >= 16 && i <= 21;
-              const h = isCut ? 2 : Math.max(4, Math.abs(Math.sin(i * 0.25)) * 26 + (i % 3 === 0 ? 6 : 0));
-              return (
-                <div key={i} style={{
-                  flex: 1,
-                  height: `${h}px`,
-                  background: isCut ? '#ef4444' : `linear-gradient(to top, ${a}, ${sec})`,
-                  borderRadius: 1,
-                  opacity: isCut ? 0.35 : 0.85,
-                  transformOrigin: 'center',
-                  animation: isCut ? 'none' : `sfc1-wave 2.4s cubic-bezier(0.45,0,0.55,1) ${(i % 11) * 0.16}s infinite`
-                }} />
-              );
-            })}
-          </div>
-          <div className="absolute left-[38%] top-0 bottom-0 w-[1px] border-l border-dashed border-red-500/60 flex items-center justify-center">
-            <span className="absolute -top-1 bg-red-950/80 border border-red-500/30 text-[7px] px-1 rounded text-red-400 font-mono" style={{ transform: 'translateY(-10px)' }}>SILENCE</span>
-            <Scissors className="absolute text-red-400" size={10} style={{ transform: 'translateX(-50%) translateY(4px)' }} />
-          </div>
-          <div className="absolute left-[70%] top-0 bottom-0 w-[1.5px]" style={{ background: a, boxShadow: `0 0 5px ${a}, 0 0 9px ${a}60`, animation: 'sfc1-breathe 2.8s cubic-bezier(0.45,0,0.55,1) infinite' }}>
-            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45" style={{ background: a }} />
-          </div>
-        </div>
-      </div>
-      <div className="flex justify-between items-center gap-3">
-        <div className="flex-1 flex items-center justify-between bg-white/[0.02] border border-white/[0.04] rounded-lg px-2.5 py-2">
-          <span className="text-[7.5px] font-mono text-white/40 tracking-wider">CUT ENGINE STATUS</span>
-          <span className="text-[8px] font-mono text-emerald-400 font-bold flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> ACTIVE
-          </span>
-        </div>
-        <div className="flex-1 flex items-center justify-between border rounded-lg px-2.5 py-2 shadow-lg" style={{ background: `linear-gradient(to right, ${sec}12, ${a}06)`, borderColor: `${sec}25` }}>
-          <span className="text-[7.5px] font-mono text-slate-300">TOTAL TIME SAVED</span>
-          <span className="text-[9px] font-mono font-black text-white">-36.2s</span>
-        </div>
+        ))}
       </div>
     </div>
   );
@@ -343,58 +410,124 @@ function CaptionsMockup({ a, sec }) {
 }
 
 function BRollMockup({ a, sec }) {
+  const clips = [
+    { n: 'Office', e: '🏢', pct: 91, dur: '0:05', t: '18,32,58' },
+    { n: 'Startup', e: '🚀', pct: 88, dur: '0:04', t: '14,28,52' },
+    { n: 'Meeting', e: '🤝', pct: 93, dur: '0:06', t: '20,30,52' },
+    { n: 'Podcast', e: '🎙️', pct: 90, dur: '0:07', t: '14,24,44' },
+    { n: 'Laptop', e: '💻', pct: 94, dur: '0:03', t: '12,30,54' },
+    { n: 'Camera', e: '🎥', pct: 89, dur: '0:05', t: '16,26,46' },
+    { n: 'Coffee', e: '☕', pct: 86, dur: '0:02', t: '22,30,48' }
+  ];
+  const meta = [
+    { n: 'Workspace', l: '4%', d: '0s' }, { n: 'Startup', l: '21%', d: '1.6s' },
+    { n: 'Coding', l: '38%', d: '3.2s' }, { n: 'Meeting', l: '54%', d: '4.8s' },
+    { n: 'Podcast', l: '70%', d: '6.4s' }, { n: 'Office', l: '86%', d: '8s' }
+  ];
   return (
-    <div className="relative w-full rounded-2xl border border-white/[0.12] bg-black/55 backdrop-blur-xl p-4 flex gap-4 overflow-hidden text-left" style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.45), 0 22px 54px rgba(0,0,0,0.55), 0 0 34px rgba(14,165,233,0.06), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.4)' }}>
-      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:10px_10px] pointer-events-none" />
+    <div className="relative w-full rounded-2xl border border-white/[0.12] backdrop-blur-xl p-4 flex flex-col gap-2.5 overflow-hidden text-left" style={{
+      background: 'linear-gradient(160deg, #081527 0%, #060F1E 55%, #040A14 100%)',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.45), 0 22px 54px rgba(0,0,0,0.55), 0 0 34px rgba(14,165,233,0.06), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.4)'
+    }}>
+      {/* Cinematic film-strip accents — very low opacity */}
+      {[{ top: '30%', rot: -5 }, { top: '64%', rot: -5 }].map((st, i) => (
+        <div key={i} aria-hidden className="absolute left-[-12%] w-[124%] pointer-events-none" style={{ top: st.top, transform: `rotate(${st.rot}deg)`, opacity: 0.07 }}>
+          <div style={{ height: 5, backgroundColor: 'rgba(140,180,215,0.5)', backgroundImage: 'repeating-linear-gradient(90deg, transparent 0px, transparent 4px, rgba(4,9,17,0.9) 4px, rgba(4,9,17,0.9) 14px)' }} />
+          <div style={{ height: 26, backgroundImage: `repeating-linear-gradient(90deg, ${a}55 0px, ${a}55 2px, ${a}12 2px, ${a}12 46px)` }} />
+          <div style={{ height: 5, backgroundColor: 'rgba(140,180,215,0.5)', backgroundImage: 'repeating-linear-gradient(90deg, transparent 0px, transparent 4px, rgba(4,9,17,0.9) 4px, rgba(4,9,17,0.9) 14px)' }} />
+        </div>
+      ))}
+      {/* Soft light streak */}
+      <div aria-hidden className="absolute top-[46%] left-[4%] w-[55%] h-[2px] pointer-events-none" style={{ background: `linear-gradient(90deg, transparent, ${a}40, transparent)`, filter: 'blur(3px)', animation: 'sfc-streak 14s cubic-bezier(0.45,0,0.55,1) infinite' }} />
       {/* Top specular hairline */}
       <div aria-hidden className="absolute top-0 left-6 right-6 h-px pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.16) 30%, rgba(14,165,233,0.2) 50%, rgba(255,255,255,0.16) 70%, transparent)' }} />
-      {/* Soft ambient corner light */}
-      <div aria-hidden className="absolute -top-8 -left-6 w-48 h-28 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 20% 20%, rgba(14,165,233,0.08), transparent 68%)', filter: 'blur(14px)' }} />
-      <div className="flex-[1.1] flex flex-col gap-3">
-        <div className="relative overflow-hidden flex flex-col gap-1.5 border border-white/[0.09] rounded-lg p-3" style={{ background: 'linear-gradient(180deg, rgba(9,18,32,0.94) 0%, rgba(5,11,20,0.9) 100%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), inset 0 0 0 1px rgba(14,165,233,0.04), 0 10px 24px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.35)' }}>
-          {/* Cyan scan line passing across the analyzer */}
-          <div className="absolute top-0 bottom-0 w-[1.5px] pointer-events-none" style={{ left: 8, background: `linear-gradient(180deg, transparent, ${a}AA, transparent)`, boxShadow: `0 0 8px ${a}70`, animation: 'sfc-scan 8s ease-in-out infinite' }} />
-          <span className="text-[8px] font-mono text-cyan-400 uppercase tracking-widest">AI CONTEXT ANALYZER</span>
-          <p className="text-[9.5px] font-mono text-white/60 leading-relaxed mt-1">
-            "Welcome to our new <span className="inline-block px-1 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-bold" style={{ animation: 'sfc-chip 8s ease-in-out 1.2s infinite', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 2px 5px rgba(0,0,0,0.4)' }}>#workspace</span>. Here we code in the <span className="inline-block px-1 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-bold" style={{ animation: 'sfc-chip 8s ease-in-out 2.6s infinite', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 2px 5px rgba(0,0,0,0.4)' }}>#cloud</span> with massive performance <span className="inline-block px-1 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-bold" style={{ animation: 'sfc-chip 8s ease-in-out 4s infinite', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 2px 5px rgba(0,0,0,0.4)' }}>#growth</span>."
-          </p>
-        </div>
-        <div className="flex flex-col gap-2 border border-white/[0.08] p-2.5 rounded-lg" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.015) 100%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07), 0 6px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.3)' }}>
-          <span className="text-[7px] font-mono text-white/30 uppercase tracking-wider">AI SEARCH CRITERIA</span>
-          <div className="flex flex-wrap gap-1.5">
-            {['Tech Office', 'Servers', 'Cinematic Bokeh', 'Modern Desk'].map((tag, i) => (
-              <span key={i} className="text-[7.5px] font-mono px-1.5 py-0.5 rounded bg-cyan-950/40 border border-cyan-500/20 text-cyan-400" style={{ animation: `sfc-chip 9s ease-in-out ${i * 2.2}s infinite`, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 5px rgba(0,0,0,0.35)' }}>
-                🔍 {tag}
-              </span>
-            ))}
-          </div>
+      {/* Floating particles */}
+      {[{ l: '12%', t: '20%', d: '0s' }, { l: '58%', t: '14%', d: '4s' }, { l: '84%', t: '30%', d: '8s' }].map((p, i) => (
+        <div key={i} aria-hidden className="absolute w-[2px] h-[2px] rounded-full pointer-events-none" style={{ left: p.l, top: p.t, background: 'rgba(200,230,255,0.9)', opacity: 0.2, boxShadow: `0 0 4px ${a}60`, animation: `sfc-float 13s cubic-bezier(0.45,0,0.55,1) ${p.d} infinite` }} />
+      ))}
+      {/* Header: title + AI confidence meter */}
+      <div className="relative z-10 flex items-center justify-between">
+        <span className="text-[6.5px] font-mono text-white/45 uppercase tracking-[0.18em]">AI Match Pipeline</span>
+        <div className="flex items-center gap-1.5 px-1.5 py-[3px] rounded-md border" style={{ borderColor: `${a}35`, background: `linear-gradient(180deg, ${a}12, rgba(255,255,255,0.02))`, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)' }}>
+          <svg width="10" height="10" viewBox="0 0 12 12" className="-rotate-90">
+            <circle cx="6" cy="6" r="5" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1.6" />
+            <circle cx="6" cy="6" r="5" fill="none" stroke={a} strokeWidth="1.6" strokeLinecap="round" strokeDasharray="30.2 31.4" style={{ animation: 'sfc-breathe 5s cubic-bezier(0.45,0,0.55,1) infinite' }} />
+          </svg>
+          <span className="text-[6px] font-mono font-black leading-none" style={{ color: a }}>AI 96%</span>
         </div>
       </div>
-      <div className="flex-[0.9] flex flex-col gap-2 justify-center">
-        <span className="text-[8px] font-mono text-white/30 uppercase tracking-widest">RECOMMENDED FOOTAGE</span>
-        {[
-          { file: 'developer_typing.mp4', match: 98, tag: 'cloud' },
-          { file: 'datacenter_racks.mp4', match: 95, tag: 'servers' },
-          { file: 'charts_growth.mp4', match: 92, tag: 'growth' }
-        ].map((item, idx) => (
-          <div key={idx} className="relative overflow-hidden flex items-center gap-2.5 p-2 rounded-xl border transition-all duration-300" style={{ background: idx === 0 ? `linear-gradient(180deg, ${a}16, ${a}0C)` : 'linear-gradient(180deg, rgba(255,255,255,0.028), rgba(255,255,255,0.012))', borderColor: idx === 0 ? `${a}40` : 'rgba(255,255,255,0.06)', boxShadow: idx === 0 ? `0 12px 26px ${a}0F, 0 3px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.09)` : 'inset 0 1px 0 rgba(255,255,255,0.04), 0 2px 6px rgba(0,0,0,0.3)', animation: idx === 0 ? 'sfc-breathe-scale 7s ease-in-out infinite' : 'none' }}>
-            {/* Slow highlight sweep */}
-            <span aria-hidden className="absolute pointer-events-none" style={{ top: '-50%', left: 0, width: '30%', height: '200%', background: `linear-gradient(to right, transparent, ${a}1A 50%, transparent)`, animation: `monitor-sheen 14s ease-in-out ${idx * 4.5}s infinite` }} />
-            <div className="w-10 h-7 rounded-lg relative overflow-hidden bg-slate-900 border border-white/[0.14] flex items-center justify-center flex-shrink-0" style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -2px 4px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.4)' }}>
-              <div className="absolute inset-0" style={{ background: `linear-gradient(to top right, ${a}30, transparent)` }} />
-              <div className="absolute top-0 left-0 right-0 h-1/2 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.07), transparent)' }} />
-              <Play size={8} className="animate-pulse" style={{ color: idx === 0 ? a : 'rgba(255,255,255,0.35)', filter: idx === 0 ? `drop-shadow(0 0 3px ${a}80)` : 'none' }} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-[8.5px] font-mono text-white font-bold truncate">{item.file}</div>
-              <div className="flex items-center justify-between mt-0.5">
-                <span className="text-[7px] text-white/30 font-mono">#{item.tag}</span>
-                <span className="text-[7px] font-mono font-bold" style={{ color: idx === 0 ? a : 'rgba(255,255,255,0.4)' }}>{item.match}% match</span>
-              </div>
-            </div>
-          </div>
+      {/* Floating metadata chips */}
+      <div className="relative z-10 h-[22px]">
+        {meta.map(m => (
+          <span key={m.n + m.l} className="absolute top-0 px-1.5 py-[2px] rounded-full border text-[5.5px] font-mono font-bold" style={{ left: m.l, color: 'rgba(255,255,255,0.7)', background: `${a}10`, borderColor: `${a}28`, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07)', animation: `sfc-float-soft ${9 + (parseFloat(m.d) % 3) * 2}s cubic-bezier(0.45,0,0.55,1) ${m.d} infinite` }}>{m.n}</span>
         ))}
       </div>
+      {/* Pipeline lane — clips flow left → right through scan gates */}
+      <div className="relative z-10 overflow-hidden rounded-lg border border-white/[0.08]" style={{ background: 'linear-gradient(180deg, rgba(7,14,26,0.92), rgba(4,9,17,0.9))', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), inset 0 2px 8px rgba(0,0,0,0.4)' }}>
+        <div className="flex gap-1.5 py-1.5 px-1.5 w-max" style={{ animation: 'sfc-strip-conv 42s linear infinite' }}>
+          {[...clips, ...clips].map((cl, k) => (
+            <div key={k} className="relative w-16 rounded-md border p-[3px] flex flex-col gap-[2px] shrink-0" style={{
+              background: 'linear-gradient(180deg, rgba(13,24,42,0.92), rgba(7,14,26,0.9))',
+              borderColor: 'rgba(255,255,255,0.09)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07), 0 3px 8px rgba(0,0,0,0.4)',
+              animation: `sfc-chip 14s cubic-bezier(0.45,0,0.55,1) ${(k % 7) * 2}s infinite`
+            }}>
+              <div className="relative h-[24px] rounded-[3px] overflow-hidden flex items-center justify-center" style={{ background: `linear-gradient(150deg, rgba(${cl.t},0.95) 0%, rgba(6,12,22,0.96) 100%)`, border: '1px solid rgba(255,255,255,0.06)' }}>
+                <span className="text-[9px] leading-none select-none" style={{ filter: 'saturate(0.7) brightness(0.95)' }}>{cl.e}</span>
+                <span aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.06), transparent 40%, rgba(0,0,0,0.3))' }} />
+                <span className="absolute bottom-[1px] right-[2px] text-[4px] font-mono text-white/55 leading-none">{cl.dur}</span>
+              </div>
+              <div className="flex items-center justify-between leading-none px-[1px]">
+                <span className="text-[4.5px] font-mono text-white/60 uppercase truncate">{cl.n}</span>
+                <span className="text-[4.5px] font-mono font-black shrink-0" style={{ color: `${a}CC` }}>{cl.pct}%</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* AI scan-pulse gates over the lane */}
+        {['26%', '52%', '78%'].map((l, i) => (
+          <div key={i} aria-hidden className="absolute inset-y-1 pointer-events-none" style={{ left: l, width: 3, background: `linear-gradient(180deg, transparent, ${a}70, transparent)`, filter: 'blur(1px)', boxShadow: `0 0 8px ${a}40`, animation: `sfc-breathe ${2.6 + i * 0.5}s cubic-bezier(0.45,0,0.55,1) ${i * 0.9}s infinite` }} />
+        ))}
+      </div>
+      {/* Bottom: semantic analysis bar + Selected Best Match */}
+      <div className="relative z-10 flex items-end gap-3">
+        <div className="flex-1 flex flex-col gap-1 pb-0.5">
+          <div className="flex items-center justify-between">
+            <span className="text-[5.5px] font-mono text-white/45 uppercase tracking-[0.16em]">Semantic Analysis</span>
+            <span className="text-[5.5px] font-mono font-black" style={{ color: a, animation: 'sfc-vignette 7s cubic-bezier(0.45,0,0.55,1) infinite' }}>Matching…</span>
+          </div>
+          <div className="h-[4px] rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)' }}>
+            <div className="h-full rounded-full" style={{ width: '96%', transformOrigin: 'left', background: `linear-gradient(90deg, ${sec || a}, ${a})`, boxShadow: `0 0 6px ${a}50`, animation: 'sfc-bar 10s cubic-bezier(0.45,0,0.55,1) infinite' }} />
+          </div>
+          <div className="flex items-center justify-between text-[4.5px] font-mono text-white/35">
+            <span>1.5M clips scanned</span><span>7 candidates</span><span>1 selected</span>
+          </div>
+        </div>
+        {/* Selected Best Match — enlarged */}
+        <div className="relative shrink-0" style={{ animation: 'sfc-hl 5s cubic-bezier(0.45,0,0.55,1) infinite' }}>
+          <div className="relative w-[92px] rounded-lg p-[4px] flex flex-col gap-[3px] overflow-hidden" style={{
+            background: `linear-gradient(180deg, ${a}16, rgba(7,14,26,0.94))`,
+            border: `1px solid ${a}`,
+            boxShadow: `0 0 14px ${a}40, 0 8px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12)`
+          }}>
+            {/* moving scan lines across the selected card */}
+            <span aria-hidden className="absolute pointer-events-none" style={{ top: '-40%', left: 0, width: '26%', height: '180%', background: `linear-gradient(to right, transparent, ${a}45 50%, transparent)`, animation: 'monitor-sheen 3.8s ease-in-out infinite' }} />
+            <span aria-hidden className="absolute inset-x-0 h-[1.5px] pointer-events-none" style={{ top: 0, background: `linear-gradient(90deg, transparent, ${a}80, transparent)`, animation: 'sfc-sweep-y 4.6s linear infinite' }} />
+            <div className="relative h-[34px] rounded-[4px] overflow-hidden flex items-center justify-center" style={{ background: 'linear-gradient(150deg, rgba(12,26,48,0.95) 0%, rgba(6,12,22,0.96) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <span className="text-[13px] leading-none select-none" style={{ filter: 'saturate(0.75)' }}>⌨️</span>
+              <span aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.07), transparent 40%, rgba(0,0,0,0.32))' }} />
+              <span className="absolute bottom-[2px] right-[3px] text-[4.5px] font-mono text-white/60 leading-none">0:08</span>
+            </div>
+            <div className="flex items-center justify-between leading-none px-[1px]">
+              <span className="text-[5px] font-mono text-white/75 uppercase tracking-wide">Coding</span>
+              <span className="text-[6px] font-mono font-black" style={{ color: a, animation: 'sfc-vignette 6s cubic-bezier(0.45,0,0.55,1) infinite' }}>98%</span>
+            </div>
+          </div>
+          <span className="absolute -top-[8px] left-1/2 -translate-x-1/2 px-1.5 rounded-[2px] text-[4.5px] font-mono font-black uppercase whitespace-nowrap leading-[8px]" style={{ color: '#06121F', background: a, boxShadow: `0 0 6px ${a}60` }}>✓ Selected Best Match</span>
+        </div>
+      </div>
+      {/* Vignette */}
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(85% 80% at 50% 46%, transparent 58%, rgba(3,7,14,0.5) 100%)' }} />
     </div>
   );
 }
