@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Database, ArrowRight, Menu, X, Sparkles } from 'lucide-react';
 import ThundraLogo from './ThundraLogo';
 
-export default function Navbar() {
+function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -250,3 +250,6 @@ export default function Navbar() {
     </nav>
   );
 }
+
+// Memoized: parent re-renders (e.g. video timeupdate state) must not reconcile this subtree.
+export default React.memo(Navbar);

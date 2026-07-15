@@ -1163,6 +1163,12 @@ h2 {
   92% { opacity: 1; }
   100% { offset-distance: 100%; opacity: 0; }
 }
+@keyframes sfc-bar-smooth {
+  0% { transform: scaleX(0.22); }
+  34% { transform: scaleX(1); }
+  86% { transform: scaleX(1); }
+  100% { transform: scaleX(0.22); }
+}
 @keyframes sfc-bar {
   0% { transform: scaleX(0.25); }
   20% { transform: scaleX(1); }
@@ -1193,6 +1199,19 @@ h2 {
   #features svg line,
   #features svg path {
     animation: none !important;
+  }
+}
+
+/* Close the dead zone between the Features intro and the first card:
+   the deck's first card is vertically centered in a (100vh - nav) fixed
+   panel, so pull the scroll zone up by that centering offset minus a
+   premium ~72px gap. Scroll maths track offsetTop, so timings adapt. */
+.sfc-zone {
+  margin-top: calc(-1 * ((100vh - 72px - min(74vh, 530px)) / 2 - 72px));
+}
+@media (max-width: 767px) {
+  .sfc-zone {
+    margin-top: calc(-1 * ((100vh - 72px - min(84vh, 660px)) / 2 - 64px));
   }
 }
 
@@ -1258,6 +1277,11 @@ h2 {
 }
 
 /* ── PRICING SECTION ANIMATIONS ── */
+/* Flex-centered VS (comparison): float only — no -50% offset */
+@keyframes vs-float-inline {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
 @keyframes vs-float {
   0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
   50% { transform: translate(-50%, -50%) translateY(-3px); }
@@ -1265,6 +1289,57 @@ h2 {
 @keyframes vs-breathe {
   0%, 100% { opacity: 0.25; }
   50% { opacity: 0.45; }
+}
+/* ── PRICING SHOWCASE ── */
+@keyframes price-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes price-float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+@keyframes price-grid-pan {
+  0% { background-position: 0 0; }
+  100% { background-position: 48px 48px; }
+}
+@keyframes price-spot-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.04); }
+}
+/* Rotating conic glow border on the flagship plan */
+.price-hero-ring {
+  position: absolute;
+  inset: -1px;
+  border-radius: 19px;
+  padding: 1.2px;
+  background: conic-gradient(
+    from var(--badge-angle),
+    transparent 0%,
+    rgba(79,209,255,0.6) 11%,
+    rgba(111,168,255,0.32) 20%,
+    transparent 36%,
+    transparent 60%,
+    rgba(79,209,255,0.4) 74%,
+    rgba(111,168,255,0.2) 82%,
+    transparent 92%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: badge-ring-spin 9s linear infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+.price-float { animation: price-float 6s ease-in-out infinite; }
+.price-float-slow { animation: price-float-slow 7s ease-in-out infinite; }
+.price-parallax {
+  transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+  transform: translate3d(calc(var(--ppx,0) * 10px), calc(var(--ppy,0) * 10px), 0);
+}
+.price-parallax-soft {
+  transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
+  transform: translate3d(calc(var(--ppx,0) * -6px), calc(var(--ppy,0) * -6px), 0);
 }
 @keyframes cta-shimmer {
   0% { transform: translateX(-100%) skewX(-15deg); }

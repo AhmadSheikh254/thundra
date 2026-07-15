@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Send, MapPin, Clock, ArrowRight, Check } from 'lucide-react';
 import ThundraLogo from './ThundraLogo';
 
-export default function Footer() {
+function Footer() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
@@ -227,3 +227,6 @@ export default function Footer() {
     </footer>
   );
 }
+
+// Memoized: parent re-renders (e.g. video timeupdate state) must not reconcile this subtree.
+export default React.memo(Footer);

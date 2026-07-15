@@ -1332,7 +1332,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-transparent text-slate-100 font-body flex flex-col justify-between select-none overflow-x-hidden">
+    <div className="relative min-h-screen bg-transparent text-slate-100 font-body flex flex-col justify-between select-none overflow-x-clip">
 
       {/* Layer 1 – Neural graph canvas (animated, interactive nodes + edges) */}
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-[1]" />
@@ -1719,8 +1719,8 @@ export default function Home() {
       </section>
 
       {/* SECTION 6: WHY THUNDRA AI - COMPARISON TABLE */}
-      <section 
-        className="relative z-10 px-6 md:px-[6%] py-10 md:py-16 max-w-4xl mx-auto w-full text-center space-y-12 border-t border-purpleTheme/10"
+      <section
+        className="relative z-10 px-6 md:px-[6%] py-10 md:py-16 max-w-5xl mx-auto w-full text-center space-y-14 border-t border-purpleTheme/10"
         style={{ background: 'radial-gradient(circle at 50% 0%, rgba(79,209,255,0.05) 0%, transparent 60%)' }}
       >
         <div className="space-y-2">
@@ -1731,43 +1731,122 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="relative overflow-x-auto rounded-2xl border border-white/[0.08] backdrop-blur-md" style={{
-          background: 'linear-gradient(170deg, rgba(12,14,26,0.82) 0%, rgba(7,9,18,0.88) 100%)',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.4), 0 22px 50px rgba(0,0,0,0.45), 0 0 30px rgba(79,209,255,0.04), inset 0 1px 0 rgba(255,255,255,0.07)'
-        }}>
-          {/* Top specular hairline */}
-          <div aria-hidden className="absolute top-0 left-8 right-8 h-px pointer-events-none z-10" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.12) 35%, rgba(79,209,255,0.16) 50%, rgba(255,255,255,0.12) 65%, transparent)' }} />
-          {/* Slow glass sweep */}
-          <div aria-hidden className="absolute pointer-events-none z-[1]" style={{ top: '-45%', left: 0, width: '24%', height: '190%', background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.025) 50%, transparent)', animation: 'monitor-sheen 17s ease-in-out infinite' }} />
-          {/* Floating particles */}
-          {[{ l: '12%', t: '30%', d: '0s' }, { l: '80%', t: '60%', d: '4s' }, { l: '45%', t: '80%', d: '8s' }].map((p, i) => (
-            <div key={i} aria-hidden className="absolute w-[2.5px] h-[2.5px] rounded-full bg-[#4FD1FF] pointer-events-none z-[1]" style={{ left: p.l, top: p.t, opacity: 0.18, boxShadow: '0 0 4px rgba(79,209,255,0.5)', animation: `sfc-float 12s ease-in-out ${p.d} infinite` }} />
-          ))}
-          <table className="w-full text-left border-collapse text-xs md:text-sm relative z-[2]">
-            <thead>
-              <tr className="border-b border-white/[0.06] font-heading" style={{ background: 'linear-gradient(180deg, rgba(4,6,12,0.7), rgba(4,6,12,0.45))' }}>
-                <th className="p-4 font-bold text-slate-400 uppercase tracking-wider">Metrics</th>
-                <th className="p-4 font-bold text-red-400 uppercase tracking-wider">Traditional Editing</th>
-                <th className="p-4 font-bold text-purpleLight uppercase tracking-wider" style={{ background: 'linear-gradient(180deg, rgba(79,209,255,0.06), rgba(79,209,255,0.02))', boxShadow: 'inset 1px 0 0 rgba(79,209,255,0.12)' }}>Thundra AI</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/[0.045] font-body">
-              {[
-                { metric: "⏱ Production Speed", trad: "Hours/Days of manual cuts", thun: "Processed in 60 seconds" },
-                { metric: "💬 Captions/Subtitles", trad: "Manual transcribing & syncing", thun: "Transcribed in Urdu/English instantly" },
-                { metric: "🎬 Stock Footage Search", trad: "Hours searching stock libraries", thun: "Contextual B-roll matched by AI" },
-                { metric: "🛠 Software Complexity", trad: "Steep learning curve (Premiere/DaVinci)", thun: "Easy chat workspace" },
-                { metric: "💰 Monthly Cost", trad: "$150+/month for software & stock subscriptions", thun: "$19/month starting" }
-              ].map((row, idx) => (
-                <tr key={idx} className="transition-all duration-400 hover:bg-[#4FD1FF]/[0.025] hover:shadow-[inset_2px_0_0_rgba(79,209,255,0.3)] group/cmp">
-                  <td className="p-4 font-bold text-slate-200 transition-colors duration-400 group-hover/cmp:text-white">{row.metric}</td>
-                  <td className="p-4 text-slate-400">{row.trad}</td>
-                  <td className="p-4 text-white font-semibold transition-shadow duration-400" style={{ background: 'linear-gradient(180deg, rgba(79,209,255,0.045), rgba(79,209,255,0.02))', boxShadow: 'inset 1px 0 0 rgba(79,209,255,0.1)' }}>{row.thun}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {(() => {
+          const rows = [
+            { Icon: Clock,         label: 'Production Speed',    trad: 'Hours or days of manual cuts',            thun: 'Fully processed in ~60 seconds' },
+            { Icon: MessageSquare, label: 'Captions & Subtitles', trad: 'Manual transcribing & syncing',           thun: 'Instant Urdu / English transcription' },
+            { Icon: Film,          label: 'Stock Footage',       trad: 'Hours searching stock libraries',         thun: 'Contextual B-roll matched by AI' },
+            { Icon: Settings,      label: 'Software Complexity', trad: 'Steep Premiere / DaVinci curve',          thun: 'Simple conversational workspace' },
+            { Icon: Database,      label: 'Monthly Cost',        trad: '$150+ for software & stock',              thun: 'From $19 / month, all-in-one' },
+          ];
+          return (
+            <div className="relative max-w-5xl mx-auto">
+              {/* ── Premium split comparison ── */}
+              <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-3 md:gap-0 items-stretch text-left relative">
+
+                {/* ── Traditional side — clean, simple, muted ── */}
+                <motion.div
+                  initial={{ opacity: 0, x: -18 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative rounded-2xl border border-white/[0.06] p-5 md:p-6 flex flex-col overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(165deg, rgba(18,16,18,0.85) 0%, rgba(10,9,11,0.92) 100%)',
+                    boxShadow: '0 3px 8px rgba(0,0,0,0.4), 0 18px 40px -12px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)',
+                    backdropFilter: 'blur(16px)'
+                  }}
+                >
+                  <div className="absolute top-0 left-6 right-6 h-px pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent, rgba(239,68,68,0.14), transparent)' }} />
+                  <div className="flex items-center gap-2.5 mb-4">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center border border-red-500/15" style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.08), rgba(20,16,18,0.6))', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)' }}>
+                      <Layers className="w-4 h-4 text-red-400/60" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-200 tracking-tight font-heading">Traditional Editing</h3>
+                      <span className="text-[9px] text-red-400/45 uppercase tracking-[0.14em] font-semibold">Manual · Fragmented</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-1.5 flex-1">
+                    {rows.map((r, i) => (
+                      <div key={i} className="group/tr flex items-start gap-2.5 min-h-[52px] px-2.5 py-2 rounded-xl border border-transparent transition-all duration-300 hover:border-red-500/[0.08] hover:bg-red-500/[0.015]">
+                        <div className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-px border border-red-500/10 bg-red-500/[0.03]">
+                          <X className="w-2.5 h-2.5 text-red-400/45 stroke-[2.5]" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="block text-[10px] uppercase tracking-[0.1em] text-slate-500 font-semibold mb-0.5">{r.label}</span>
+                          <span className="block text-[12px] text-slate-400 leading-snug">{r.trad}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* ── Center VS — premium animated ── */}
+                <div className="relative flex md:flex-col items-center justify-center py-1 md:py-0 md:px-5 z-20">
+                  <div className="hidden md:block absolute top-8 bottom-8 w-px" style={{ background: 'linear-gradient(180deg, transparent, rgba(79,209,255,0.16), transparent)' }} />
+                  <div className="relative" style={{ animation: 'vs-float-inline 5s infinite ease-in-out' }}>
+                    <div className="absolute -inset-2 rounded-full blur-[6px] opacity-20 bg-[#4FD1FF]" style={{ animation: 'vs-breathe 5s infinite ease-in-out' }} />
+                    <div className="absolute -inset-1.5 rounded-full border border-[#4FD1FF]/20" style={{ animation: 'sfc-spin-slow 14s linear infinite' }}>
+                      <span className="absolute -top-[3px] left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#4FD1FF]" style={{ boxShadow: '0 0 6px #4FD1FF' }} />
+                    </div>
+                    <div className="w-11 h-11 rounded-full flex items-center justify-center border border-[#4FD1FF]/30" style={{
+                      background: 'linear-gradient(135deg, rgba(22,30,46,0.98) 0%, rgba(10,14,22,0.99) 100%)',
+                      boxShadow: '0 6px 18px -4px rgba(0,0,0,0.65), 0 0 18px rgba(79,209,255,0.18), inset 0 1px 1px rgba(255,255,255,0.12), inset 0 -2px 4px rgba(0,0,0,0.5)',
+                      backdropFilter: 'blur(8px)'
+                    }}>
+                      <span className="font-extrabold text-[11px] text-[#4FD1FF] tracking-[0.12em] pl-[1px]" style={{ fontFamily: 'Inter, sans-serif' }}>VS</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── Thundra AI side — intelligent, futuristic ── */}
+                <motion.div
+                  initial={{ opacity: 0, x: 18 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
+                  className="relative rounded-2xl border p-5 md:p-6 flex flex-col overflow-hidden group/thun"
+                  style={{
+                    background: 'linear-gradient(165deg, rgba(10,20,38,0.86) 0%, rgba(6,12,24,0.95) 100%)',
+                    borderColor: 'rgba(79,209,255,0.28)',
+                    boxShadow: '0 3px 8px rgba(0,0,0,0.45), 0 20px 46px -12px rgba(0,0,0,0.65), 0 0 38px rgba(79,209,255,0.07), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.3)',
+                    backdropFilter: 'blur(20px)'
+                  }}
+                >
+                  {/* ambient corner light + top edge glow + glass sweep */}
+                  <div aria-hidden className="absolute -top-16 right-0 w-56 h-32 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 70% 20%, rgba(79,209,255,0.1), transparent 68%)', filter: 'blur(20px)' }} />
+                  <div className="absolute top-0 left-6 right-6 h-px pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent, rgba(79,209,255,0.3), transparent)' }} />
+                  <div aria-hidden className="absolute pointer-events-none opacity-70" style={{ top: '-45%', left: 0, width: '22%', height: '190%', background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.03) 50%, transparent)', animation: 'monitor-sheen 15s ease-in-out infinite' }} />
+                  <div className="relative z-10 flex items-center gap-2.5 mb-4">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center border border-[#4FD1FF]/20" style={{ background: 'linear-gradient(135deg, rgba(61,90,128,0.5), rgba(79,209,255,0.28))', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.14), 0 0 12px rgba(79,209,255,0.12)' }}>
+                      <Sparkles className="w-4 h-4 text-white/95" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-white tracking-tight font-heading">Thundra AI</h3>
+                      <span className="text-[9px] text-[#4FD1FF]/70 uppercase tracking-[0.14em] font-semibold">Autonomous · Unified</span>
+                    </div>
+                  </div>
+                  <div className="relative z-10 flex flex-col gap-1.5 flex-1">
+                    {rows.map((r, i) => (
+                      <div key={i} className="group/tr flex items-start gap-2.5 min-h-[52px] px-2.5 py-2 rounded-xl border border-transparent transition-all duration-300 hover:border-[#4FD1FF]/20 hover:bg-[#4FD1FF]/[0.04] hover:shadow-[inset_0_0_0_1px_rgba(79,209,255,0.05),0_4px_14px_rgba(79,209,255,0.06)]">
+                        <div className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-px border border-[#4FD1FF]/15 bg-[#4FD1FF]/[0.06] transition-all duration-300 group-hover/tr:bg-[#4FD1FF]/[0.12] group-hover/tr:shadow-[0_0_8px_rgba(79,209,255,0.25)]">
+                          <r.Icon className="w-2.5 h-2.5 text-[#4FD1FF]" strokeWidth={2.4} />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="block text-[10px] uppercase tracking-[0.1em] text-[#4FD1FF]/60 font-semibold mb-0.5">{r.label}</span>
+                          <span className="block text-[12px] text-white font-medium leading-snug">{r.thun}</span>
+                        </div>
+                        <Check className="w-3 h-3 text-[#4FD1FF]/50 shrink-0 ml-auto mt-1 opacity-0 -translate-x-1 transition-all duration-300 group-hover/tr:opacity-100 group-hover/tr:translate-x-0" strokeWidth={3} />
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+              </div>
+            </div>
+          );
+        })()}
       </section>
 
       {/* SECTION 7: PRICING PLANS */}
@@ -1808,22 +1887,41 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="relative max-w-[960px] mx-auto">
-          {/* ── Pricing Cards Grid ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch relative">
+        <div
+          className="relative max-w-[1000px] mx-auto"
+          onMouseMove={(e) => {
+            const r = e.currentTarget.getBoundingClientRect();
+            e.currentTarget.style.setProperty('--ppx', ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+            e.currentTarget.style.setProperty('--ppy', ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+          }}
+          onMouseLeave={(e) => { e.currentTarget.style.setProperty('--ppx', '0'); e.currentTarget.style.setProperty('--ppy', '0'); }}
+        >
+          {/* ── Premium showcase background ── */}
+          {/* Animated grid, radially masked, subtle mouse parallax */}
+          <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden rounded-[32px]" style={{ WebkitMaskImage: 'radial-gradient(72% 82% at 50% 45%, black, transparent)', maskImage: 'radial-gradient(72% 82% at 50% 45%, black, transparent)' }}>
+            <div className="price-parallax-soft absolute inset-[-48px]" style={{ backgroundImage: 'linear-gradient(rgba(79,209,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(79,209,255,0.035) 1px, transparent 1px)', backgroundSize: '48px 48px', animation: 'price-grid-pan 26s linear infinite' }} />
+          </div>
+          {/* Soft radial spotlight behind the flagship plan */}
+          <div aria-hidden className="price-parallax absolute left-[58%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-[640px] h-[440px] pointer-events-none" style={{ background: 'radial-gradient(ellipse 55% 55% at 50% 45%, rgba(79,209,255,0.08) 0%, rgba(61,90,128,0.045) 45%, transparent 72%)', filter: 'blur(34px)', animation: 'price-spot-pulse 8s ease-in-out infinite' }} />
+          {/* Floating particles */}
+          {[{ l: '13%', t: '20%', d: '0s' }, { l: '88%', t: '28%', d: '3s' }, { l: '22%', t: '80%', d: '6s' }, { l: '80%', t: '74%', d: '9s' }, { l: '50%', t: '10%', d: '4.5s' }].map((p, i) => (
+            <div key={i} aria-hidden className="absolute w-[3px] h-[3px] rounded-full bg-[#4FD1FF] pointer-events-none" style={{ left: p.l, top: p.t, opacity: 0.2, boxShadow: '0 0 5px rgba(79,209,255,0.6)', animation: `sfc-float 13s cubic-bezier(0.45,0,0.55,1) ${p.d} infinite` }} />
+          ))}
+          {/* ── Pricing Cards Grid — asymmetric, flagship-dominant ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-[0.82fr_1.18fr] gap-6 lg:gap-7 items-stretch relative z-10">
             
             {/* ── Left Card: Traditional Production ── */}
             <div 
               className="rounded-[18px] p-4 md:p-4.5 flex flex-col h-full transition-all duration-500 ease-out hover:-translate-y-1 border relative text-left group"
               style={{
-                background: 'linear-gradient(165deg, rgba(16,16,20,0.88) 0%, rgba(10,10,13,0.95) 100%)',
-                borderColor: 'rgba(255,255,255,0.07)',
-                boxShadow: '0 3px 8px rgba(0,0,0,0.4), 0 14px 34px -10px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.35)',
+                background: 'linear-gradient(165deg, rgba(17,17,21,0.9) 0%, rgba(9,9,12,0.96) 100%)',
+                borderColor: 'rgba(255,255,255,0.08)',
+                boxShadow: '0 2px 5px rgba(0,0,0,0.4), 0 10px 22px -8px rgba(0,0,0,0.5), 0 22px 48px -14px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.02), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.4)',
                 backdropFilter: 'blur(20px)'
               }}
             >
               {/* Subtle top accent */}
-              <div className="absolute top-0 left-6 right-6 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(239,68,68,0.06), transparent)' }} />
+              <div className="absolute top-0 left-6 right-6 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(239,68,68,0.08), transparent)' }} />
 
               <div className="space-y-3 flex-1">
                 <div className="space-y-1">
@@ -1877,50 +1975,23 @@ export default function Home() {
               </div>
             </div>
 
-            {/* ── VS Divider (Desktop) ── */}
-            <div className="absolute left-1/2 top-1/2 hidden lg:flex items-center justify-center z-30 pointer-events-none" style={{
-              transform: 'translate(-50%, -50%)',
-              animation: 'vs-float 5s infinite ease-in-out'
-            }}>
-              {/* Soft breathing glow ring behind */}
-              <div className="absolute -inset-2.5 rounded-full blur-md opacity-20 bg-[#4FD1FF]" style={{
-                animation: 'vs-breathe 5s infinite ease-in-out'
-              }} />
-              <div className="w-9 h-9 rounded-full flex items-center justify-center border border-[#4FD1FF]/25" style={{
-                background: 'linear-gradient(135deg, rgba(22,30,46,0.97) 0%, rgba(10,14,22,0.99) 100%)',
-                boxShadow: '0 6px 18px -4px rgba(0,0,0,0.65), 0 0 16px rgba(79,209,255,0.14), inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 4px rgba(0,0,0,0.5)',
-                backdropFilter: 'blur(8px)'
-              }}>
-                <span className="font-extrabold text-[9px] text-[#4FD1FF]/90 tracking-[0.15em] pl-[1px]" style={{ fontFamily: 'Inter, sans-serif' }}>VS</span>
-              </div>
-            </div>
-
-            {/* ── VS Divider (Mobile) ── */}
-            <div className="lg:hidden flex items-center justify-center -my-1 pointer-events-none">
-              <div className="flex items-center gap-2.5 w-full">
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent to-white/[0.04]" />
-                <div className="w-8 h-8 rounded-full flex items-center justify-center border border-white/[0.06]" style={{
-                  background: 'linear-gradient(135deg, rgba(20,25,38,0.95) 0%, rgba(10,14,22,0.98) 100%)',
-                  boxShadow: '0 3px 8px rgba(0,0,0,0.5), inset 0 1px 1px 0px rgba(255,255,255,0.06)'
-                }}>
-                  <span className="font-extrabold text-[8px] text-[#4FD1FF]/75 tracking-[0.12em] pl-[0.5px]" style={{ fontFamily: 'Inter, sans-serif' }}>VS</span>
-                </div>
-                <div className="flex-1 h-px bg-gradient-to-l from-transparent to-white/[0.04]" />
-              </div>
-            </div>
-
-            {/* ── Right Card: Thundra AI (Hero) ── */}
-            <div 
-              className="rounded-[18px] p-4 md:p-4.5 flex flex-col h-full transition-all duration-500 ease-out hover:-translate-y-1 border relative overflow-hidden group text-left"
+            {/* ── Right Card: Thundra AI (Flagship, floating) ── */}
+            <div className="relative h-full price-float">
+              {/* Rotating conic glow border */}
+              <div aria-hidden className="price-hero-ring" />
+              {/* Close flagship glow */}
+              <div aria-hidden className="absolute -inset-3 rounded-[26px] pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 35%, rgba(79,209,255,0.06), transparent 68%)', filter: 'blur(8px)' }} />
+            <div
+              className="rounded-[18px] p-4 md:p-4.5 flex flex-col h-full transition-all duration-500 ease-out hover:-translate-y-1 border relative overflow-hidden group text-left z-10"
               style={{
-                background: 'linear-gradient(165deg, rgba(10,20,38,0.82) 0%, rgba(6,12,24,0.95) 100%)',
-                borderColor: 'rgba(79, 209, 255, 0.3)',
-                boxShadow: '0 3px 8px rgba(0,0,0,0.45), 0 18px 44px -12px rgba(0, 0, 0, 0.65), 0 0 34px 0px rgba(79, 209, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 -1px 0 rgba(0,0,0,0.3)',
+                background: 'linear-gradient(165deg, rgba(11,21,40,0.86) 0%, rgba(5,11,23,0.96) 100%)',
+                borderColor: 'rgba(79, 209, 255, 0.32)',
+                boxShadow: '0 2px 5px rgba(0,0,0,0.45), 0 12px 26px -8px rgba(0,0,0,0.55), 0 24px 52px -14px rgba(0, 0, 0, 0.68), 0 0 40px 0px rgba(79, 209, 255, 0.08), inset 0 0 0 1px rgba(79,209,255,0.04), inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0,0,0,0.3)',
                 backdropFilter: 'blur(20px)'
               }}
             >
               {/* Premium glass reflection overlay */}
-              <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.015] to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-700" />
               {/* Soft top edge glow */}
               <div className="absolute top-0 left-8 right-8 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(79,209,255,0.25), transparent)' }} />
               {/* Ambient radial behind card */}
@@ -2094,6 +2165,7 @@ export default function Home() {
                 </button>
               </div>
 
+            </div>
             </div>
 
           </div>

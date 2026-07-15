@@ -427,8 +427,10 @@ function BRollMockup({ a, sec }) {
   return (
     <div className="relative w-full rounded-2xl border border-white/[0.12] backdrop-blur-xl p-4 flex flex-col gap-2.5 overflow-hidden text-left" style={{
       background: 'linear-gradient(160deg, #081527 0%, #060F1E 55%, #040A14 100%)',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.45), 0 22px 54px rgba(0,0,0,0.55), 0 0 34px rgba(14,165,233,0.06), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.4)'
+      boxShadow: '0 4px 12px rgba(0,0,0,0.45), 0 22px 54px rgba(0,0,0,0.55), 0 0 44px rgba(14,165,233,0.05), inset 0 0 0 1px rgba(255,255,255,0.025), inset 0 1px 0 rgba(255,255,255,0.09), inset 0 -1px 0 rgba(0,0,0,0.4)'
     }}>
+      {/* Static glass reflection — clean top sheen */}
+      <div aria-hidden className="absolute inset-[1px] rounded-2xl pointer-events-none" style={{ background: 'linear-gradient(175deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.008) 26%, transparent 48%)' }} />
       {/* Cinematic film-strip accents — very low opacity */}
       {[{ top: '30%', rot: -5 }, { top: '64%', rot: -5 }].map((st, i) => (
         <div key={i} aria-hidden className="absolute left-[-12%] w-[124%] pointer-events-none" style={{ top: st.top, transform: `rotate(${st.rot}deg)`, opacity: 0.07 }}>
@@ -438,17 +440,17 @@ function BRollMockup({ a, sec }) {
         </div>
       ))}
       {/* Soft light streak */}
-      <div aria-hidden className="absolute top-[46%] left-[4%] w-[55%] h-[2px] pointer-events-none" style={{ background: `linear-gradient(90deg, transparent, ${a}40, transparent)`, filter: 'blur(3px)', animation: 'sfc-streak 14s cubic-bezier(0.45,0,0.55,1) infinite' }} />
+      <div aria-hidden className="absolute top-[46%] left-[4%] w-[55%] h-[2px] pointer-events-none" style={{ background: `linear-gradient(90deg, transparent, ${a}35, transparent)`, filter: 'blur(3px)', animation: 'sfc-streak 14s cubic-bezier(0.45,0,0.55,1) infinite' }} />
       {/* Top specular hairline */}
       <div aria-hidden className="absolute top-0 left-6 right-6 h-px pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.16) 30%, rgba(14,165,233,0.2) 50%, rgba(255,255,255,0.16) 70%, transparent)' }} />
       {/* Floating particles */}
       {[{ l: '12%', t: '20%', d: '0s' }, { l: '58%', t: '14%', d: '4s' }, { l: '84%', t: '30%', d: '8s' }].map((p, i) => (
-        <div key={i} aria-hidden className="absolute w-[2px] h-[2px] rounded-full pointer-events-none" style={{ left: p.l, top: p.t, background: 'rgba(200,230,255,0.9)', opacity: 0.2, boxShadow: `0 0 4px ${a}60`, animation: `sfc-float 13s cubic-bezier(0.45,0,0.55,1) ${p.d} infinite` }} />
+        <div key={i} aria-hidden className="absolute w-[2px] h-[2px] rounded-full pointer-events-none" style={{ left: p.l, top: p.t, background: 'rgba(200,230,255,0.9)', opacity: 0.16, boxShadow: `0 0 4px ${a}60`, animation: `sfc-float 13s cubic-bezier(0.45,0,0.55,1) ${p.d} infinite` }} />
       ))}
       {/* Header: title + AI confidence meter */}
       <div className="relative z-10 flex items-center justify-between">
         <span className="text-[6.5px] font-mono text-white/45 uppercase tracking-[0.18em]">AI Match Pipeline</span>
-        <div className="flex items-center gap-1.5 px-1.5 py-[3px] rounded-md border" style={{ borderColor: `${a}35`, background: `linear-gradient(180deg, ${a}12, rgba(255,255,255,0.02))`, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)' }}>
+        <div className="flex items-center gap-1.5 px-1.5 py-[3px] rounded-md border" style={{ borderColor: `${a}3A`, background: `linear-gradient(180deg, ${a}12, rgba(255,255,255,0.02))`, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 6px rgba(0,0,0,0.35)' }}>
           <svg width="10" height="10" viewBox="0 0 12 12" className="-rotate-90">
             <circle cx="6" cy="6" r="5" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1.6" />
             <circle cx="6" cy="6" r="5" fill="none" stroke={a} strokeWidth="1.6" strokeLinecap="round" strokeDasharray="30.2 31.4" style={{ animation: 'sfc-breathe 5s cubic-bezier(0.45,0,0.55,1) infinite' }} />
@@ -459,34 +461,34 @@ function BRollMockup({ a, sec }) {
       {/* Floating metadata chips */}
       <div className="relative z-10 h-[22px]">
         {meta.map(m => (
-          <span key={m.n + m.l} className="absolute top-0 px-1.5 py-[2px] rounded-full border text-[5.5px] font-mono font-bold" style={{ left: m.l, color: 'rgba(255,255,255,0.7)', background: `${a}10`, borderColor: `${a}28`, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07)', animation: `sfc-float-soft ${9 + (parseFloat(m.d) % 3) * 2}s cubic-bezier(0.45,0,0.55,1) ${m.d} infinite` }}>{m.n}</span>
+          <span key={m.n + m.l} className="absolute top-0 px-1.5 py-[2px] rounded-full border text-[5.5px] font-mono font-bold" style={{ left: m.l, color: 'rgba(255,255,255,0.78)', background: `${a}10`, borderColor: `${a}33`, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.09), 0 2px 5px rgba(0,0,0,0.3)', animation: `sfc-float-soft ${9 + (parseFloat(m.d) % 3) * 2}s cubic-bezier(0.45,0,0.55,1) ${m.d} infinite` }}>{m.n}</span>
         ))}
       </div>
       {/* Pipeline lane — clips flow left → right through scan gates */}
-      <div className="relative z-10 overflow-hidden rounded-lg border border-white/[0.08]" style={{ background: 'linear-gradient(180deg, rgba(7,14,26,0.92), rgba(4,9,17,0.9))', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), inset 0 2px 8px rgba(0,0,0,0.4)' }}>
-        <div className="flex gap-1.5 py-1.5 px-1.5 w-max" style={{ animation: 'sfc-strip-conv 42s linear infinite' }}>
+      <div className="relative z-10 overflow-hidden rounded-[10px] border border-white/[0.09]" style={{ background: 'linear-gradient(180deg, rgba(7,14,26,0.92), rgba(4,9,17,0.9))', boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.025), inset 0 1px 0 rgba(255,255,255,0.07), inset 0 2px 8px rgba(0,0,0,0.4), 0 6px 16px rgba(0,0,0,0.35), 0 0 22px rgba(14,165,233,0.05)' }}>
+        <div className="flex gap-2 p-2 w-max" style={{ animation: 'sfc-strip-conv 42s linear infinite' }}>
           {[...clips, ...clips].map((cl, k) => (
-            <div key={k} className="relative w-16 rounded-md border p-[3px] flex flex-col gap-[2px] shrink-0" style={{
-              background: 'linear-gradient(180deg, rgba(13,24,42,0.92), rgba(7,14,26,0.9))',
-              borderColor: 'rgba(255,255,255,0.09)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07), 0 3px 8px rgba(0,0,0,0.4)',
+            <div key={k} className="relative w-16 rounded-[7px] border p-1 flex flex-col gap-[3px] shrink-0" style={{
+              background: 'linear-gradient(180deg, rgba(13,24,42,0.94), rgba(7,14,26,0.92))',
+              borderColor: 'rgba(255,255,255,0.11)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.09), inset 0 -1px 0 rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.35), 0 4px 10px rgba(0,0,0,0.4)',
               animation: `sfc-chip 14s cubic-bezier(0.45,0,0.55,1) ${(k % 7) * 2}s infinite`
             }}>
-              <div className="relative h-[24px] rounded-[3px] overflow-hidden flex items-center justify-center" style={{ background: `linear-gradient(150deg, rgba(${cl.t},0.95) 0%, rgba(6,12,22,0.96) 100%)`, border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div className="relative h-[26px] rounded-[4px] overflow-hidden flex items-center justify-center" style={{ background: `linear-gradient(150deg, rgba(${cl.t},0.95) 0%, rgba(6,12,22,0.96) 100%)`, border: '1px solid rgba(255,255,255,0.07)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -4px 6px rgba(0,0,0,0.45)' }}>
                 <span className="text-[9px] leading-none select-none" style={{ filter: 'saturate(0.7) brightness(0.95)' }}>{cl.e}</span>
                 <span aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.06), transparent 40%, rgba(0,0,0,0.3))' }} />
-                <span className="absolute bottom-[1px] right-[2px] text-[4px] font-mono text-white/55 leading-none">{cl.dur}</span>
+                <span className="absolute bottom-[1px] right-[2px] text-[4px] font-mono text-white/60 leading-none" style={{ animation: `sfc-vignette ${8 + (k % 3)}s cubic-bezier(0.45,0,0.55,1) ${(k % 5) * 0.8}s infinite` }}>{cl.dur}</span>
               </div>
               <div className="flex items-center justify-between leading-none px-[1px]">
                 <span className="text-[4.5px] font-mono text-white/60 uppercase truncate">{cl.n}</span>
-                <span className="text-[4.5px] font-mono font-black shrink-0" style={{ color: `${a}CC` }}>{cl.pct}%</span>
+                <span className="text-[4.5px] font-mono font-black shrink-0" style={{ color: `${a}CC`, animation: `sfc-vignette ${7 + (k % 4)}s cubic-bezier(0.45,0,0.55,1) ${(k % 6) * 0.7}s infinite` }}>{cl.pct}%</span>
               </div>
             </div>
           ))}
         </div>
         {/* AI scan-pulse gates over the lane */}
         {['26%', '52%', '78%'].map((l, i) => (
-          <div key={i} aria-hidden className="absolute inset-y-1 pointer-events-none" style={{ left: l, width: 3, background: `linear-gradient(180deg, transparent, ${a}70, transparent)`, filter: 'blur(1px)', boxShadow: `0 0 8px ${a}40`, animation: `sfc-breathe ${2.6 + i * 0.5}s cubic-bezier(0.45,0,0.55,1) ${i * 0.9}s infinite` }} />
+          <div key={i} aria-hidden className="absolute inset-y-1 pointer-events-none" style={{ left: l, width: 2, background: `linear-gradient(180deg, transparent, ${a}66, transparent)`, filter: 'blur(0.8px)', boxShadow: `0 0 7px ${a}35`, animation: `sfc-breathe ${2.6 + i * 0.5}s cubic-bezier(0.45,0,0.55,1) ${i * 0.9}s infinite` }} />
         ))}
       </div>
       {/* Bottom: semantic analysis bar + Selected Best Match */}
@@ -496,24 +498,26 @@ function BRollMockup({ a, sec }) {
             <span className="text-[5.5px] font-mono text-white/45 uppercase tracking-[0.16em]">Semantic Analysis</span>
             <span className="text-[5.5px] font-mono font-black" style={{ color: a, animation: 'sfc-vignette 7s cubic-bezier(0.45,0,0.55,1) infinite' }}>Matching…</span>
           </div>
-          <div className="h-[4px] rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)' }}>
-            <div className="h-full rounded-full" style={{ width: '96%', transformOrigin: 'left', background: `linear-gradient(90deg, ${sec || a}, ${a})`, boxShadow: `0 0 6px ${a}50`, animation: 'sfc-bar 10s cubic-bezier(0.45,0,0.55,1) infinite' }} />
+          <div className="h-[5px] rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.055)', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.02)' }}>
+            <div className="h-full rounded-full" style={{ width: '96%', transformOrigin: 'left', background: `linear-gradient(90deg, ${sec || a}, ${a})`, backgroundSize: '200% 100%', boxShadow: `0 0 5px ${a}45`, animation: 'sfc-bar-smooth 10s cubic-bezier(0.45,0,0.55,1) infinite, progress-shimmer 2.4s linear infinite' }} />
           </div>
           <div className="flex items-center justify-between text-[4.5px] font-mono text-white/35">
             <span>1.5M clips scanned</span><span>7 candidates</span><span>1 selected</span>
           </div>
         </div>
         {/* Selected Best Match — enlarged */}
-        <div className="relative shrink-0" style={{ animation: 'sfc-hl 5s cubic-bezier(0.45,0,0.55,1) infinite' }}>
-          <div className="relative w-[92px] rounded-lg p-[4px] flex flex-col gap-[3px] overflow-hidden" style={{
-            background: `linear-gradient(180deg, ${a}16, rgba(7,14,26,0.94))`,
+        <div className="relative shrink-0" style={{ animation: 'sfc-hl 6s cubic-bezier(0.45,0,0.55,1) infinite' }}>
+          {/* Ambient backlight behind the selected clip */}
+          <div aria-hidden className="absolute -inset-3 rounded-full pointer-events-none" style={{ background: `radial-gradient(ellipse, ${a}16, transparent 70%)`, filter: 'blur(12px)', animation: 'sfc-breathe 7s cubic-bezier(0.45,0,0.55,1) infinite' }} />
+          <div className="relative w-[92px] rounded-[9px] p-1 flex flex-col gap-[3px] overflow-hidden" style={{
+            background: `linear-gradient(180deg, ${a}14, rgba(7,14,26,0.95))`,
             border: `1px solid ${a}`,
-            boxShadow: `0 0 14px ${a}40, 0 8px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12)`
+            boxShadow: `0 0 10px ${a}30, 0 2px 6px rgba(0,0,0,0.45), 0 10px 22px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.14)`
           }}>
             {/* moving scan lines across the selected card */}
-            <span aria-hidden className="absolute pointer-events-none" style={{ top: '-40%', left: 0, width: '26%', height: '180%', background: `linear-gradient(to right, transparent, ${a}45 50%, transparent)`, animation: 'monitor-sheen 3.8s ease-in-out infinite' }} />
+            <span aria-hidden className="absolute pointer-events-none" style={{ top: '-40%', left: 0, width: '26%', height: '180%', background: `linear-gradient(to right, transparent, ${a}45 50%, transparent)`, animation: 'monitor-sheen 5.5s cubic-bezier(0.45,0,0.55,1) infinite' }} />
             <span aria-hidden className="absolute inset-x-0 h-[1.5px] pointer-events-none" style={{ top: 0, background: `linear-gradient(90deg, transparent, ${a}80, transparent)`, animation: 'sfc-sweep-y 4.6s linear infinite' }} />
-            <div className="relative h-[34px] rounded-[4px] overflow-hidden flex items-center justify-center" style={{ background: 'linear-gradient(150deg, rgba(12,26,48,0.95) 0%, rgba(6,12,22,0.96) 100%)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div className="relative h-[36px] rounded-[5px] overflow-hidden flex items-center justify-center" style={{ background: 'linear-gradient(150deg, rgba(12,26,48,0.95) 0%, rgba(6,12,22,0.96) 100%)', border: '1px solid rgba(255,255,255,0.09)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -5px 8px rgba(0,0,0,0.45)' }}>
               <span className="text-[13px] leading-none select-none" style={{ filter: 'saturate(0.75)' }}>⌨️</span>
               <span aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.07), transparent 40%, rgba(0,0,0,0.32))' }} />
               <span className="absolute bottom-[2px] right-[3px] text-[4.5px] font-mono text-white/60 leading-none">0:08</span>
@@ -1553,13 +1557,15 @@ function FeatureCard({ card, index, scrollYProgress }) {
   const scale = useTransform(
     scrollYProgress,
     [slideStart, safeSlideEnd, scaleStart, safeScaleEnd],
-    [0.97, 1.0, 1.0, 0.98]
+    isFirst ? [1.0, 1.0, 1.0, 0.98] : [0.97, 1.0, 1.0, 0.98]
   );
-  
+
+  // First card must be visible at rest (progress 0) — it sits in normal flow
+  // right below the section intro. Others fade in as they slide up.
   const opacity = useTransform(
     scrollYProgress,
     [slideStart, safeSlideEnd, scaleStart, safeScaleEnd],
-    [0.0, 1.0, 1.0, 0.0]
+    isFirst ? [1.0, 1.0, 1.0, 0.0] : [0.0, 1.0, 1.0, 0.0]
   );
   const filter     = 'none';
 
@@ -1803,7 +1809,7 @@ function FeatureCard({ card, index, scrollYProgress }) {
   );
 }
 
-export default function StackedFeatureCards({ navigate }) {
+function StackedFeatureCards({ navigate }) {
   // Sticky deck runs on ALL viewports — mobile/tablet adapt via .stacked-card-* CSS
   const isMobile = false;
 
@@ -1821,8 +1827,22 @@ export default function StackedFeatureCards({ navigate }) {
       }
     };
     update();
+    // Layout above this section settles after mount (media/fonts) — track it,
+    // otherwise sectionTop goes stale and the deck fades in far too late.
     window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    window.addEventListener('load', update);
+    window.addEventListener('scroll', update, { passive: true });
+    const t1 = setTimeout(update, 300);
+    const t2 = setTimeout(update, 1200);
+    const ro = new ResizeObserver(update);
+    ro.observe(document.body);
+    return () => {
+      window.removeEventListener('resize', update);
+      window.removeEventListener('load', update);
+      window.removeEventListener('scroll', update);
+      clearTimeout(t1); clearTimeout(t2);
+      ro.disconnect();
+    };
   }, [sectionTopMV]);
 
   const scrollYProgress = useTransform(
@@ -1834,42 +1854,7 @@ export default function StackedFeatureCards({ navigate }) {
     },
   );
 
-  const panelY = useTransform(
-    [scrollY, sectionTopMV],
-    ([sy, st]) => {
-      const vh = window.innerHeight || 900;
-      const containerPx = (CONTAINER_VH / 100) * vh;
-      const exitLimit = st + containerPx - vh;
-      if (sy < st - NAV) {
-        return st - sy - NAV;
-      } else if (sy > exitLimit) {
-        return exitLimit - sy;
-      } else {
-        return 0;
-      }
-    }
-  );
 
-  const panelOpacity = useTransform(
-    [scrollY, sectionTopMV],
-    ([sy, st]) => {
-      const vh = window.innerHeight || 900;
-      const containerPx = (CONTAINER_VH / 100) * vh;
-      const startFadeIn = st - vh;
-      const endFadeIn   = st - NAV;
-      const startFadeOut = st + containerPx - vh;
-      const endFadeOut   = st + containerPx - NAV;
-      if (sy < startFadeIn) return 0;
-      if (sy < endFadeIn) {
-        return (sy - startFadeIn) / (endFadeIn - startFadeIn);
-      }
-      if (sy <= startFadeOut) return 1;
-      if (sy < endFadeOut) {
-        return 1 - (sy - startFadeOut) / (endFadeOut - startFadeOut);
-      }
-      return 0;
-    }
-  );
 
   if (isMobile) {
     return (
@@ -1984,19 +1969,16 @@ export default function StackedFeatureCards({ navigate }) {
 
       <div
         ref={scrollZoneRef}
+        className="sfc-zone"
         style={{ height:`${CONTAINER_VH}vh`, position: 'relative' }}
       >
-        <motion.div
+        <div
           style={{
-            position: 'fixed',
+            position: 'sticky',
             top:      `${NAV}px`,
-            left:     0,
-            right:    0,
             height:   `calc(100vh - ${NAV}px)`,
             zIndex:   40,
             overflow: 'hidden',   /* clips cards at y=100% (below panel) */
-            opacity:  panelOpacity,
-            y:        panelY,
             pointerEvents: 'none',
           }}
         >
@@ -2011,10 +1993,13 @@ export default function StackedFeatureCards({ navigate }) {
               />
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
 
       <div style={{ height:20 }}/>
     </section>
   );
 }
+
+// Memoized: parent re-renders (e.g. video timeupdate state) must not reconcile this subtree.
+export default React.memo(StackedFeatureCards);

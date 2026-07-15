@@ -127,7 +127,7 @@ function AppContent() {
   const location = useLocation();
 
   return (
-    <div className="relative min-h-screen bg-[#070B12] text-[#F8F8FF] overflow-x-hidden font-body">
+    <div className="relative min-h-screen bg-[#070B12] text-[#F8F8FF] overflow-x-clip font-body">
       <GlobalBackground />
       <AnimatePresence mode="wait">
         <Suspense fallback={null}>
