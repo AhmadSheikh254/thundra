@@ -1290,6 +1290,19 @@ h2 {
   0%, 100% { opacity: 0.25; }
   50% { opacity: 0.45; }
 }
+/* ── OFFSCREEN ANIMATION PAUSING ──
+   Sections that are scrolled out of view keep their CSS animations ticking,
+   which burns compositor + main-thread work on every frame while scrolling.
+   Pausing them offscreen is visually identical (they are not on screen) and
+   frees the budget needed to hold 60 FPS. Animations resume from where they
+   paused, so there is never a visual jump. */
+[data-anim-section].anim-paused,
+[data-anim-section].anim-paused *,
+[data-anim-section].anim-paused *::before,
+[data-anim-section].anim-paused *::after {
+  animation-play-state: paused !important;
+}
+
 /* ── PRICING SHOWCASE ── */
 @keyframes price-float {
   0%, 100% { transform: translateY(0); }

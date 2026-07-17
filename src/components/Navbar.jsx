@@ -3,12 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Database, ArrowRight, Menu, X, Sparkles } from 'lucide-react';
 import ThundraLogo from './ThundraLogo';
+import { scrollToSection } from '../lib/scroll';
 
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [featuresActive, setFeaturesActive] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +19,30 @@ function Navbar() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Highlight "Features" while the comparison section is on screen.
+  // IntersectionObserver instead of a scroll handler: zero main-thread work per frame.
+  useEffect(() => {
+    if (location.pathname !== '/') { setFeaturesActive(false); return; }
+    const el = document.getElementById('comparison');
+    if (!el || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setFeaturesActive(entry.isIntersecting),
+      { rootMargin: '-45% 0px -45% 0px' }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [location.pathname]);
+
+  // Smooth, navbar-offset anchor scroll routed through Lenis (no fighting = no jump).
+  const handleAnchorScroll = (id, e) => {
+    setMobileMenuOpen(false);
+    if (location.pathname !== '/') return; // let the browser navigate home + hash
+    e.preventDefault();
+    if (scrollToSection(id) && window.history?.pushState) {
+      window.history.pushState(null, '', `/#${id}`);
+    }
+  };
 
   // Body scroll lock when mobile menu is open
   useEffect(() => {
@@ -132,13 +158,19 @@ function Navbar() {
             )}
           </Link>
 
-          <a 
-            href="/#features" 
-            onClick={() => setMobileMenuOpen(false)}
-            className="px-4 py-2 text-xs font-bold rounded-full text-slate-455 hover:text-white transition-all duration-300 relative group"
+          <a
+            href="/#comparison"
+            onClick={(e) => handleAnchorScroll('comparison', e)}
+            className={`px-4 py-2 text-xs font-bold rounded-full transition-all duration-300 relative group ${
+              featuresActive
+                ? 'text-white bg-white/[0.04] border border-white/[0.05]'
+                : 'text-slate-455 hover:text-white'
+            }`}
           >
             <span>Features</span>
-            <span className="absolute inset-0 rounded-full scale-75 opacity-0 bg-white/[0.04] group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 -z-10" />
+            {!featuresActive && (
+              <span className="absolute inset-0 rounded-full scale-75 opacity-0 bg-white/[0.04] group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 -z-10" />
+            )}
           </a>
 
           <a 
@@ -219,9 +251,9 @@ function Navbar() {
                 <span>How It Works</span>
               </Link>
 
-              <a 
-                href="/#features" 
-                onClick={() => setMobileMenuOpen(false)}
+              <a
+                href="/#comparison"
+                onClick={(e) => handleAnchorScroll('comparison', e)}
                 className="p-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white transition-colors"
               >
                 Features

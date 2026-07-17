@@ -1119,6 +1119,25 @@ export default function Home() {
   };
 
   // Natively update timeline playhead and keep both videos synchronized and looped together
+  // Pause CSS animations inside sections that are scrolled off screen.
+  // They are invisible there, so this is visually identical — it just stops
+  // burning compositor/main-thread budget on every frame during scroll.
+  useEffect(() => {
+    if (!('IntersectionObserver' in window)) return;
+    const targets = document.querySelectorAll('[data-anim-section]');
+    if (!targets.length) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          entry.target.classList.toggle('anim-paused', !entry.isIntersecting);
+        }
+      },
+      { rootMargin: '300px 0px' } // resume just before it scrolls into view
+    );
+    targets.forEach((t) => io.observe(t));
+    return () => io.disconnect();
+  }, []);
+
   const handleTimeUpdate = () => {
     const vBefore = videoBeforeRef.current;
     const vAfter = videoAfterRef.current;
@@ -1480,33 +1499,25 @@ export default function Home() {
           {/* Main Visual Slider (aspect-[4/3] - Wider and less tall) */}
           <div className="relative w-full aspect-[4/3] bg-[#05050a] overflow-hidden select-none">
             
-            {/* 1. BEFORE LAYER (Bottom) - RAW camera feed */}
+            {/* 1. BEFORE LAYER (Bottom) - RAW camera feed
+                 Demo video removed — empty media container awaiting upload.
+                 videoBeforeRef stays unattached, so every video handler null-guards to a no-op. */}
             <div className="absolute inset-0 select-none">
-              <video 
-                ref={videoBeforeRef}
-                src="/raw.mp4"
-                className="w-full h-full object-contain pointer-events-none"
-                style={{ filter: 'none' }}
-                muted={true}
-                playsInline
-                preload="metadata"
+              <div
+                className="w-full h-full pointer-events-none"
+                style={{ background: 'linear-gradient(160deg, #0b0d13 0%, #05050a 100%)' }}
               />
             </div>
 
-            {/* 2. AFTER LAYER (Top clipped to the right side) - AI Edited & Graded */}
-            <div 
+            {/* 2. AFTER LAYER (Top clipped to the right side) - AI Edited & Graded
+                 Demo video removed — empty media container awaiting upload. */}
+            <div
               className="absolute inset-y-0 left-0 right-0 overflow-hidden select-none pointer-events-none"
               style={{ clipPath: `polygon(${sliderPos}% 0%, 100% 0%, 100% 100%, ${sliderPos}% 100%)` }}
             >
-              <video 
-                ref={videoAfterRef}
-                src="/edited.mp4"
-                className="w-full h-full object-contain pointer-events-none"
-                style={{ filter: 'none' }}
-                muted={isMuted}
-                playsInline
-                preload="metadata"
-                onTimeUpdate={handleTimeUpdate}
+              <div
+                className="w-full h-full pointer-events-none"
+                style={{ background: 'linear-gradient(160deg, rgba(61,90,128,0.14) 0%, rgba(79,209,255,0.05) 45%, #05050a 100%)' }}
               />
             </div>
 
@@ -1720,6 +1731,8 @@ export default function Home() {
 
       {/* SECTION 6: WHY THUNDRA AI - COMPARISON TABLE */}
       <section
+        id="comparison"
+        data-anim-section
         className="relative z-10 px-6 md:px-[6%] py-10 md:py-16 max-w-5xl mx-auto w-full text-center space-y-14 border-t border-purpleTheme/10"
         style={{ background: 'radial-gradient(circle at 50% 0%, rgba(79,209,255,0.05) 0%, transparent 60%)' }}
       >
@@ -1851,7 +1864,8 @@ export default function Home() {
 
       {/* SECTION 7: PRICING PLANS */}
       <section 
-        id="pricing" 
+        id="pricing"
+        data-anim-section
         className="relative z-10 px-6 md:px-[6%] py-10 md:py-16 max-w-6xl mx-auto w-full text-center border-t border-white/[0.04] overflow-hidden"
         style={{
           background: '#040711',

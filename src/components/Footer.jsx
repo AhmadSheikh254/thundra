@@ -18,7 +18,7 @@ function Footer() {
   };
 
   return (
-    <footer className="relative z-10 bg-[#070B12] pt-20 pb-8 px-6 md:px-[6%] border-t border-[#3D5A80]/15 shrink-0 overflow-hidden">
+    <footer data-anim-section className="relative z-10 bg-[#070B12] pt-20 pb-8 px-6 md:px-[6%] border-t border-[#3D5A80]/15 shrink-0 overflow-hidden">
       {/* Top specular hairline */}
       <div aria-hidden className="absolute top-0 left-[10%] right-[10%] h-px pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08) 30%, rgba(79,209,255,0.14) 50%, rgba(255,255,255,0.08) 70%, transparent)' }} />
       {/* Background Decorative Mesh Lights */}

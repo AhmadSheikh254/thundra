@@ -1,6 +1,7 @@
 import React, { useEffect, lazy, Suspense } from 'react';
 import Lenis from 'lenis';
 import { motion, AnimatePresence } from 'framer-motion';
+import { setLenis } from './lib/scroll';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import GlobalBackground from './components/GlobalBackground';
 
@@ -159,6 +160,8 @@ function App() {
       touchMultiplier: 1.0,
     });
 
+    setLenis(lenis);
+
     let rafId;
     function raf(time) {
       lenis.raf(time);
@@ -169,6 +172,7 @@ function App() {
 
     return () => {
       cancelAnimationFrame(rafId);
+      setLenis(null);
       lenis.destroy();
     };
   }, []);
